@@ -12,12 +12,18 @@ public:
     pair<int, int> coordinates;
     bool isVertical;
 
-    Ship(int size) : size(size), isSunk(false) {}
+    Ship(int size, pair<int, int> coordinates, bool isVertical) : size(size), coordinates(coordinates), isVertical(isVertical), isSunk(false) {}
 
     void placeShip(pair<int, int> coords, bool isVertical) { 
         coordinates = coords;
-        isVertical = isVertical;
+        this->isVertical = isVertical;
     }
+
+    int getSize() { return size; }
+
+    bool getIsVertical() { return isVertical; }
+
+    pair<int, int> getCoordinates() { return coordinates; }
 };
 
 class Grid {
@@ -27,12 +33,22 @@ public:
 
     Grid() : grid(10, vector<char>(10, '~')) {}
 
-    void placeShip(Ship& ship, pair<int, int> coordinates, bool isVertical) { 
+    void placeShip(Ship& ship) { 
+        pair<int, int> coordinates = ship.getCoordinates();
+        bool isVertical = ship.getIsVertical();
         ship.placeShip(coordinates,isVertical);
-        if (isVertical){        
-            grid[coordinates.first][coordinates.second] = 'S'; 
+        if (isVertical){
+            for (int i = 0; i < ship.getSize(); i++)
+            {
+                grid[(coordinates.first)+i][coordinates.second] = 'S'; 
+            }
         }
-        else grid[coordinates.first][coordinates.second] = 'S'; 
+        else {
+        for (int i = 0; i < ship.getSize(); i++)
+            {
+                grid[coordinates.first][(coordinates.second)+i] = 'S'; 
+            }
+        }
         ships.push_back(ship);
     }
 
@@ -54,34 +70,19 @@ public:
 
     Player(string name) : name(name) {}
 
-    void placeShips() {
-        // Placer les 5 bateaux : taille 2, 3, 3, 4, 5
-        vector<pair<int, int> > coords;
+    void placeShips(vector<Ship> ships) {        
+        for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i));}
+    }
 
-        // Bateau de taille 2
-        Ship ship2(2);
-        coords = {{0, 0}, {0, 1}};
-        grid.placeShip(ship2, coords);
-
-        // Bateau de taille 3
-        Ship ship3_1(3);
-        coords = {{2, 0}, {2, 1}, {2, 2}};
-        grid.placeShip(ship3_1, coords);
-
-        // Autre bateau de taille 3
-        Ship ship3_2(3);
-        coords = {{4, 0}, {4, 1}, {4, 2}};
-        grid.placeShip(ship3_2, coords);
-
-        // Bateau de taille 4
-        Ship ship4(4);
-        coords = {{6, 0}, {6, 1}, {6, 2}, {6, 3}};
-        grid.placeShip(ship4, coords);
-
-        // Bateau de taille 5
-        Ship ship5(5);
-        coords = {{8, 0}, {8, 1}, {8, 2}, {8, 3}, {8, 4}};
-        grid.placeShip(ship5, coords);
+    void attack(Player& player, pair<int,int> coordinates){
+        if (player.grid.grid[coordinates.first][coordinates.second] == 'S'){
+            player.grid.grid[coordinates.first][coordinates.second] = 'X';
+            cout << "Touché !" << endl;
+        }
+        else {
+            player.grid.grid[coordinates.first][coordinates.second] = 'O';
+            cout << "Dans l'eau !" << endl;
+        }
     }
 };
 
@@ -94,9 +95,10 @@ public:
 
     void start() {
         cout << "Placement des bateaux pour " << player1.name << endl;
-        player1.placeShips();
+        vector<Ship> ships = {Ship(2, {0, 0}, false),Ship(3, {2, 0}, false),Ship(3, {4, 0}, false),Ship(4, {6, 0}, false),Ship(5, {8, 0}, false)};
+        player1.placeShips(ships);
         cout << "Placement des bateaux pour " << player2.name << endl;
-        player2.placeShips();
+        player2.placeShips(ships);
     }
 };
 
@@ -104,6 +106,8 @@ int main() {
     Game game("Joueur 1", "Joueur 2");
     game.start();
     game.player1.grid.display();
+    game.player1.attack(game.player2, {0, 0});
+    game.player2.grid.display();
 
     return 0;
 }
