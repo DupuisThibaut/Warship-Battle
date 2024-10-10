@@ -201,6 +201,14 @@ class Agent : public IPlayer{
             do{
                 x=rand()%10;y=rand()%10;
             }while(player->isTouched({Y,X})==true || X>9 || X<0 || Y>9 || Y<0);
+            if (player->isTouched({Y,X})){
+                player->grid.grid[Y][X] = 'X';
+                cout << "Touché !" << endl;
+            }
+            else {
+                player->grid.grid[Y][X] = 'O';
+                cout << "Dans l'eau !" << endl;
+            }
         }
 
         void getEnvironment(){
