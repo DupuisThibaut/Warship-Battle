@@ -88,6 +88,7 @@ class IPlayer{
         virtual void attack(IPlayer* opponent) = 0;
         virtual string getName() const = 0;
         virtual bool isTouched(pair<int,int>coordinates) = 0;
+        virtual void getEnvironment() = 0;
         virtual ~IPlayer(){}
 };
 
@@ -163,6 +164,9 @@ public:
         return name;
     }
 
+    void getEnvironment(){
+            grid.display();
+    }
 
 };
 
@@ -245,7 +249,7 @@ int main() {
     game.start();
     while(game.fin==false){
         game.player1->attack(game.getPlayer(2));
-        game.player1->grid.display();
+        game.player1->getEnvironment();
         p1.getEnvironment();
         game.player1->play.display();
         game.setFin(game.player2->grid.allSunk());
