@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <random>
 
 using namespace std;
 
@@ -67,6 +68,7 @@ class Player {
 public:
     string name;
     Grid grid;
+    Grid play;
 
     Player(string name) : name(name) {}
 
@@ -75,7 +77,7 @@ public:
     }
 
     void attack(Player& player, pair<int,int> coordinates){
-        if (player.grid.grid[coordinates.first][coordinates.second] == 'S'){
+        if (player.isTouched(coordinates)){
             player.grid.grid[coordinates.first][coordinates.second] = 'X';
             cout << "Touché !" << endl;
         }
@@ -84,7 +86,16 @@ public:
             cout << "Dans l'eau !" << endl;
         }
     }
+
+    bool isTouched(pair<int,int>coordinates){
+        if (grid.grid[coordinates.first][coordinates.second] == 'S'){
+            return true;
+        }
+        return false;
+    }
 };
+
+
 
 class Game {
 public:
@@ -102,8 +113,26 @@ public:
     }
 };
 
+class Agent{
+    Player agent;
+    Game game;
+
+    Agent(Player player,Game game) : agent(player),game(game){}
+
+    void attack(){
+        if (agent.grid.grid[0][0] == '~'){
+            agent.attack(game.player2,{0,0});
+        }
+        agent.grid.display();
+    }
+
+    void getEnvironment(){
+
+    }
+};
+
 int main() {
-    Game game("Joueur 1", "Joueur 2");
+    Game game("Ordi 1", "Joueur 2");
     game.start();
     game.player1.grid.display();
     game.player1.attack(game.player2, {0, 0});
