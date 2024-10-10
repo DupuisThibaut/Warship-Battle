@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <random>
 
 using namespace std;
 
@@ -77,12 +78,19 @@ public:
         }return true;
     }
 };
+class IPlayer{
+    public:
+        virtual void placeShips(vector<Ship> ships)=0;
+        virtual void attack(IPlayer& opponent, pair<int,int> coordinates) = 0;
+        virtual string getName() const = 0;
+        virtual ~IPlayer(){}
+};
 
-
-class Player {
+class Player : public IPlayer{
 public:
     string name;
     Grid grid;
+    Grid play;
 
     Player(string name) : name(name) {}
 
@@ -91,7 +99,7 @@ public:
     }
 
     void attack(Player& player, pair<int,int> coordinates){
-        if (player.grid.grid[coordinates.first][coordinates.second] == 'S'){
+        if (player.isTouched(coordinates)){
             player.grid.grid[coordinates.first][coordinates.second] = 'X';
             cout << "Touché !" << endl;
         }
@@ -100,18 +108,30 @@ public:
             cout << "Dans l'eau !" << endl;
         }
     }
+
+    bool isTouched(pair<int,int>coordinates){
+        if (grid.grid[coordinates.first][coordinates.second] == 'S'){
+            return true;
+        }
+        return false;
+    }
+    string getName() const override {
+        return name;
+    }
 };
+
+
 
 class Game {
 public:
-    Player player1;
-    Player player2;
-    bool fin=false;;
+    IPlayer* player1;
+    IPlayer* player2;
+    bool fin=false;
 
-    Game(string name1, string name2) : player1(name1), player2(name2) {}
+    Game(IPlayer* p1, IPlayer* p2) : player1(p1), player2(p2) {}
 
     void start() {
-        cout << "Placement des bateaux pour " << player1.name << endl;
+        cout << "Placement des bateaux pour " << player1->getName() << endl;
         int X,Y;
         string V;
         bool VH=true;
@@ -134,7 +154,7 @@ public:
                 else bonnePosition=player1.grid.placeShip(Ship(i+2,{X,Y},VH));
             }while(bonnePosition==false);
         }
-        cout << "Placement des bateaux pour " << player2.name << endl;
+        cout << "Placement des bateaux pour " << player2->getName() << endl;
         VH=false;
         for(int i=0;i<5;i++){
             do{
@@ -155,10 +175,33 @@ public:
             }while(bonnePosition==false);
         }
     }
+
+    IPlayer* getPlayer(int x) const{
+        if(x==1) return player1;
+        return player2;
+    }
+};
+
+class Agent : public IPlayer{
+    Player* player;
+    Game* game;
+
+    Agent(Player* player,Game* game1) : player(player),game(game1){}
+
+    void attack(){
+        if (player->grid.grid[0][0] == '~'){
+            player->attack(game->getPlayer(2),{0,0});
+        }
+        player->grid.display();
+    }
+
+    void getEnvironment(){
+
+    }
 };
 
 int main() {
-    Game game("Joueur 1", "Joueur 2");
+    Game game("Ordi 1", "Joueur 2");
     game.start();
     while(game.fin==false){
         int X,Y;
