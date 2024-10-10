@@ -136,7 +136,7 @@ public:
                 cout << "Position Y (entre 0 et 9) d'attaque " << " : ";
                 cin >> Y;
             }while(player->isTouched({Y,X})==true || X>9 || X<0 || Y>9 || Y<0);
-            
+
         }while(bonnePosition==false);
         if (player->isTouched({Y,X})){
             player->grid.grid[Y][X] = 'X';
@@ -196,10 +196,11 @@ class Agent : public IPlayer{
             for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i));}
         }
 
-        void attack(IPlayer* player){
-            if (grid.grid[0][0] == '~'){
-            }
-            grid.display();
+        void attack(Iplayer* player){
+            int x,y;
+            do{
+                x=rand()%10;y=rand()%10;
+            }while(player->isTouched({Y,X})==true || X>9 || X<0 || Y>9 || Y<0);
         }
 
         void getEnvironment(){
