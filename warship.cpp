@@ -61,7 +61,7 @@ public:
             grid[X[i]][Y[i]] = numero+'0';
         }
         ships.push_back(ship);
-        vieShips[numero]=ship.getSize();
+        vieShips[numero-1]=ship.getSize();
         return true;
     }
 
@@ -225,9 +225,12 @@ class Agent : public IPlayer{
         void attack(IPlayer* player){
             int X,Y;
             X=rand()%10;Y=rand()%10;
+            do{
+                X=rand()%10;Y=rand()%10;
+            }while(player->grid.grid[Y][X] == 'X' || player->grid.grid[Y][X] == 'O');
             if (player->isTouched({Y,X})){
-                player->grid.vieShips[(int)(player->grid.grid[Y][X])-1]-=1;
-                player->grid.isSunk((int)(player->grid.grid[Y][X])-1);
+                player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
+                player->grid.isSunk((player->grid.grid[Y][X]-'0')-1);
                 player->grid.grid[Y][X] = 'X';
                 cout << "Touché !" << endl;
             }
@@ -245,8 +248,8 @@ class Agent : public IPlayer{
         }
         bool isTouched(pair<int,int>coordinates){
             if (grid.grid[coordinates.first][coordinates.second] == '~')return false;
-            if(grid.grid[coordinates.first][coordinates.second] == 'O')return false;
-            if(grid.grid[coordinates.first][coordinates.second] == 'X')return false;
+            if (grid.grid[coordinates.first][coordinates.second] == 'O')return false;
+            if (grid.grid[coordinates.first][coordinates.second] == 'X')return false;
             return true;
         }
 };
