@@ -15,7 +15,7 @@ public:
 
     Ship(int size, pair<int, int> coordinates, bool isVertical) : size(size), coordinates(coordinates), isVertical(isVertical), isSunk(false) {}
 
-    void placeShip(pair<int, int> coords, bool isVertical) { 
+    void placeShip(pair<int, int> coords, bool isVertical) {
         coordinates = coords;
         this->isVertical = isVertical;
     }
@@ -34,23 +34,33 @@ public:
 
     Grid() : grid(10, vector<char>(10, '~')) {}
 
-    void placeShip(Ship& ship) { 
+    bool placeShip(Ship ship) {
         pair<int, int> coordinates = ship.getCoordinates();
         bool isVertical = ship.getIsVertical();
         ship.placeShip(coordinates,isVertical);
+        vector<int> X;
+        vector<int> Y;
         if (isVertical){
             for (int i = 0; i < ship.getSize(); i++)
             {
-                grid[(coordinates.first)+i][coordinates.second] = 'S'; 
+                if(coordinates.first+i>9)return false;
+                if(grid[(coordinates.first)+i][coordinates.second]=='S')return false;
+                X.push_back((coordinates.first)+i);Y.push_back(coordinates.second);
             }
         }
         else {
         for (int i = 0; i < ship.getSize(); i++)
             {
-                grid[coordinates.first][(coordinates.second)+i] = 'S'; 
+                if(coordinates.second+i>9)return false;
+                if(grid[coordinates.first][(coordinates.second)+i]=='S')return false;
+                X.push_back((coordinates.first));Y.push_back(coordinates.second+i);
             }
         }
+        for (int i = 0; i < ship.getSize(); i++){
+            grid[X[i]][Y[i]] = 'S';
+        }
         ships.push_back(ship);
+        return true;
     }
 
     void display() {
@@ -60,6 +70,12 @@ public:
             }
             cout << endl;
         }
+    }
+
+    bool allSunk(){
+        for(int i=0;i<5;i++){
+            if(ships[i].isSunk==false)return false;
+        }return true;
     }
 };
 class IPlayer{
@@ -80,7 +96,7 @@ public:
 
     Player(string name) : name(name) {}
 
-    void placeShips(vector<Ship> ships) {        
+    void placeShips(vector<Ship> ships) {
         for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i));}
     }
 
@@ -112,15 +128,54 @@ class Game {
 public:
     IPlayer* player1;
     IPlayer* player2;
+    bool fin=false;
 
     Game(IPlayer* p1, IPlayer* p2) : player1(p1), player2(p2) {}
 
     void start() {
         cout << "Placement des bateaux pour " << player1->getName() << endl;
-        vector<Ship> ships = {Ship(2, {0, 0}, false),Ship(3, {2, 0}, false),Ship(3, {4, 0}, false),Ship(4, {6, 0}, false),Ship(5, {8, 0}, false)};
-        player1->placeShips(ships);
+        int X,Y;
+        string V;
+        bool VH=true;
+        bool bonnePosition=true;
+        for(int i=0;i<5;i++){
+            do{
+                if(bonnePosition==false)cout<<"Bateau au mauvais endroit"<<endl;
+                do{
+                    cout << "Position X (entre 0 et 9) bateau " << i+1 << " : ";
+                    cin >> X;
+                }while(X<0 || X>9);
+                do{
+                    cout << "Position Y (entre 0 et 9) bateau " << i+1 << " : ";
+                    cin >> Y;
+                }while(X<0 || X>9);
+                cout << "Vertical (v) ou Horizontal (h) ";
+                cin >> V;
+                if(V=="v")VH=true;
+                if(i==0 || i==1)bonnePosition=player1->grid.placeShip(Ship(i+2,{X,Y},VH));
+                else bonnePosition=player1->grid.placeShip(Ship(i+2,{X,Y},VH));
+            }while(bonnePosition==false);
+        }
         cout << "Placement des bateaux pour " << player2->getName() << endl;
-        player2->placeShips(ships);
+        VH=false;
+        for(int i=0;i<5;i++){
+            do{
+                if(bonnePosition==false)cout<<"Bateau au mauvais endroit"<<endl;
+                do{
+                    cout << "Position X (entre 0 et 9) bateau " << i+1 << " : ";
+                    cin >> X;
+                }while(X<0 || X>9);
+                do{
+                    cout << "Position Y (entre 0 et 9) bateau " << i+1 << " : ";
+                    cin >> Y;
+                }while(X<0 || X>9);
+                cout << "Vertical (v) ou Horizontal (h) ";
+                cin >> V;
+                if(V=="v")VH=true;
+                if(i==0 || i==1)bonnePosition=player2->grid.placeShip(Ship(i+2,{X,Y},VH));
+                else bonnePosition=player2->grid.placeShip(Ship(i+2,{X,Y},VH));
+            }while(bonnePosition==false);
+        }
     }
 
     IPlayer* getPlayer(int x) const{
@@ -160,9 +215,25 @@ int main() {
     Player p2("Joueur 2");
     Game game(&p1, &p2);
     game.start();
-    game.player1->grid.display();
-    //game.player1.attack(game.player2, {0, 0});
-    game.player2->grid.display();
+    while(game.fin==false){
+        int X,Y;
+        cout << "Joueur 1 attaque ligne : ";
+        cin >> X;
+        cout << "Joueur 1 attaque colonne : ";
+        cin >> Y;
+        //game.player1->attack(game.player2, {X,Y});
+        game.player1->grid.display();
+        game.fin=game.player2->grid.allSunk();
+        if(game.fin==true)break;
+        cout << "Joueur 2 attaque ligne : ";
+        cin >> X;
+        cout << "Joueur 2 attaque colonne : ";
+        cin >> Y;
+        //game.player2.attack(game.player1, {X,Y});
+        game.player2->grid.display();
+        game.fin=game.player1->grid.allSunk();
+    }
+    cout<<"fin !"<<endl;
 
     return 0;
 }
