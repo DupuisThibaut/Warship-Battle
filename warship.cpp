@@ -83,7 +83,7 @@ class IPlayer{
     Grid grid;
     Grid play;
         virtual void placeShips()=0;
-        //virtual void attack(IPlayer& opponent, pair<int,int> coordinates) = 0;
+        virtual void attack(IPlayer* opponent) = 0;
         virtual string getName() const = 0;
         virtual bool isTouched(pair<int,int>coordinates) = 0;
         virtual ~IPlayer(){}
@@ -117,20 +117,33 @@ public:
                 cin >> V;
                 if(V=="v")VH=true;
                 else VH=false;
-                if(i==0 || i==1)bonnePosition=player1->grid.placeShip(Ship(i+2,{X,Y},VH));
-                else bonnePosition=player1->grid.placeShip(Ship(i+2,{X,Y},VH));
-                player1->grid.display();
+                if(i==0 || i==1)bonnePosition=grid.placeShip(Ship(i+2,{X,Y},VH));
+                else bonnePosition=grid.placeShip(Ship(i+2,{X,Y},VH));
+                grid.display();
             }while(bonnePosition==false);
         }
     }
 
-    void attack(IPlayer& player, pair<int,int> coordinates){
-        if (player.isTouched(coordinates)){
-            player.grid.grid[coordinates.first][coordinates.second] = 'X';
+    void attack(IPlayer* player){
+        int X,Y;
+        string V;
+        bool bonnePosition=true;
+        do{play.display();
+            if(bonnePosition==false)cout<<"mauvais endroit"<<endl;
+            do{
+                cout << "Position X (entre 0 et 9) d'attaque " << " : ";
+                cin >> X;
+                cout << "Position Y (entre 0 et 9) d'attaque " << " : ";
+                cin >> Y;
+            }while(player->isTouched({Y,X})==true || X>9 || X<0 || Y>9 || Y<0);
+            
+        }while(bonnePosition==false);
+        if (player->isTouched({Y,X})){
+            player->grid.grid[Y][X] = 'X';
             cout << "Touché !" << endl;
         }
         else {
-            player.grid.grid[coordinates.first][coordinates.second] = 'O';
+            player->grid.grid[Y][X] = 'O';
             cout << "Dans l'eau !" << endl;
         }
     }
@@ -178,9 +191,12 @@ class Agent : public IPlayer{
 
         Agent(string name) : name(name){}
 
-        void placeShips(){}
+        void placeShips(){
+            vector<Ship> ships = {Ship(2, {0, 0}, false),Ship(3, {2, 0}, false),Ship(3, {4, 0}, false),Ship(4, {6, 0}, false),Ship(5, {8, 0}, false)};
+            for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i));}
+        }
 
-        void attack(IPlayer& player, pair<int,int> coordinates){
+        void attack(IPlayer* player){
             if (grid.grid[0][0] == '~'){
             }
             grid.display();
@@ -201,20 +217,11 @@ int main() {
     Game game(&p1, &p2);
     game.start();
     while(game.fin==false){
-        int X,Y;
-        cout << "Joueur 1 attaque ligne : ";
-        cin >> X;
-        cout << "Joueur 1 attaque colonne : ";
-        cin >> Y;
-        //game.player1->attack(game.player2, {X,Y});
+        game.player1->attack(game.getPlayer(2));
         game.player1->play.display();
         game.fin=game.player2->grid.allSunk();
         if(game.fin==true)break;
-        cout << "Joueur 2 attaque ligne : ";
-        cin >> X;
-        cout << "Joueur 2 attaque colonne : ";
-        cin >> Y;
-        //game.player2.attack(game.player1, {X,Y});
+        game.player2->attack(game.getPlayer(1));
         game.player2->play.display();
         game.fin=game.player1->grid.allSunk();
     }
