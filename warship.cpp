@@ -118,7 +118,7 @@ public:
                 if(V=="v")VH=true;
                 else VH=false;
                 if(i==0 || i==1)bonnePosition=grid.placeShip(Ship(i+2,{X,Y},VH));
-                else bonnePosition=grid.placeShip(Ship(i+2,{X,Y},VH));
+                else bonnePosition=grid.placeShip(Ship(i+1,{X,Y},VH));
                 grid.display();
             }while(bonnePosition==false);
         }
@@ -196,10 +196,10 @@ class Agent : public IPlayer{
             for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i));}
         }
 
-        void attack(Iplayer* player){
-            int x,y;
+        void attack(IPlayer* player){
+            int X,Y;
             do{
-                x=rand()%10;y=rand()%10;
+                X=rand()%10;Y=rand()%10;
             }while(player->isTouched({Y,X})==true || X>9 || X<0 || Y>9 || Y<0);
             if (player->isTouched({Y,X})){
                 player->grid.grid[Y][X] = 'X';
