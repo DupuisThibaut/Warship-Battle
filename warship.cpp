@@ -44,16 +44,16 @@ public:
             for (int i = 0; i < ship.getSize(); i++)
             {
                 if(coordinates.first+i>9)return false;
-                if(grid[(coordinates.first)+i][coordinates.second]=='S')return false;
-                X.push_back((coordinates.first)+i);Y.push_back(coordinates.second);
+                if(grid[(coordinates.second)+i][coordinates.first]=='S')return false;
+                X.push_back((coordinates.second)+i);Y.push_back(coordinates.first);
             }
         }
         else {
         for (int i = 0; i < ship.getSize(); i++)
             {
                 if(coordinates.second+i>9)return false;
-                if(grid[coordinates.first][(coordinates.second)+i]=='S')return false;
-                X.push_back((coordinates.first));Y.push_back(coordinates.second+i);
+                if(grid[coordinates.second][(coordinates.first)+i]=='S')return false;
+                X.push_back((coordinates.second));Y.push_back(coordinates.first+i);
             }
         }
         for (int i = 0; i < ship.getSize(); i++){
@@ -81,6 +81,7 @@ public:
 class IPlayer{
     public:
     Grid grid;
+    Grid play;
         virtual void placeShips(vector<Ship> ships)=0;
         //virtual void attack(IPlayer& opponent, pair<int,int> coordinates) = 0;
         virtual string getName() const = 0;
@@ -148,12 +149,14 @@ public:
                 do{
                     cout << "Position Y (entre 0 et 9) bateau " << i+1 << " : ";
                     cin >> Y;
-                }while(X<0 || X>9);
+                }while(Y<0 || Y>9);
                 cout << "Vertical (v) ou Horizontal (h) ";
                 cin >> V;
                 if(V=="v")VH=true;
+                else VH=false;
                 if(i==0 || i==1)bonnePosition=player1->grid.placeShip(Ship(i+2,{X,Y},VH));
                 else bonnePosition=player1->grid.placeShip(Ship(i+2,{X,Y},VH));
+                player1->grid.display();
             }while(bonnePosition==false);
         }
         cout << "Placement des bateaux pour " << player2->getName() << endl;
@@ -168,10 +171,11 @@ public:
                 do{
                     cout << "Position Y (entre 0 et 9) bateau " << i+1 << " : ";
                     cin >> Y;
-                }while(X<0 || X>9);
+                }while(Y<0 || Y>9);
                 cout << "Vertical (v) ou Horizontal (h) ";
                 cin >> V;
                 if(V=="v")VH=true;
+                else VH = false;
                 if(i==0 || i==1)bonnePosition=player2->grid.placeShip(Ship(i+2,{X,Y},VH));
                 else bonnePosition=player2->grid.placeShip(Ship(i+2,{X,Y},VH));
             }while(bonnePosition==false);
@@ -222,7 +226,7 @@ int main() {
         cout << "Joueur 1 attaque colonne : ";
         cin >> Y;
         //game.player1->attack(game.player2, {X,Y});
-        game.player1->grid.display();
+        game.player1->play.display();
         game.fin=game.player2->grid.allSunk();
         if(game.fin==true)break;
         cout << "Joueur 2 attaque ligne : ";
@@ -230,7 +234,7 @@ int main() {
         cout << "Joueur 2 attaque colonne : ";
         cin >> Y;
         //game.player2.attack(game.player1, {X,Y});
-        game.player2->grid.display();
+        game.player2->play.display();
         game.fin=game.player1->grid.allSunk();
     }
     cout<<"fin !"<<endl;
