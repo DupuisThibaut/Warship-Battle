@@ -156,12 +156,14 @@ public:
         }while(bonnePosition==false);
         if (player->isTouched({Y,X})){
             player->grid.grid[Y][X] = 'X';
+            this->play.grid[Y][X]='X';
             cout << "Touché !" << endl;
         }
         else {
             player->grid.vieShips[player->grid.grid[Y][X]-1]-=1;
             player->grid.isSunk(player->grid.grid[Y][X]-1);
             player->grid.grid[Y][X] = 'O';
+            this->play.grid[Y][X]='O';
             cout << "Dans l'eau !" << endl;
         }
     }
@@ -198,6 +200,8 @@ public:
         player1->placeShips();
         cout << "Placement des bateaux pour " << player2->getName() << endl;
         player2->placeShips();
+        cout << "Lancement de la partie :" << endl;
+        char i; cin >> i;
     }
 
     IPlayer* getPlayer(int x) const{
@@ -232,10 +236,12 @@ class Agent : public IPlayer{
                 player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
                 player->grid.isSunk((player->grid.grid[Y][X]-'0')-1);
                 player->grid.grid[Y][X] = 'X';
+                this->play.grid[Y][X]='X';
                 cout << "Touché !" << endl;
             }
             else {
                 player->grid.grid[Y][X] = 'O';
+                this->play.grid[Y][X]='O';
                 cout << "Dans l'eau !" << endl;
             }
         }
@@ -261,12 +267,15 @@ int main() {
     game.start();
     int i;
     while(game.fin==false){
+        char i;
         game.player1->attack(game.getPlayer(2));
         game.player1->display();
+        cin >> i;
         game.setFin(game.player2->grid.allSunk());
         if(game.fin==true)break;
         game.player2->attack(game.getPlayer(1));
         game.player2->display();
+        cin >> i;
         game.setFin(game.player1->grid.allSunk());
     }
     cout<<"fin !"<<endl;
