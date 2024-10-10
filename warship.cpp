@@ -62,9 +62,15 @@ public:
         }
     }
 };
+class IPlayer{
+    public:
+        virtual void placeShips(vector<Ship> ships)=0;
+        virtual void attack(IPlayer& opponent, pair<int,int> coordinates) = 0;
+        virtual string getName() const = 0;
+        virtual ~IPlayer(){}
+};
 
-
-class Player {
+class Player : public IPlayer{
 public:
     string name;
     Grid grid;
@@ -93,37 +99,45 @@ public:
         }
         return false;
     }
+    string getName() const override {
+        return name;
+    }
 };
 
 
 
 class Game {
 public:
-    Player player1;
-    Player player2;
+    IPlayer* player1;
+    IPlayer* player2;
 
-    Game(string name1, string name2) : player1(name1), player2(name2) {}
+    Game(IPlayer* p1, IPlayer* p2) : player1(p1), player2(p2) {}
 
     void start() {
-        cout << "Placement des bateaux pour " << player1.name << endl;
+        cout << "Placement des bateaux pour " << player1->getName() << endl;
         vector<Ship> ships = {Ship(2, {0, 0}, false),Ship(3, {2, 0}, false),Ship(3, {4, 0}, false),Ship(4, {6, 0}, false),Ship(5, {8, 0}, false)};
-        player1.placeShips(ships);
-        cout << "Placement des bateaux pour " << player2.name << endl;
-        player2.placeShips(ships);
+        player1->placeShips(ships);
+        cout << "Placement des bateaux pour " << player2->getName() << endl;
+        player2->placeShips(ships);
+    }
+
+    IPlayer* getPlayer(int x) const{
+        if(x==1) return player1;
+        return player2;
     }
 };
 
-class Agent{
-    Player agent;
-    Game game;
+class Agent : public IPlayer{
+    Player* player;
+    Game* game;
 
-    Agent(Player player,Game game) : agent(player),game(game){}
+    Agent(Player* player,Game* game1) : player(player),game(game1){}
 
     void attack(){
-        if (agent.grid.grid[0][0] == '~'){
-            agent.attack(game.player2,{0,0});
+        if (player->grid.grid[0][0] == '~'){
+            player->attack(game->getPlayer(2),{0,0});
         }
-        agent.grid.display();
+        player->grid.display();
     }
 
     void getEnvironment(){
