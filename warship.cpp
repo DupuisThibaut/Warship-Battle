@@ -33,10 +33,11 @@ class Grid {
 public:
     vector<vector<char> > grid;
     vector<Ship> ships;
+    vector<int> vieShips;
 
-    Grid() : grid(10, vector<char>(10, '~')) {}
+    Grid() : grid(10, vector<char>(10, '~')), vieShips(5, 0) {}
 
-    bool placeShip(Ship ship) {
+    bool placeShip(Ship ship, int numero) {
         pair<int, int> coordinates = ship.getCoordinates();
         bool isVertical = ship.getIsVertical();
         ship.placeShip(coordinates,isVertical);
@@ -57,10 +58,10 @@ public:
             }
         }
         for (int i = 0; i < ship.getSize(); i++){
-            grid[X[i]][Y[i]] = 'S';
+            grid[X[i]][Y[i]] = numero+'0';
         }
         ships.push_back(ship);
-        cout<<ships.size()<<endl;
+        vieShips[numero]=ship.getSize();
         return true;
     }
 
@@ -73,10 +74,21 @@ public:
         }
     }
 
+    void isSunk(int numero){
+        if(vieShips[numero]==0){
+            ships[numero].isSunk=true;
+        }
+    }
+
     bool allSunk(){
+        cout<< vieShips[0]<<endl;
+        cout<< vieShips[1]<<endl;
+        cout<< vieShips[2]<<endl;
+        cout<< vieShips[3]<<endl;
+        cout<< vieShips[4]<<endl;
+        isSunk(0);isSunk(1);isSunk(2);isSunk(3);isSunk(4);
         for(int i=0;i<5;i++){
-            //if(ships.at(i).getSunk()==false)return false;
-            cout<<ships.size()<<endl;
+            if(ships.at(i).getSunk()==false)return false;
         }return true;
     }
 };
@@ -89,14 +101,13 @@ class IPlayer{
         virtual string getName() const = 0;
         virtual bool isTouched(pair<int,int>coordinates) = 0;
         virtual void getEnvironment() = 0;
+        void display(){grid.display();play.display();}
         virtual ~IPlayer(){}
 };
 
 class Player : public IPlayer{
 public:
     string name;
-    Grid grid;
-    Grid play;
 
     Player(string name) : name(name) {}
 
@@ -123,9 +134,8 @@ public:
                     cin >> V;
                     if(V=="v")VH=true;
                     else VH=false;
-                    if(i==0 || i==1)bonnePosition=grid.placeShip(Ship(i+2,{X,Y},VH));
-                    else bonnePosition=grid.placeShip(Ship(i+1,{X,Y},VH));
-                    grid.display();
+                    if(i==0 || i==1)bonnePosition=grid.placeShip(Ship(i+2,{X,Y},VH),i);
+                    else bonnePosition=grid.placeShip(Ship(i+1,{X,Y},VH),i);
                 }while(bonnePosition==false);
             }
     }
@@ -149,13 +159,15 @@ public:
             cout << "Touché !" << endl;
         }
         else {
+            player->grid.vieShips[player->grid.grid[Y][X]-1]-=1;
+            player->grid.isSunk(player->grid.grid[Y][X]-1);
             player->grid.grid[Y][X] = 'O';
             cout << "Dans l'eau !" << endl;
         }
     }
 
     bool isTouched(pair<int,int>coordinates){
-        if (grid.grid[coordinates.first][coordinates.second] == 'S'){
+        if (grid.grid[coordinates.first][coordinates.second] != '~' || grid.grid[coordinates.first][coordinates.second] != 'O' || grid.grid[coordinates.first][coordinates.second] != 'X'){
             return true;
         }
         return false;
@@ -174,6 +186,7 @@ public:
 
 class Game {
 public:
+
     IPlayer* player1;
     IPlayer* player2;
     bool fin=false;
@@ -183,8 +196,6 @@ public:
     void start() {
         cout << "Placement des bateaux pour " << player1->getName() << endl;
         player1->placeShips();
-        player1->grid.display();
-        player1->play.display();
         cout << "Placement des bateaux pour " << player2->getName() << endl;
         player2->placeShips();
     }
@@ -203,22 +214,20 @@ class Agent : public IPlayer{
     public :
         string name;
         Game* game;
-        Grid grid;
-        Grid play;
 
         Agent(string name) : name(name){}
 
         void placeShips(){
             vector<Ship> ships = {Ship(2, {0, 0}, false),Ship(3, {0, 2}, false),Ship(3, {0, 4}, false),Ship(4, {0, 6}, false),Ship(5, {0, 8}, false)};
-            for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i));grid.display();}
+            for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i),i+1);}
         }
 
         void attack(IPlayer* player){
             int X,Y;
-            do{
-                X=rand()%10;Y=rand()%10;
-            }while(player->isTouched({Y,X})==true || X>9 || X<0 || Y>9 || Y<0);
+            X=rand()%10;Y=rand()%10;
             if (player->isTouched({Y,X})){
+                player->grid.vieShips[(int)(player->grid.grid[Y][X])-1]-=1;
+                player->grid.isSunk((int)(player->grid.grid[Y][X])-1);
                 player->grid.grid[Y][X] = 'X';
                 cout << "Touché !" << endl;
             }
@@ -235,10 +244,10 @@ class Agent : public IPlayer{
             return name;
         }
         bool isTouched(pair<int,int>coordinates){
-            if (grid.grid[coordinates.first][coordinates.second] == 'S'){
-                return true;
-            }
-            return false;
+            if (grid.grid[coordinates.first][coordinates.second] == '~')return false;
+            if(grid.grid[coordinates.first][coordinates.second] == 'O')return false;
+            if(grid.grid[coordinates.first][coordinates.second] == 'X')return false;
+            return true;
         }
 };
 
@@ -247,15 +256,14 @@ int main() {
     Agent p2("Joueur 2");
     Game game(&p1, &p2);
     game.start();
+    int i;
     while(game.fin==false){
         game.player1->attack(game.getPlayer(2));
-        game.player1->getEnvironment();
-        p1.getEnvironment();
-        game.player1->play.display();
+        game.player1->display();
         game.setFin(game.player2->grid.allSunk());
         if(game.fin==true)break;
         game.player2->attack(game.getPlayer(1));
-        game.player2->play.display();
+        game.player2->display();
         game.setFin(game.player1->grid.allSunk());
     }
     cout<<"fin !"<<endl;
