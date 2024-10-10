@@ -64,9 +64,11 @@ public:
 };
 class IPlayer{
     public:
+    Grid grid;
         virtual void placeShips(vector<Ship> ships)=0;
-        virtual void attack(IPlayer& opponent, pair<int,int> coordinates) = 0;
+        //virtual void attack(IPlayer& opponent, pair<int,int> coordinates) = 0;
         virtual string getName() const = 0;
+        virtual bool isTouched(pair<int,int>coordinates) = 0;
         virtual ~IPlayer(){}
 };
 
@@ -82,7 +84,7 @@ public:
         for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i));}
     }
 
-    void attack(Player& player, pair<int,int> coordinates){
+    void attack(IPlayer& player, pair<int,int> coordinates){
         if (player.isTouched(coordinates)){
             player.grid.grid[coordinates.first][coordinates.second] = 'X';
             cout << "Touché !" << endl;
@@ -128,29 +130,39 @@ public:
 };
 
 class Agent : public IPlayer{
-    Player* player;
-    Game* game;
+    public :
+        string name;
+        Game* game;
+        Grid grid;
+        Grid play;
 
-    Agent(Player* player,Game* game1) : player(player),game(game1){}
+        Agent(string name) : name(name){}
 
-    void attack(){
-        if (player->grid.grid[0][0] == '~'){
-            player->attack(game->getPlayer(2),{0,0});
+        void placeShips(vector<Ship> ships){}
+
+        void attack(IPlayer& player, pair<int,int> coordinates){
+            if (grid.grid[0][0] == '~'){
+            }
+            grid.display();
         }
-        player->grid.display();
-    }
 
-    void getEnvironment(){
-
-    }
+        void getEnvironment(){
+            grid.display();
+        }
+        string getName() const override{
+            return name;
+        }
+        bool isTouched(pair<int,int>coordinates){return true;}
 };
 
 int main() {
-    Game game("Ordi 1", "Joueur 2");
+    Agent p1("Ordi 1");
+    Player p2("Joueur 2");
+    Game game(&p1, &p2);
     game.start();
-    game.player1.grid.display();
-    game.player1.attack(game.player2, {0, 0});
-    game.player2.grid.display();
+    game.player1->grid.display();
+    //game.player1.attack(game.player2, {0, 0});
+    game.player2->grid.display();
 
     return 0;
 }
