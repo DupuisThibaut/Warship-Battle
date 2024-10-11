@@ -3,7 +3,9 @@
 #include <string>
 #include <random>
 
-#include "Player/IPlayer.cpp"
+#include "../Objects/Ship.h"
+#include "../Objects/Grid.h"
+#include "Player.h"
 
 using namespace std;
 
@@ -11,9 +13,9 @@ class Player : public IPlayer{
 public:
     string name;
 
-    Player(string name) : name(name) {}
+    Player::Player(string name) : name(name) {}
 
-    void placeShips() {
+    void Player::placeShips(){
         int X,Y;
         string V;
         bool VH=true;
@@ -44,7 +46,7 @@ public:
             }
     }
 
-    void attack(IPlayer* player){
+    void Player::attack(IPlayer* player){
         int X,Y;
         string V;
         bool bonnePosition=true;
@@ -71,20 +73,20 @@ public:
             }
     }
 
-    bool isTouched(pair<int,int>coordinates){
+    bool Player::isTouched(pair<int,int>coordinates){
         if (grid.grid[coordinates.first][coordinates.second] != '~' || grid.grid[coordinates.first][coordinates.second] != 'O' || grid.grid[coordinates.first][coordinates.second] != 'X'){
             return true;
         }
         return false;
     }
-    string getName() const override {
+    string Player::getName(){
         return name;
     }
-	void setName(string newName){
+	void Player::setName(string newName){
         name = newName;
     }
 
-    void getEnvironment(){
+    void Player::getEnvironment(){
             grid.display();
     }
 };

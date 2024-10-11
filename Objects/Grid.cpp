@@ -3,8 +3,8 @@
 #include <string>
 #include <random>
 
-#include "Ship.cpp"
-
+#include "Ship.h"
+#include "Grid.h"
 using namespace std;
 
 class Grid {
@@ -13,9 +13,9 @@ public:
     vector<Ship> ships;
     vector<int> vieShips;
 
-    Grid() : grid(10, vector<char>(10, '~')), vieShips(5, 0) {}
+    Grid::Grid() : grid(10, vector<char>(10, '~')), vieShips(5, 0) {}
 
-    bool placeShip(Ship ship, int numero) {
+    bool Grid::placeShip(Ship ship, int numero) {
         pair<int, int> coordinates = ship.getCoordinates();
         bool isVertical = ship.getIsVertical();
         ship.placeShip(coordinates,isVertical);
@@ -43,7 +43,7 @@ public:
         return true;
     }
 
-    void display() {
+    void Grid::display() {
         for (int i = 0; i < 10; ++i) {
             for (int j = 0; j < 10; ++j) {
                 cout << grid[i][j] << " ";
@@ -52,13 +52,13 @@ public:
         }
     }
 
-    void isSunk(int numero){
+    void Grid::isSunk(int numero){
         if(vieShips[numero]==0){
             ships[numero].isSunk=true;
         }
     }
 
-    bool allSunk(){
+    bool Grid::allSunk(){
         // Commentaire cout
         //cout<< vieShips[0]<<endl;
         //cout<< vieShips[1]<<endl;

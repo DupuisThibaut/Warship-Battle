@@ -3,12 +3,12 @@
 #include <string>
 #include <random>
 
-#include "Objects/Ship.cpp"
-#include "Objects/Grid.cpp"
-#include "Player/IPlayer.cpp"
-#include "Player/Player.cpp"
-#include "Player/Agent.cpp"
-#include "Game.cpp"
+#include "Objects/Ship.h"
+#include "Objects/Grid.h"
+#include "Player/Iplayer.h"
+#include "Player/Player.h"
+#include "Player/Agent.h"
+#include "Game.h"
 
 using namespace std;
 

@@ -2,29 +2,21 @@
 #include <vector>
 #include <string>
 #include <random>
-
+#include "Ship.h"
 using namespace std;
 
 // Classe Ship représentant un bateau
-class Ship {
-public:
-    int size;
-    bool isSunk;
-    pair<int, int> coordinates;
-    bool isVertical;
+Ship::Ship(int size, pair<int, int> coordinates, bool isVertical) : size(size), coordinates(coordinates), isVertical(isVertical), isSunk(false) {}
 
-    Ship(int size, pair<int, int> coordinates, bool isVertical) : size(size), coordinates(coordinates), isVertical(isVertical), isSunk(false) {}
-
-    void placeShip(pair<int, int> coords, bool isVertical) {
+void Ship::placeShip(pair<int, int> coords, bool isVertical) {
         coordinates = coords;
         this->isVertical = isVertical;
     }
 
-    int getSize() { return size; }
+int Ship::getSize() { return size; }
 
-    bool getIsVertical() { return isVertical; }
+bool Ship::getIsVertical() { return isVertical; }
 
-    pair<int, int> getCoordinates() { return coordinates; }
+pair<int, int> Ship::getCoordinates() { return coordinates; }
 
-    bool getSunk(){return isSunk;}
-};
+bool Ship::getSunk(){return isSunk;}

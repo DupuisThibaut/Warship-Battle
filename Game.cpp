@@ -4,37 +4,30 @@
 #include <random>
 
 //#include "Objects/Ship.cpp"
-#include "Objects/Grid.cpp"
-#include "Player/IPlayer.cpp"
-#include "Player/Player.cpp"
+#include "Objects/Grid.h"
+#include "Player/IPlayer.h"
+#include "Player/Player.h"
 #include "Player/Agent.cpp"
+#include "Game.h"
 
 using namespace std;
 
-class Game {
-public:
+Game::Game(IPlayer* p1, IPlayer* p2) : player1(p1), player2(p2) {}
 
-    IPlayer* player1;
-    IPlayer* player2;
-    bool fin=false;
+void Game::start() {
+    cout << "Placement des bateaux pour " << player1->getName() << endl;
+    player1->placeShips();
+    cout << "Placement des bateaux pour " << player2->getName() << endl;
+    player2->placeShips();
+    cout << "Lancement de la partie : ";
+    char i; cin >> i;
+}
 
-    Game(IPlayer* p1, IPlayer* p2) : player1(p1), player2(p2) {}
+IPlayer* Game::getPlayer(int x) const{
+    if(x==1) return player1;
+    return player2;
+}
 
-    void start() {
-        cout << "Placement des bateaux pour " << player1->getName() << endl;
-        player1->placeShips();
-        cout << "Placement des bateaux pour " << player2->getName() << endl;
-        player2->placeShips();
-        cout << "Lancement de la partie : ";
-        char i; cin >> i;
-    }
-
-    IPlayer* getPlayer(int x) const{
-        if(x==1) return player1;
-        return player2;
-    }
-
-    void setFin(bool f){
-        fin=f;
-    }
-};
+void Game::setFin(bool f){
+    fin=f;
+}
