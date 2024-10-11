@@ -152,21 +152,20 @@ public:
                 cin >> X;
                 cout << "Position Y (entre 0 et 9) d'attaque " << " : ";
                 cin >> Y;
-            }while(player->isTouched({Y,X})==true || X>9 || X<0 || Y>9 || Y<0);
-
+            }while(X>9 || X<0 || Y>9 || Y<0 || player->grid.grid[Y][X] != '~');
         }while(bonnePosition==false);
         if (player->isTouched({Y,X})){
-            player->grid.grid[Y][X] = 'X';
-            this->play.grid[Y][X]='X';
-            cout << "Touché !" << endl;
-        }
-        else {
-            player->grid.vieShips[player->grid.grid[Y][X]-1]-=1;
-            player->grid.isSunk(player->grid.grid[Y][X]-1);
-            player->grid.grid[Y][X] = 'O';
-            this->play.grid[Y][X]='O';
-            cout << "Dans l'eau !" << endl;
-        }
+                player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
+                player->grid.isSunk((player->grid.grid[Y][X]-'0')-1);
+                player->grid.grid[Y][X] = 'X';
+                this->play.grid[Y][X]='X';
+                cout << "Touché !" << endl;
+            }
+            else {
+                player->grid.grid[Y][X] = 'O';
+                this->play.grid[Y][X]='O';
+                cout << "Dans l'eau !" << endl;
+            }
     }
 
     bool isTouched(pair<int,int>coordinates){
@@ -232,7 +231,7 @@ class Agent : public IPlayer{
             X=rand()%10;Y=rand()%10;
             do{
                 X=rand()%10;Y=rand()%10;
-            }while(player->grid.grid[Y][X] == 'X' || player->grid.grid[Y][X] == 'O');
+            }while(player->grid.grid[Y][X] != '~');
             if (player->isTouched({Y,X})){
                 player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
                 player->grid.isSunk((player->grid.grid[Y][X]-'0')-1);
