@@ -120,6 +120,7 @@ public:
         string f;cout << "manuelle ?";cin >> f;if(f=="n"){
             vector<Ship> ships = {Ship(2, {0, 0}, false),Ship(3, {0, 2}, false),Ship(3, {0, 4}, false),Ship(4, {0, 6}, false),Ship(5, {0, 8}, false)};
             for (int i = 0; i < 5; i++){grid.placeShip(ships.at(i),i+1);}
+            //i
         }else
             for(int i=0;i<5;i++){
                 do{
