@@ -179,6 +179,9 @@ public:
     string getName() const override {
         return name;
     }
+	void setName(string newName){
+        name = newName;
+    }
 
     void getEnvironment(){
             grid.display();
@@ -277,25 +280,38 @@ int main() {
     cout << "4. Agent VS Agent " << endl;
     cout << "Votre choix : ";
     int mode;
-    cin >> mode;
-    Game* game = nullptr;
-    switch (mode) {
-        case 1:
-            game = new Game(&p1, &p2);
-            break;
-        case 2:
-            game = new Game(&p1, &a1);
-            break;
-        case 3:
-            game = new Game(&a1, &p1);
-            break;
-        case 4:
-            game = new Game(&a1, &a2);
-            break;
-        default:
-            cout << "Mode invalide" << endl;
-            return 1;
-    }
+    string name;
+	cin >> mode;
+	Game* game = nullptr;
+	switch (mode) {
+		case 1:
+			cout << "Entrer le nom du Joueur 1 : ";
+			cin >> name;
+			p1.setName(name);
+			cout << "Entrer le nom du Joueur 2 : ";
+			cin >> name;
+			p2.setName(name);
+			game = new Game(&p1, &p2);
+			break;
+		case 2:
+			cout << "Entrer le nom du Joueur 1 : ";
+			cin >> name;
+			p1.setName(name);
+			game = new Game(&p1, &a1);
+			break;
+		case 3:
+			cout << "Entrer le nom du Joueur 1 : ";
+			cin >> name;
+			p1.setName(name);
+			game = new Game(&a1, &p1);
+			break;
+		case 4:
+			game = new Game(&a1, &a2);
+			break;
+		default:
+			cout << "Mode invalide" << endl;
+			return 1;
+	}
     game->start();
     int v=2;
     while(game->fin==false){
