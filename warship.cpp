@@ -152,7 +152,7 @@ public:
                 cin >> X;
                 cout << "Position Y (entre 0 et 9) d'attaque " << " : ";
                 cin >> Y;
-            }while(X>9 || X<0 || Y>9 || Y<0 || player->grid.grid[Y][X] != '~');
+            }while(X>9 || X<0 || Y>9 || Y<0 || player->grid.grid[Y][X] == 'O' || player->grid.grid[Y][X] == 'X');
         }while(bonnePosition==false);
         if (player->isTouched({Y,X})){
                 player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
@@ -231,7 +231,7 @@ class Agent : public IPlayer{
             X=rand()%10;Y=rand()%10;
             do{
                 X=rand()%10;Y=rand()%10;
-            }while(player->grid.grid[Y][X] != '~');
+            }while(player->grid.grid[Y][X] == 'O' || player->grid.grid[Y][X] == 'X');
             if (player->isTouched({Y,X})){
                 player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
                 player->grid.isSunk((player->grid.grid[Y][X]-'0')-1);
@@ -263,8 +263,8 @@ class Agent : public IPlayer{
 int main() {
     Agent a1("Ordi 1");
     Agent a2("Ordi 2");
-    Agent p1("Joueur 1");
-    Agent p2("Joueur 2");
+    Player p1("Joueur 1");
+    Player p2("Joueur 2");
     cout << "--------------------" << endl;
     cout << "-- Warship-Battle --" << endl;
     cout << "--------------------" << endl;
@@ -295,20 +295,16 @@ int main() {
             return 1;
     }
     game->start();
-    int i;
     int v=2;
     while(game->fin==false){
-        char i;
         cout << "Attaque de " << game->player1->getName() << endl;
         game->player1->attack(game->getPlayer(2));
         game->player1->display();
-        //cin >> i;
         game->setFin(game->player2->grid.allSunk());
         if(game->fin==true){v=1;break;}
         cout << "Attaque de " << game->player2->getName() << endl;
         game->player2->attack(game->getPlayer(1));
         game->player2->display();
-        //cin >> i;
         game->setFin(game->player1->grid.allSunk());
     }
     if(v==1)cout<<"Victoire de " << game->player1->getName() << " !"<<endl;
