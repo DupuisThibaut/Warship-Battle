@@ -81,11 +81,12 @@ public:
     }
 
     bool allSunk(){
-        cout<< vieShips[0]<<endl;
-        cout<< vieShips[1]<<endl;
-        cout<< vieShips[2]<<endl;
-        cout<< vieShips[3]<<endl;
-        cout<< vieShips[4]<<endl;
+        // Commentaire cout
+        //cout<< vieShips[0]<<endl;
+        //cout<< vieShips[1]<<endl;
+        //cout<< vieShips[2]<<endl;
+        //cout<< vieShips[3]<<endl;
+        //cout<< vieShips[4]<<endl;
         isSunk(0);isSunk(1);isSunk(2);isSunk(3);isSunk(4);
         for(int i=0;i<5;i++){
             if(ships.at(i).getSunk()==false)return false;
@@ -101,7 +102,7 @@ class IPlayer{
         virtual string getName() const = 0;
         virtual bool isTouched(pair<int,int>coordinates) = 0;
         virtual void getEnvironment() = 0;
-        void display(){grid.display();play.display();}
+        void display(){cout<<"Bateau de " << getName() <<endl;grid.display();cout<<"Tir précédent de " << getName() <<endl;play.display();}
         virtual ~IPlayer(){}
 };
 
@@ -200,7 +201,7 @@ public:
         player1->placeShips();
         cout << "Placement des bateaux pour " << player2->getName() << endl;
         player2->placeShips();
-        cout << "Lancement de la partie :" << endl;
+        cout << "Lancement de la partie : ";
         char i; cin >> i;
     }
 
@@ -261,24 +262,58 @@ class Agent : public IPlayer{
 };
 
 int main() {
-    Agent p1("Ordi 1");
+    Agent a1("Ordi 1");
+    Agent a2("Ordi 2");
+    Agent p1("Joueur 1");
     Agent p2("Joueur 2");
-    Game game(&p1, &p2);
-    game.start();
-    int i;
-    while(game.fin==false){
-        char i;
-        game.player1->attack(game.getPlayer(2));
-        game.player1->display();
-        cin >> i;
-        game.setFin(game.player2->grid.allSunk());
-        if(game.fin==true)break;
-        game.player2->attack(game.getPlayer(1));
-        game.player2->display();
-        cin >> i;
-        game.setFin(game.player1->grid.allSunk());
+    cout << "--------------------" << endl;
+    cout << "-- Warship-Battle --" << endl;
+    cout << "--------------------" << endl;
+    cout << "Mode parte : " << endl;
+    cout << "1. Player VS Player " << endl;
+    cout << "2. Player VS Agent " << endl;
+    cout << "3. Agent VS Player " << endl;
+    cout << "4. Agent VS Agent " << endl;
+    cout << "Votre choix : ";
+    int mode;
+    cin >> mode;
+    Game* game = nullptr;
+    switch (mode) {
+        case 1:
+            game = new Game(&p1, &p2);
+            break;
+        case 2:
+            game = new Game(&p1, &a1);
+            break;
+        case 3:
+            game = new Game(&a1, &p1);
+            break;
+        case 4:
+            game = new Game(&a1, &a2);
+            break;
+        default:
+            cout << "Mode invalide" << endl;
+            return 1;
     }
-    cout<<"fin !"<<endl;
+    game->start();
+    int i;
+    int v=2;
+    while(game->fin==false){
+        char i;
+        cout << "Attaque de " << game->player1->getName() << endl;
+        game->player1->attack(game->getPlayer(2));
+        game->player1->display();
+        //cin >> i;
+        game->setFin(game->player2->grid.allSunk());
+        if(game->fin==true){v=1;break;}
+        cout << "Attaque de " << game->player2->getName() << endl;
+        game->player2->attack(game->getPlayer(1));
+        game->player2->display();
+        //cin >> i;
+        game->setFin(game->player1->grid.allSunk());
+    }
+    if(v==1)cout<<"Victoire de " << game->player1->getName() << " !"<<endl;
+    else cout<<"Victoire de " << game->player2->getName() << " !"<<endl;
 
     return 0;
 }
