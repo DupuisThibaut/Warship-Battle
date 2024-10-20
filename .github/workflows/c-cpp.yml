@@ -1,0 +1,51 @@
+# Ce workflow utilise des actions qui ne sont pas certifiées par GitHub.
+# Elles sont fournies par un tiers et sont régies par
+# des conditions de service, une politique de confidentialité et une documentation de support séparées.
+
+name: Build and Release Warship-Battle
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Build Warship-Battle
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup C++ Build Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential g++
+
+      - name: Build the project
+        run: |
+          make
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release v${{ github.run_number }}
+          body: |
+            This is the release of Warship-Battle version v${{ github.run_number }}.
+          draft: false
+          prerelease: false
+
+      - name: Upload Executable
+        id: upload_executable
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./out/warship  # Chemin vers votre exécutable
+          asset_name: warship  # Nom du fichier à télécharger
+          asset_content_type: application/octet-stream  # Type MIME pour les exécutables
