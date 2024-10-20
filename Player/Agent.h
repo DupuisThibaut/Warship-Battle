@@ -11,19 +11,25 @@ using namespace std;
 
 using namespace std;
 
-
+//Classe qui étend IPlayer et qui désigne l'agent (joueur non humain)
 class Agent : public IPlayer{
     public :
+        //Nom de l'agent
         string name;
+        //Environnement dans lequel il se trouve
         Game* game;
-
+        //Constructeur pour la classe Agent
         Agent(string name);
-
+        //Actions :
+        //Implémentation de la fonction de placement pour l'agent
         void placeShips() override;
-
+        //Implémentation de la fonction d'attaque pour l'agent
         void attack(IPlayer* player) override;
+        //Lecture :
+        //Implémentation des getteurs
         void getEnvironment() override;
         string getName() const override;
+        //Implémentation de la détection de touché
         bool isTouched(pair<int,int>coordinates) override;
 };
 #endif
