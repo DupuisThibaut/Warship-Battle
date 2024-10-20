@@ -5,8 +5,7 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write  # Permet d'écrire dans le contenu, y compris la création de releases
-  packages: write   # Si vous utilisez également des packages
+  contents: write
 
 jobs:
   build:
