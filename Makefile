@@ -2,13 +2,17 @@
 CXX = g++
 CXXFLAGS = -std=c++11
 SOURCES = warship.cpp Game.cpp Player/Player.cpp Player/Agent.cpp Objects/Grid.cpp Objects/Ship.cpp
-EXECUTABLE = warship
+EXECUTABLE = out/warship
 
 # Règle par défaut
 all: $(EXECUTABLE)
 
+# Règle pour créer le dossier out si inexistant
+out:
+	mkdir -p out
+
 # Règle pour construire l'exécutable
-$(EXECUTABLE): $(SOURCES)
+$(EXECUTABLE): out $(SOURCES)
 	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(EXECUTABLE)
 
 # Règle pour nettoyer les fichiers générés
