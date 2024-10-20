@@ -25,6 +25,4 @@ public:
 
     void setFin(bool f);
 };
-
-
 #endif

@@ -6,8 +6,6 @@
 //#include "Objects/Ship.cpp"
 #include "Agent.h"
 #include "../Objects/Grid.h"
-#include "Iplayer.h"
-#include "Player.h"
 #include "../Game.h"
 
 using namespace std;

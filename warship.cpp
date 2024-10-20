@@ -5,9 +5,9 @@
 
 #include "Objects/Ship.h"
 #include "Objects/Grid.h"
-#include "Player/Iplayer.h"
 #include "Player/Player.h"
 #include "Player/Agent.h"
+#include "Player/Iplayer.h"
 #include "Game.h"
 
 using namespace std;

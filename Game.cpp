@@ -5,9 +5,6 @@
 
 //#include "Objects/Ship.cpp"
 #include "Objects/Grid.h"
-#include "Player/IPlayer.h"
-#include "Player/Player.h"
-#include "Player/Agent.cpp"
 #include "Game.h"
 
 using namespace std;

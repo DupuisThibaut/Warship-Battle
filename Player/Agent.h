@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <random>
+#include "Iplayer.h"
 #include "../Game.h"
 
 using namespace std;
@@ -9,6 +10,7 @@ using namespace std;
 #define AGENT_H
 
 using namespace std;
+
 
 class Agent : public IPlayer{
     public :
