@@ -4,13 +4,14 @@ on:
   push:
     branches: [ "main" ]
 
-permissions:
-  contents: write
-
 jobs:
   build:
     name: Build Warship-Battle
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]  # Supporte Linux, macOS et Windows
 
     steps:
       - name: Checkout code
@@ -18,12 +19,21 @@ jobs:
 
       - name: Setup C++ Build Environment
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential g++
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y build-essential g++
+          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            brew install gcc  # Installe GCC sur macOS
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            choco install mingw  # Installe MinGW sur Windows
+          fi
 
       - name: Build the project
         run: |
-          make
+          make  # Assurez-vous que votre Makefile est bien configuré
+
+      - name: List files in output directory
+        run: ls -l ./out  # Vérifiez que le fichier exécutable existe
 
       - name: Create release
         id: create_release
@@ -45,6 +55,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./out/warship  # Chemin vers votre exécutable
-          asset_name: warship  # Nom du fichier à télécharger
-          asset_content_type: application/octet-stream  # Type MIME pour les exécutables
+          asset_path: |
+            ${{ if eq(matrix.os, 'windows-latest') }}:
+              ./out/warship.exe  # Exécutable pour Windows
+            ${{ else }}:
+              ./out/warship  # Exécutable pour macOS et Linux
+          asset_name: |
+            ${{ if eq(matrix.os, 'windows-latest') }}:
+              warship.exe
+            ${{ else }}:
+              warship
+          asset_content_type: application/octet-stream  # Type MIME générique pour les exécutables
