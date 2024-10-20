@@ -1,0 +1,30 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Match semantic versioning tags
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup GCC
+      uses: actions/setup-cpp@v1
+      with:
+        gcc-version: '11'
+
+    - name: Build the project
+      run: |
+        make
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        files: out/warship  # Path to your executable
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
