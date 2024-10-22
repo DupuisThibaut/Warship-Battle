@@ -23,7 +23,7 @@ public:
     //Fonction d'affichage de la grille
     void display();
     //Fonction qui met à jour "vieShips" en fonction de l'état d'un bateau
-    void isSunk(int numero);
+    void isSunk(int numero, Grid grid);
     //Fonction qui renvoie si la partie est terminée (tout les bateaux ont coulé) ou non
     bool allSunk();
 };

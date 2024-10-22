@@ -71,6 +71,7 @@ int main() {
         game->player2->attack(game->getPlayer(1));
         game->player2->display();
         game->setFin(game->player1->grid.allSunk());
+        char i;cin>>i;
     }
     if(v==1)cout<<"Victoire de " << game->player1->getName() << " !"<<endl;
     else cout<<"Victoire de " << game->player2->getName() << " !"<<endl;

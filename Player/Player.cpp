@@ -57,7 +57,7 @@ void Player::attack(IPlayer* player){
     }while(bonnePosition==false);
     if (player->isTouched({Y,X})){
             player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
-            player->grid.isSunk((player->grid.grid[Y][X]-'0')-1);
+            player->grid.isSunk((player->grid.grid[Y][X]-'0')-1,play);
             player->grid.grid[Y][X] = 'X';
             this->play.grid[Y][X]='X';
             cout << "Touché !" << endl;
