@@ -39,15 +39,33 @@ void Agent::attack(IPlayer* player){
     vector<int> p=prochainCoup();X=p[0];Y=p[1];coups[X*10+Y]=0;
     if (player->isTouched({Y,X})){
         player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
-        cout<<"JJJJJJJJJJJJJJJJJJJJJJJ"<<(player->grid.grid[Y][X]-'0')-1<<endl;
-        player->grid.isSunk((player->grid.grid[Y][X]-'0')-1,play);
-        if(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].isSunk==false)
-        this->play.grid[Y][X]='X';
+        player->grid.isSunk((player->grid.grid[Y][X]-'0')-1,this->play);
+        if(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].isSunk==false)this->play.grid[Y][X]='X';
+        else{
+            if (player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getIsVertical()) {
+                for (int i = 0; i < player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getSize(); i++){
+                    this->play.grid[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second+i][player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first] = ((player->grid.grid[Y][X]-'0')-1+1)+'0';
+                    if(X>0 && coups[(X-1)*10+Y]>0)coups[(X-1)*10+Y]-=3;
+                    if(X<9 && coups[(X+1)*10+Y]>0)coups[(X+1)*10+Y]-=3;
+                    if(Y>0 && coups[X*10+Y-1]>0)coups[X*10+Y-1]-=3;
+                    if(Y<9 && coups[X*10+Y+1]>0)coups[X*10+Y+1]-=3;
+                }
+            }
+            else{
+                for (int i = 0; i < player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getSize(); i++){
+                    this->play.grid[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second][player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first+i] = ((player->grid.grid[Y][X]-'0')-1+1)+'0';
+                    if(X>0 && coups[(X-1)*10+Y]>0)coups[(X-1)*10+Y]-=3;
+                    if(X<9 && coups[(X+1)*10+Y]>0)coups[(X+1)*10+Y]-=3;
+                    if(Y>0 && coups[X*10+Y-1]>0)coups[X*10+Y-1]-=3;
+                    if(Y<9 && coups[X*10+Y+1]>0)coups[X*10+Y+1]-=3;
+                }
+            }
+        }
         player->grid.grid[Y][X] = 'X';
-        if(X>0 && coups[(X-1)*10+Y]>0)coups[(X-1)*10+Y]+=2;
-        if(X<9 && coups[(X+1)*10+Y]>0)coups[(X+1)*10+Y]+=2;
-        if(Y>0 && coups[X*10+Y-1]>0)coups[X*10+Y-1]+=2;
-        if(Y<9 && coups[X*10+Y+1]>0)coups[X*10+Y+1]+=2;
+        if(X>0 && coups[(X-1)*10+Y]>0){coups[(X-1)*10+Y]+=3;}
+        if(X<9 && coups[(X+1)*10+Y]>0)coups[(X+1)*10+Y]+=3;
+        if(Y>0 && coups[X*10+Y-1]>0)coups[X*10+Y-1]+=3;
+        if(Y<9 && coups[X*10+Y+1]>0)coups[X*10+Y+1]+=3;
         cout << "Touché !" << endl;
     }
     else {

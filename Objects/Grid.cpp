@@ -53,19 +53,6 @@ void Grid::isSunk(int numero, Grid grille){
         cout<<"iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"<<numero<<endl;
         cout<<ships[numero].getSize()<<endl;
         ships[numero].isSunk=true;
-        if (ships[numero].getIsVertical()) {
-            for (int i = 0; i < ships[numero].getSize(); i++){
-                cout<<"KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"<<endl;
-                grille.grid[ships[numero].getCoordinates().second+i][ships[numero].getCoordinates().first] = (numero+1)+'0';
-            }
-        }
-        else{
-            for (int i = 0; i < ships[numero].getSize(); i++){
-                cout<<"LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL"<<grille.grid[ships[numero].getCoordinates().second][ships[numero].getCoordinates().first+i]<<endl;
-                grille.grid[ships[numero].getCoordinates().second][ships[numero].getCoordinates().first+i] = (numero+1)+'0';
-                cout<<grille.grid[ships[numero].getCoordinates().second][ships[numero].getCoordinates().first+i]<<endl;
-            }
-        }
     }
 }
 
