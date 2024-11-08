@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include <random>
-
+#include <unistd.h>
 //#include "Objects/Ship.cpp"
 #include "Agent.h"
 #include "../Objects/Grid.h"
