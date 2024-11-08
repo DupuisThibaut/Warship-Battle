@@ -17,6 +17,8 @@ class IPlayer{
         virtual void placeShips()=0;
     //Fonction permettant d'attaquer la grille adverse
         virtual void attack(IPlayer* opponent) = 0;
+    //Fonction qui décide de l'attaque ou la défense
+        virtual void whatToDo(IPlayer* opponent) = 0;
     //Getteur pour le nom du joueur
         virtual string getName() const = 0;
     //Fonction qui détermine si un bateau est touché aux coordonnées choisies

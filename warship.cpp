@@ -63,12 +63,12 @@ int main() {
     int v=2;
     while(game->fin==false){
         cout << "Attaque de " << game->player1->getName() << endl;
-        game->player1->attack(game->getPlayer(2));
+        game->player1->whatToDo(game->getPlayer(2));
         game->player1->display();
         game->setFin(game->player2->grid.allSunk());
         if(game->fin==true){v=1;break;}
         cout << "Attaque de " << game->player2->getName() << endl;
-        game->player2->attack(game->getPlayer(1));
+        game->player2->whatToDo(game->getPlayer(1));
         game->player2->display();
         game->setFin(game->player1->grid.allSunk());
         char i;cin>>i;
