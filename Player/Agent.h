@@ -20,6 +20,8 @@ class Agent : public IPlayer{
         Game* game;
         //Liste des prochains coups
         vector<int> coups;
+        //Nombre de défenses restantes
+        int nbdefense=1;
         //Constructeur pour la classe Agent
         Agent(string name);
         //Actions :
@@ -29,10 +31,14 @@ class Agent : public IPlayer{
         void attack(IPlayer* player) override;
         //Implémentation de la fonction pour récuperer le prochain coup pour l'agent
         vector<int> prochainCoup();
-
         void changeCoups(int X, int Y, int valeur);
-
         void ameliorerCoups(int X, int Y);
+        //Implémentation de la fonction de défense 
+        int chooseDefAt();
+        //Fonction qui choisit d'attaquer ou défendre
+        void whatToDo(IPlayer* player) override;
+        //Fonction de défense de l'agent
+        void defense();
         //Lecture :
         //Implémentation des getteurs
         void getEnvironment() override;

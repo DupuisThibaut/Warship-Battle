@@ -69,6 +69,10 @@ void Player::attack(IPlayer* player){
         }
 }
 
+void Player::whatToDo(IPlayer* player){
+    this->attack(player);
+}
+
 bool Player::isTouched(pair<int,int>coordinates){
     if (grid.grid[coordinates.first][coordinates.second] != '~' || grid.grid[coordinates.first][coordinates.second] != 'O' || grid.grid[coordinates.first][coordinates.second] != 'X'){
         return true;

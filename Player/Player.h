@@ -19,6 +19,8 @@ public:
     Player(string name);
     //Implémentation de la fonction de placement pour le joueur
     void placeShips() override;
+    //Fonction qui choisit d'attaquer ou défendre
+    void whatToDo(IPlayer* player) override;
     //Implémentation de la fonction d'attaque pour le joueur
     void attack(IPlayer* player)override;
     //Implémentation de la détection de touché

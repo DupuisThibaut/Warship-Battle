@@ -50,6 +50,8 @@ void Grid::display() {
 
 void Grid::isSunk(int numero, Grid grille){
     if(vieShips[numero]==0){
+        cout<<"iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"<<numero<<endl;
+        cout<<ships[numero].getSize()<<endl;
         ships[numero].isSunk=true;
     }
 }

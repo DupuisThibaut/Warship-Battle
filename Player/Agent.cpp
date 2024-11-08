@@ -4,7 +4,6 @@
 #include <random>
 #include <sys/types.h>
 #include <unistd.h>
-
 //#include "Objects/Ship.cpp"
 #include "Agent.h"
 #include "../Objects/Grid.h"
@@ -15,6 +14,7 @@ using namespace std;
 Agent::Agent(string name) : name(name){for(int i=0;i<10;i++){
     if(i%2==0)for(int j=0;j<10;j++){if((i*10+j)%2!=0)coups.push_back(1);else coups.push_back(2);}
     else{for(int j=0;j<10;j++){if((i*10+j)%2!=0)coups.push_back(2);else coups.push_back(1);}}}
+
 }
 
 void Agent::placeShips(){
@@ -78,7 +78,6 @@ void Agent::ameliorerCoups(int X, int Y){
     if(Y-1>=0){if(this->play.grid[X][Y-1]=='X'){if(Y<9)if(this->play.grid[X][Y+1]=='~'){coups[(Y+1)*10+X]+=1;}if(Y-2>=0)if(this->play.grid[X][Y-2]=='~')coups[(Y-2)*10+X]+=1;}}
     if(Y+1<=9){if(this->play.grid[X][Y+1]=='X'){if(Y>0)if(this->play.grid[X][Y-1]=='~'){coups[(Y-1)*10+X]+=1;}if(Y+2<=9)if(this->play.grid[X][Y+2]=='~')coups[(Y+2)*10+X]+=1;}}
 }
-
 vector<int> Agent::prochainCoup(){
     int m=0;vector<vector<int>> liste;
     for(int i=0;i<10;i++){
@@ -90,6 +89,45 @@ vector<int> Agent::prochainCoup(){
     int x=rand()%liste.size();cout << "x" << x << endl;cout << "liste" << liste.size() << endl;cout << "coups" << coups.size() << endl;
     cout << "X LISTE " << liste[x][0] << " " << liste[x][1] << endl;
     return liste[x];
+}
+
+int Agent::chooseDefAt(){
+    vector<char> sunked;
+    sunked.push_back('X');sunked.push_back('O');sunked.push_back('~');
+    vector<int> sunk;
+    sunk.push_back('X');sunk.push_back('O');sunk.push_back('~');
+    int cpt_sunked = 0;
+    int cpt_sunk = 0;
+    for(int i = 0; i<10;i++){
+        for(int j = 0;i<10;i++){
+            if(find(sunked.begin(),sunked.end(),this->play.grid[j][i]) != sunked.end()){
+                sunked.push_back(this->play.grid[j][i]);
+                cpt_sunked++;
+            }
+            if(find(sunk.begin(),sunk.end(),this->grid.grid[j][i]) != sunk.end()){
+                sunk.push_back(this->grid.grid[j][i]);
+                cpt_sunk++;
+            }
+        }
+    }
+    cout<<"sunked/sunk : "<<cpt_sunked/cpt_sunk<<endl;
+    return int(cpt_sunked/cpt_sunk);
+
+}
+
+void Agent::defense(){
+}
+
+void Agent::whatToDo(IPlayer* player){
+    cout<<"Défenses restantes : "<<this->nbdefense<<endl;
+    if(this->chooseDefAt()<1 && this->nbdefense==1){
+        this->defense();
+        this->nbdefense =0;
+        cout<<"Je défends"<<endl;
+    }
+    else{
+        this->attack(player);
+    }
 }
 
 void Agent::getEnvironment(){
