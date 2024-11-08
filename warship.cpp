@@ -61,14 +61,15 @@ int main() {
 	}
     game->start();
     int v=2;
+    vector<int> coordinates;
     while(game->fin==false){
         cout << "Attaque de " << game->player1->getName() << endl;
-        game->player1->whatToDo(game->getPlayer(2));
+        coordinates = game->player1->whatToDo(game->getPlayer(2),coordinates);
         game->player1->display();
         game->setFin(game->player2->grid.allSunk());
         if(game->fin==true){v=1;break;}
         cout << "Attaque de " << game->player2->getName() << endl;
-        game->player2->whatToDo(game->getPlayer(1));
+        coordinates = game->player2->whatToDo(game->getPlayer(1),coordinates);
         game->player2->display();
         game->setFin(game->player1->grid.allSunk());
         // char i;cin>>i;

@@ -16,9 +16,9 @@ class IPlayer{
     //Fonction qui permet au joueur de placer ses bateaux sur la grille grid
         virtual void placeShips()=0;
     //Fonction permettant d'attaquer la grille adverse
-        virtual void attack(IPlayer* opponent) = 0;
+        virtual vector<int> attack(IPlayer* opponent) = 0;
     //Fonction qui décide de l'attaque ou la défense
-        virtual void whatToDo(IPlayer* opponent) = 0;
+        virtual vector<int> whatToDo(IPlayer* opponent,vector<int> coordinates) = 0;
     //Getteur pour le nom du joueur
         virtual string getName() const = 0;
     //Fonction qui détermine si un bateau est touché aux coordonnées choisies

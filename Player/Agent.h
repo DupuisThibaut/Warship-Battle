@@ -28,17 +28,17 @@ class Agent : public IPlayer{
         //Implémentation de la fonction de placement pour l'agent
         void placeShips() override;
         //Implémentation de la fonction d'attaque pour l'agent
-        void attack(IPlayer* player) override;
+        vector<int> attack(IPlayer* player) override;
         //Implémentation de la fonction pour récuperer le prochain coup pour l'agent
         vector<int> prochainCoup();
         void changeCoups(int X, int Y, int valeur);
         void ameliorerCoups(int X, int Y);
         //Implémentation de la fonction de défense 
-        int chooseDefAt();
+        vector<int> chooseDefAt();
         //Fonction qui choisit d'attaquer ou défendre
-        void whatToDo(IPlayer* player) override;
+        vector<int> whatToDo(IPlayer* player,vector<int>) override;
         //Fonction de défense de l'agent
-        void defense();
+        void defense(vector<int> coordinates);
         //Lecture :
         //Implémentation des getteurs
         void getEnvironment() override;

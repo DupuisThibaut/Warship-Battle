@@ -33,8 +33,9 @@ void Agent::placeShips(){
     grid.display();
 }
 
-void Agent::attack(IPlayer* player){
+vector<int> Agent::attack(IPlayer* player){
     int X,Y;
+    vector<int> result;
     vector<int> p=prochainCoup();X=p[0];Y=p[1];coups[X*10+Y]=0;
     if (player->isTouched({Y,X})){
         player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
@@ -62,6 +63,9 @@ void Agent::attack(IPlayer* player){
         this->play.grid[Y][X]='O';
         cout << "Dans l'eau !" << endl;
     }
+    result.push_back(X);
+    result.push_back(Y);
+    return result;
 }
 
 void Agent::changeCoups(int X, int Y, int valeur){
@@ -91,8 +95,9 @@ vector<int> Agent::prochainCoup(){
     return liste[x];
 }
 
-int Agent::chooseDefAt(){
+vector<int> Agent::chooseDefAt(){
     vector<char> sunked;
+    vector<int> result;
     sunked.push_back('X');sunked.push_back('O');sunked.push_back('~');
     vector<int> sunk;
     sunk.push_back('X');sunk.push_back('O');sunk.push_back('~');
@@ -111,23 +116,27 @@ int Agent::chooseDefAt(){
         }
     }
     cout<<"sunked/sunk : "<<cpt_sunked/cpt_sunk<<endl;
-    return int(cpt_sunked/cpt_sunk);
+    result.push_back(int(cpt_sunked/cpt_sunk));result.push_back(cpt_sunked);result.push_back(cpt_sunk);
+    return result;
 
 }
 
-void Agent::defense(){
+void Agent::defense(vector<int> coordinates){
 }
 
-void Agent::whatToDo(IPlayer* player){
+vector<int> Agent::whatToDo(IPlayer* player,vector<int> coordinates){
     cout<<"Défenses restantes : "<<this->nbdefense<<endl;
-    if(this->chooseDefAt()<1 && this->nbdefense==1){
-        this->defense();
+    vector<int> datas = chooseDefAt();
+    vector<int> result;
+    if(datas[0]<1 && this->nbdefense==1 && datas[2]>2){
+        this->defense(coordinates);
         this->nbdefense =0;
         cout<<"Je défends"<<endl;
     }
     else{
-        this->attack(player);
+        result = this->attack(player);
     }
+    return result;
 }
 
 void Agent::getEnvironment(){
