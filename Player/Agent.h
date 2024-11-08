@@ -18,6 +18,8 @@ class Agent : public IPlayer{
         string name;
         //Environnement dans lequel il se trouve
         Game* game;
+        //Liste des prochains coups
+        vector<int> coups;
         //Constructeur pour la classe Agent
         Agent(string name);
         //Actions :
@@ -25,6 +27,12 @@ class Agent : public IPlayer{
         void placeShips() override;
         //Implémentation de la fonction d'attaque pour l'agent
         void attack(IPlayer* player) override;
+        //Implémentation de la fonction pour récuperer le prochain coup pour l'agent
+        vector<int> prochainCoup();
+
+        void changeCoups(int X, int Y, int valeur);
+
+        void ameliorerCoups(int X, int Y);
         //Lecture :
         //Implémentation des getteurs
         void getEnvironment() override;

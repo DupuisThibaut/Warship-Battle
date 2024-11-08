@@ -18,14 +18,16 @@ bool Grid::placeShip(Ship ship, int numero) {
     if (isVertical){
         for (int i = 0; i < ship.getSize(); i++)
         {
-            if(grid[(coordinates.second)+i][coordinates.first]=='S')return false;
+            if(coordinates.second+i>9)return false;
+            if(grid[(coordinates.second)+i][coordinates.first]!='~')return false;
             X.push_back((coordinates.second)+i);Y.push_back(coordinates.first);
         }
     }
     else {
     for (int i = 0; i < ship.getSize(); i++)
         {
-            if(grid[coordinates.second][(coordinates.first)+i]=='S')return false;
+            if(coordinates.first+i>9)return false;
+            if(grid[coordinates.second][(coordinates.first)+i]!='~')return false;
             X.push_back((coordinates.second));Y.push_back(coordinates.first+i);
         }
     }
@@ -46,22 +48,14 @@ void Grid::display() {
     }
 }
 
-void Grid::isSunk(int numero){
+void Grid::isSunk(int numero, Grid grille){
     if(vieShips[numero]==0){
         ships[numero].isSunk=true;
     }
 }
 
 bool Grid::allSunk(){
-    // Commentaire cout
-    //cout<< vieShips[0]<<endl;
-    //cout<< vieShips[1]<<endl;
-    //cout<< vieShips[2]<<endl;
-    //cout<< vieShips[3]<<endl;
-    //cout<< vieShips[4]<<endl;
-    isSunk(0);isSunk(1);isSunk(2);isSunk(3);isSunk(4);
     for(int i=0;i<5;i++){
         if(ships.at(i).getSunk()==false)return false;
     }return true;
 }
-
