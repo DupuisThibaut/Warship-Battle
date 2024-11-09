@@ -28,7 +28,7 @@ class Agent : public IPlayer{
         //Implémentation de la fonction de placement pour l'agent
         void placeShips() override;
         //Implémentation de la fonction d'attaque pour l'agent
-        vector<int> attack(IPlayer* player) override;
+        pair<int,int> attack(IPlayer* player) override;
         //Implémentation de la fonction pour récuperer le prochain coup pour l'agent
         vector<int> prochainCoup();
         void changeCoups(int X, int Y, int valeur);
@@ -36,14 +36,16 @@ class Agent : public IPlayer{
         //Implémentation de la fonction de défense 
         vector<int> chooseDefAt();
         //Fonction qui choisit d'attaquer ou défendre
-        vector<int> whatToDo(IPlayer* player,vector<int>) override;
+        pair<int,int> whatToDo(IPlayer* player,pair<int,int> coordinates) override;
         //Fonction de défense de l'agent
-        void defense(vector<int> coordinates);
+        void defense(pair<int,int> coordinates);
         //Lecture :
         //Implémentation des getteurs
         void getEnvironment() override;
         string getName() const override;
         //Implémentation de la détection de touché
         bool isTouched(pair<int,int>coordinates) override;
+        //Fonction pour savoir si le bateau aux coordonnées X et Y est le plus grand
+        bool isItTheBiggestBoat(pair<int,int> coordinates,vector<int> datas);
 };
 #endif

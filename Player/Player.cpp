@@ -42,10 +42,10 @@ void Player::placeShips(){
         }
 }
 
-vector<int> Player::attack(IPlayer* player){
+pair<int,int> Player::attack(IPlayer* player){
     int X,Y;
     string V;
-    vector<int> result;
+    pair<int,int> result;
     bool bonnePosition=true;
     do{play.display();
         if(bonnePosition==false)cout<<"mauvais endroit"<<endl;
@@ -68,12 +68,12 @@ vector<int> Player::attack(IPlayer* player){
             this->play.grid[Y][X]='O';
             cout << "Dans l'eau !" << endl;
         }
-    result.push_back(X);
-    result.push_back(Y);
+    result.first = X;
+    result.second = Y;
     return result;
 }
 
-vector<int> Player::whatToDo(IPlayer* player,vector<int> coordinates){
+pair<int,int> Player::whatToDo(IPlayer* player,pair<int,int> coordinates){
     return this->attack(player);
 
 }

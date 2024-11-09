@@ -20,9 +20,9 @@ public:
     //Implémentation de la fonction de placement pour le joueur
     void placeShips() override;
     //Fonction qui choisit d'attaquer ou défendre
-    vector<int> whatToDo(IPlayer* player,vector<int> coordinates) override;
+    pair<int,int> whatToDo(IPlayer* player,pair<int,int> coordinates) override;
     //Implémentation de la fonction d'attaque pour le joueur
-    vector<int> attack(IPlayer* player)override;
+    pair<int,int> attack(IPlayer* player)override;
     //Implémentation de la détection de touché
     bool isTouched(pair<int,int>coordinates) override;
     //Implémentation du getteur de nom de joueur
