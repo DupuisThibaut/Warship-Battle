@@ -72,7 +72,7 @@ int main() {
         coordinates = game->player2->whatToDo(game->getPlayer(1),coordinates);
         game->player2->display();
         game->setFin(game->player1->grid.allSunk());
-        char i;cin>>i;
+        //char i;cin>>i;
     }
     if(v==1)cout<<"Victoire de " << game->player1->getName() << " !"<<endl;
     else cout<<"Victoire de " << game->player2->getName() << " !"<<endl;

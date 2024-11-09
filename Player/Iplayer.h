@@ -26,7 +26,7 @@ class IPlayer{
     //Fonction qui renvoie la grille de placement grid
         virtual void getEnvironment() = 0;
     //Fonction qui permet d'afficher les grilles de placement et de jeu
-        void display(){cout<<"Bateau de " << getName() <<endl;grid.display();cout<<"Tir précédent de " << getName() <<endl;play.display();}
+        void display(){cout<<"Bateaux de " << getName() <<endl;grid.display();cout<<"Tir précédent de " << getName() <<endl;play.display();}
     //Constructeur de la classe IPlayer
         virtual ~IPlayer(){}
 };

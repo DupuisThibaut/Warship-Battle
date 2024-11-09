@@ -130,13 +130,10 @@ pair<int,int> Agent::whatToDo(IPlayer* player,pair<int,int> coordinates){
     cout<<"Défenses restantes : "<<this->nbdefense<<endl;
     vector<int> datas = chooseDefAt();
     pair<int,int> result;
-    cout<<datas[0];
-    cout<<this->nbdefense<<endl;cout<< datas[2]<<endl;cout<<coordinates.first<<endl;if(coordinates.first<10 && coordinates.second<10)cout<< isItTheBiggestBoat(coordinates,datas)<<endl;
-    
-    if(datas[0]<1 && this->nbdefense==1 && datas[2]>2 && coordinates.first==10 && isItTheBiggestBoat(coordinates,datas)){
+    if(datas[0]<1 && this->nbdefense==1 && datas[2]>2 && coordinates.first<10 && isItTheBiggestBoat(coordinates,datas)){
         this->defense(coordinates);
         this->nbdefense =0;
-        cout<<"Je défends"<<endl;
+        cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
         result = make_pair(10,10);
     }
     else{
@@ -159,8 +156,24 @@ bool Agent::isTouched(pair<int,int>coordinates){
 }
 
 bool Agent::isItTheBiggestBoat(pair<int,int>coordinates,vector<int> datas){
-    int num_boat = int(play.grid[coordinates.second][coordinates.first]);
-    cout<<"hello"<<endl;
+    if(grid.grid[coordinates.second][coordinates.first]=='~') return false;
+    if(grid.grid[coordinates.second][coordinates.first]=='O') return false;
+    int num_boat = 0;
+    for(size_t i=0;i<grid.ships.size();i++){
+        for(size_t j =0;j<grid.ships[i].size;j++){
+            if(grid.ships[i].getIsVertical()==true){
+                if(grid.ships[i].coordinates.second+j == coordinates.first && grid.ships[i].coordinates.first == coordinates.second){
+                    num_boat = grid.ships[i].size;
+                }
+            }
+            else{
+                if(grid.ships[i].coordinates.first+j == coordinates.second && grid.ships[i].coordinates.second == coordinates.first){
+                    num_boat = grid.ships[i].size;
+                }
+            }
+        }
+    }
+    if(num_boat == 0){return false;}
     if(num_boat==5){return true;}
     if(num_boat==1 && datas[2]<4){return false;}
     for(int i=2;i<5;i++){
