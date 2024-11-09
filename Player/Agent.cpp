@@ -163,20 +163,21 @@ bool Agent::isItTheBiggestBoat(pair<int,int>coordinates,vector<int> datas){
         for(size_t j =0;j<grid.ships[i].size;j++){
             if(grid.ships[i].getIsVertical()==true){
                 if(grid.ships[i].coordinates.second+j == coordinates.first && grid.ships[i].coordinates.first == coordinates.second){
-                    num_boat = grid.ships[i].size;
+                    num_boat = i;
                 }
             }
             else{
                 if(grid.ships[i].coordinates.first+j == coordinates.second && grid.ships[i].coordinates.second == coordinates.first){
-                    num_boat = grid.ships[i].size;
+                    num_boat = i;
                 }
             }
         }
     }
+    if(grid.vieShips[num_boat-1]<(grid.ships[num_boat-1].size-1)) return false;
     if(num_boat == 0){return false;}
     if(num_boat==5){return true;}
     if(num_boat==1 && datas[2]<4){return false;}
-    for(int i=2;i<5;i++){
+    for(int i=1;i<5;i++){
         if(i>num_boat && grid.vieShips[i]!=0){
             return false;
 
