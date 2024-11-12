@@ -74,6 +74,8 @@ int main() {
         game->setFin(game->player1->grid.allSunk());
         //char i;cin>>i;
     }
+    cout<<"Il reste "<<game->player1->getNbDefense()<<" au joueur 1"<<endl;
+    cout<<"Il reste "<<game->player2->getNbDefense()<<" au joueur 2"<<endl;
     if(v==1)cout<<"Victoire de " << game->player1->getName() << " !"<<endl;
     else cout<<"Victoire de " << game->player2->getName() << " !"<<endl;
 

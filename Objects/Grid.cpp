@@ -31,11 +31,30 @@ bool Grid::placeShip(Ship ship, int numero) {
             X.push_back((coordinates.second));Y.push_back(coordinates.first+i);
         }
     }
-    for (int i = 0; i < ship.getSize(); i++){
-        grid[X[i]][Y[i]] = numero+'0';
+    if(vieShips[numero-1]==0){
+        for (int i = 0; i < ship.getSize(); i++){
+            grid[X[i]][Y[i]] = numero+'0';
+        }
+        ship.numero=numero;
+        ships.push_back(ship);
+        vieShips[numero-1]=ship.getSize();
+    }else{
+        for(int i=0;i<ship.getSize();i++){
+            if(isVertical){
+                grid[ships[numero].getCoordinates().first+i][ships[numero].getCoordinates().second]='O';
+            }else{
+                grid[ships[numero].getCoordinates().first][ships[numero].getCoordinates().second+i]='O';
+            }
+        }
+        for(int i=0;i<ship.getSize();i++){
+            if(isVertical){
+                grid[(coordinates.second)+i][coordinates.first]=numero+'0';
+            }else{
+                grid[coordinates.second][coordinates.first+i]=numero+'0';
+            }
+        }
+        ships[numero]=ship;
     }
-    ships.push_back(ship);
-    vieShips[numero-1]=ship.getSize();
     return true;
 }
 

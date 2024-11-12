@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <random>
+#include <algorithm>
 
 #include "../Objects/Ship.h"
 #include "../Objects/Grid.h"
@@ -73,6 +74,20 @@ pair<int,int> Player::attack(IPlayer* player){
     return result;
 }
 
+void Player::defense(Ship ship, pair<int,int> coordinates, IPlayer* player){
+    vector<vector<int>> places;int X=coordinates.first;int Y=coordinates.second;
+    if(X>0)places.push_back(vector<int>{(X-1,Y)});if(X<9)places.push_back(vector<int>{(X+1,Y)});if(Y>0)places.push_back(vector<int>{(X,Y-1)});if(Y<9)places.push_back(vector<int>{(X,Y+1)});
+    random_shuffle(places.begin(),places.end());
+    for(int i=0;i<4;i++){
+        Ship shipTest=ship;
+        shipTest.coordinates.first=places[i][0];shipTest.coordinates.second=places[i][1];
+        if(grid.placeShip(ship,ship.numero)){
+            player->play.grid[coordinates.first][coordinates.second]='X';
+            break;
+        }
+    }
+}
+
 pair<int,int> Player::whatToDo(IPlayer* player,pair<int,int> coordinates){
     return this->attack(player);
 
@@ -86,6 +101,9 @@ bool Player::isTouched(pair<int,int>coordinates){
 }
 string Player::getName() const{
     return name;
+}
+int Player::getNbDefense(){
+    return 1;
 }
 void Player::setName(string newName){
     name = newName;

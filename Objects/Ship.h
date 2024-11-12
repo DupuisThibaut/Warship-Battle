@@ -17,6 +17,8 @@ public:
     pair<int, int> coordinates;
     //Booléen qui détermine l'orientation du bateau
     bool isVertical;
+
+    int numero;
     //Constructeur de la classe bateau
     Ship(int size, pair<int, int> coordinates, bool isVertical);
     //Fonction de placement du bateau

@@ -23,10 +23,12 @@ public:
     pair<int,int> whatToDo(IPlayer* player,pair<int,int> coordinates) override;
     //Implémentation de la fonction d'attaque pour le joueur
     pair<int,int> attack(IPlayer* player)override;
+    void defense(Ship ship, pair<int,int> coordinates, IPlayer* player) override;
     //Implémentation de la détection de touché
     bool isTouched(pair<int,int>coordinates) override;
     //Implémentation du getteur de nom de joueur
     string getName() const override;
+    int getNbDefense() override;
     //Setteur pour le nom du joueur
 	void setName(string newName);
     //Implémentation de la fonction pour obtenir la grille grid

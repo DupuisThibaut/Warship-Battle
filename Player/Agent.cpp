@@ -4,6 +4,7 @@
 #include <random>
 #include <sys/types.h>
 #include <unistd.h>
+#include <algorithm>
 //#include "Objects/Ship.cpp"
 #include "Agent.h"
 #include "../Objects/Grid.h"
@@ -105,10 +106,10 @@ vector<int> Agent::chooseDefAt(){
     float cpt_sunk = 0;
     for(int i = 0; i<10;i++){
         for(int j = 0;j<10;j++){
-            if(find(sunked.begin(),sunked.end(),this->play.grid[j][i]) != sunked.end()){
+            if(find(sunked.begin(),sunked.end(),this->play.grid[j][i]-'0') != sunked.end()){
                 cpt_sunked++;
             }
-            if(find(sunk.begin(),sunk.end(),this->grid.grid[j][i]) != sunk.end()){
+            if(find(sunk.begin(),sunk.end(),this->grid.grid[j][i]+'0') != sunk.end()){
                 cpt_sunk++;
             }
         }
@@ -123,7 +124,18 @@ vector<int> Agent::chooseDefAt(){
 
 }
 
-void Agent::defense(pair<int,int> coordinates){
+void Agent::defense(Ship ship, pair<int,int> coordinates, IPlayer* player){
+    vector<vector<int>> places;int X=coordinates.first;int Y=coordinates.second;
+    if(X>0)places.push_back(vector<int>{(X-1,Y)});if(X<9)places.push_back(vector<int>{(X+1,Y)});if(Y>0)places.push_back(vector<int>{(X,Y-1)});if(Y<9)places.push_back(vector<int>{(X,Y+1)});
+    random_shuffle(places.begin(),places.end());
+    for(int i=0;i<4;i++){
+        Ship shipTest=ship;
+        shipTest.coordinates.first=places[i][0];shipTest.coordinates.second=places[i][1];
+        if(grid.placeShip(ship,ship.numero)){
+            player->play.grid[coordinates.first][coordinates.second]='X';
+            break;
+        }
+    }
 }
 
 pair<int,int> Agent::whatToDo(IPlayer* player,pair<int,int> coordinates){
@@ -131,7 +143,8 @@ pair<int,int> Agent::whatToDo(IPlayer* player,pair<int,int> coordinates){
     vector<int> datas = chooseDefAt();
     pair<int,int> result;
     if(datas[0]<1 && this->nbdefense==1 && datas[2]>2 && coordinates.first<10 && isItTheBiggestBoat(coordinates,datas)){
-        this->defense(coordinates);
+        this->nbdefense+=15;
+        this->defense(grid.ships[(grid.grid[coordinates.first][coordinates.second]+'0')-1],coordinates,player);
         this->nbdefense =0;
         cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
         result = make_pair(10,10);
@@ -147,6 +160,9 @@ void Agent::getEnvironment(){
 }
 string Agent::getName() const{
     return name;
+}
+int Agent::getNbDefense(){
+    return nbdefense;
 }
 bool Agent::isTouched(pair<int,int>coordinates){
     if (grid.grid[coordinates.first][coordinates.second] == '~')return false;

@@ -38,11 +38,12 @@ class Agent : public IPlayer{
         //Fonction qui choisit d'attaquer ou défendre
         pair<int,int> whatToDo(IPlayer* player,pair<int,int> coordinates) override;
         //Fonction de défense de l'agent
-        void defense(pair<int,int> coordinates);
+        void defense(Ship ship, pair<int,int> coordinates, IPlayer* player) override;
         //Lecture :
         //Implémentation des getteurs
         void getEnvironment() override;
         string getName() const override;
+        int getNbDefense() override;
         //Implémentation de la détection de touché
         bool isTouched(pair<int,int>coordinates) override;
         //Fonction pour savoir si le bateau aux coordonnées X et Y est le plus grand
