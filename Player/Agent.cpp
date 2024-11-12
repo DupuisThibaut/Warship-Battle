@@ -97,20 +97,19 @@ vector<int> Agent::prochainCoup(){
 }
 
 vector<int> Agent::chooseDefAt(){
-    vector<char> sunked;
+    vector<char> sunked = {'X', 'O', '~','e'};
     vector<int> result;
-    sunked.push_back('X');sunked.push_back('O');sunked.push_back('~');
-    vector<int> sunk;
-    sunk.push_back('X');sunk.push_back('O');sunk.push_back('~');
-    float cpt_sunked = 0;
-    float cpt_sunk = 0;
+    vector<char> sunk = {'X', 'O', '~','e'};
+    int cpt_sunked = 0;
+    int cpt_sunk = 0;
     for(int i = 0; i<10;i++){
         for(int j = 0;j<10;j++){
-            if(find(sunked.begin(),sunked.end(),this->play.grid[j][i]-'0') != sunked.end()){
-                cpt_sunked++;
+            if(find(sunked.begin(),sunked.end(),this->play.grid[i][j])==sunked.end()){
+                    cout<<"sunked : "<<this->play.grid[i][j]<<endl;
+                    cpt_sunked++;
             }
-            if(find(sunk.begin(),sunk.end(),this->grid.grid[j][i]+'0') != sunk.end()){
-                cpt_sunk++;
+            if(find(sunk.begin(),sunk.end(),this->grid.grid[i][j])==sunk.end()){
+                    cpt_sunk++;
             }
         }
     }
@@ -119,14 +118,13 @@ vector<int> Agent::chooseDefAt(){
     else {ratio = int(cpt_sunked / cpt_sunk);} 
     cout<<"sunked/sunk : "<<ratio<<endl;
     result.push_back(ratio);result.push_back(cpt_sunked);result.push_back(cpt_sunk);
-                
+    cout<<"ratio : "<<result[0]<<" sunked : "<<result[1]<<" sunk :"<<result[2]<<endl;
     return result;
-
 }
 
 void Agent::defense(Ship ship, pair<int,int> coordinates, IPlayer* player){
     vector<vector<int>> places;int X=coordinates.first;int Y=coordinates.second;
-    if(X>0)places.push_back(vector<int>{(X-1,Y)});if(X<9)places.push_back(vector<int>{(X+1,Y)});if(Y>0)places.push_back(vector<int>{(X,Y-1)});if(Y<9)places.push_back(vector<int>{(X,Y+1)});
+    if(X>0)places.push_back(vector<int>{X-1,Y});if(X<9)places.push_back(vector<int>{X+1,Y});if(Y>0)places.push_back(vector<int>{X,Y-1});if(Y<9)places.push_back(vector<int>{X,Y+1});
     random_shuffle(places.begin(),places.end());
     for(int i=0;i<4;i++){
         Ship shipTest=ship;

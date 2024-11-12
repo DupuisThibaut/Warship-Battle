@@ -76,7 +76,7 @@ pair<int,int> Player::attack(IPlayer* player){
 
 void Player::defense(Ship ship, pair<int,int> coordinates, IPlayer* player){
     vector<vector<int>> places;int X=coordinates.first;int Y=coordinates.second;
-    if(X>0)places.push_back(vector<int>{(X-1,Y)});if(X<9)places.push_back(vector<int>{(X+1,Y)});if(Y>0)places.push_back(vector<int>{(X,Y-1)});if(Y<9)places.push_back(vector<int>{(X,Y+1)});
+    if(X>0)places.push_back(vector<int>{X-1,Y});if(X<9)places.push_back(vector<int>{X+1,Y});if(Y>0)places.push_back(vector<int>{X,Y-1});if(Y<9)places.push_back(vector<int>{X,Y+1});
     random_shuffle(places.begin(),places.end());
     for(int i=0;i<4;i++){
         Ship shipTest=ship;
