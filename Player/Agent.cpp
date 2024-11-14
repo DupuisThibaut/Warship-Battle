@@ -115,7 +115,7 @@ vector<int> Agent::chooseDefAt(){
     }
     int ratio;
     if(cpt_sunk==0){ratio=1;}
-    else {ratio = int(cpt_sunked / cpt_sunk);} 
+    else {ratio = int(cpt_sunked / cpt_sunk);}
     cout<<"sunked/sunk : "<<ratio<<endl;
     result.push_back(ratio);result.push_back(cpt_sunked);result.push_back(cpt_sunk);
     cout<<"ratio : "<<result[0]<<" sunked : "<<result[1]<<" sunk :"<<result[2]<<endl;
@@ -140,14 +140,23 @@ pair<int,int> Agent::whatToDo(IPlayer* player,pair<int,int> coordinates){
     cout<<"Défenses restantes : "<<this->nbdefense<<endl;
     vector<int> datas = chooseDefAt();
     pair<int,int> result;
-    if(datas[0]<1 && this->nbdefense==1 && datas[2]>2 && coordinates.first<10 && isItTheBiggestBoat(coordinates,datas)){
+    int lastBoat=0;
+    for(int i=0;i<5;i++){
+        if(this->grid.vieShips[i]==0)lastBoat++;
+    }
+    cout<<"ici"<<endl;
+    if(((datas[0]<1 && this->nbdefense==1 && datas[2]>2) || lastBoat==4 ) && coordinates.first<10 && isItTheBiggestBoat(coordinates,datas)){
+        cout<<"ici2"<<endl;
         this->nbdefense+=15;
-        this->defense(grid.ships[(grid.grid[coordinates.first][coordinates.second]+'0')-1],coordinates,player);
+        cout<<"ici3"<<endl;
+        this->defense(grid.ships[(grid.grid[coordinates.first][coordinates.second])-1],coordinates,player);
+        cout<<"ici4"<<endl;
         this->nbdefense =0;
         cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
         result = make_pair(10,10);
     }
     else{
+        cout<<"la"<<endl;
         result = this->attack(player);
     }
     return result;
