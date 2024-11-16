@@ -127,7 +127,6 @@ class Agent : public IPlayer{
                     }
                 }
             }
-            cout<<"sunked : "<<cpt_sunked<<" sunk : "<<cpt_sunk<<endl;
             int ratio;
             if(cpt_sunk==0){ratio=1;}
             else {ratio = floor(cpt_sunked / cpt_sunk);}
@@ -141,11 +140,9 @@ class Agent : public IPlayer{
             pair<int,int> result;
             int numero = 100;
             bool test = isItTheBiggestBoat(coordinates, numero);
-            cout<<"ratio : "<<datas[0]<<" coordonnées :"<<(coordinates.first<10 && coordinates.second<10)<<" Biggestboat :"<<test<<" nbdefense : "<<(nbdefense==1)<<endl;
             if(((datas[0]<1 && datas[2]>=2) || datas[2]>=4 ) && (coordinates.first<10 && coordinates.second<10) && nbdefense==1 && test){
-                cout<<"Debug test :"<<(((datas[0]<1 && nbdefense==1 && datas[2]>2 && test) || datas[2]>=4 ) && (coordinates.first<10 && coordinates.second<10))<<endl;
                 pair<int,int> coor;coor.first=coordinates.second;coor.second=coordinates.first;
-                defense(grid.ships[numero-1],coor,player);
+                defense(grid.ships[numero],coor,player);
                 cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
                 nbdefense=0;
                 grid.display();
@@ -163,9 +160,6 @@ class Agent : public IPlayer{
             if(X>0)places.push_back(vector<int>{X-1,Y});if(X<9)places.push_back(vector<int>{X+1,Y});if(Y>0)places.push_back(vector<int>{X,Y-1});if(Y<9)places.push_back(vector<int>{X,Y+1});
             random_shuffle(places.begin(),places.end());
             bool test=false;
-            cout<<"X "<<X<<endl;
-            cout<<"Y "<<Y<<endl;
-            cout<<"places "<<places.size()<<endl;
             for(int i=0;i<places.size();i++){
                 if(test==false){
                     Ship shipTest=ship;
@@ -176,7 +170,6 @@ class Agent : public IPlayer{
                     }
                 }
             }
-            cout<<"test"<<test<<endl;
             if(test){
                 pair<int, int> coordinatesShip = ship.getCoordinates();
                 bool isVertical = ship.getIsVertical();
@@ -237,7 +230,6 @@ class Agent : public IPlayer{
         bool isItTheBiggestBoat(pair<int,int>coordinates, int &num_boat){
             if(coordinates.first<10 && coordinates.second<10){
                 if(grid.grid[coordinates.second][coordinates.first]=='~' || grid.grid[coordinates.second][coordinates.first]=='O') {return false;}
-                cout<<"debug ping"<<endl;
                 for(size_t i=0;i<grid.ships.size();i++){
                     for(size_t j =0;j<grid.ships[i].getSize();j++){
                         if(grid.ships[i].getIsVertical()==true){
@@ -248,7 +240,6 @@ class Agent : public IPlayer{
                         }
                     }
                 }
-                cout<<"num_boat : "<<num_boat<<endl;
                 if(num_boat == 100 || grid.vieShips[num_boat]!=(grid.ships[num_boat].getSize()-1)) return false;
                 for(int i=num_boat+1;i<5;i++){
                     if(grid.vieShips[i]!=0){return false;}
