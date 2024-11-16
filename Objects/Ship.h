@@ -20,16 +20,19 @@ public:
 
     int numero;
     //Constructeur de la classe bateau
-    Ship(int size, pair<int, int> coordinates, bool isVertical);
+    Ship(int size, pair<int, int> coordinates, bool isVertical) : size(size), coordinates(coordinates), isVertical(isVertical), isSunk(false) {}
     //Fonction de placement du bateau
-    void placeShip(pair<int, int> coords, bool isVertical);
+    void placeShip(pair<int, int> coords, bool isVertical) {
+        coordinates = coords;
+        this->isVertical = isVertical;
+    }
     //Getteur pour la taille du bateau
-    int getSize();
+    int getSize() { return size; }
     //Getteur pour l'orientation
-    bool getIsVertical();
+    bool getIsVertical() { return isVertical; }
     //Getteur pour les coordonnées
-    pair<int, int> getCoordinates();
+    pair<int, int> getCoordinates() { return coordinates; }
     //Getteur pour l'état du bateau
-    bool getSunk();
+    bool getSunk(){return isSunk;}
 };
 #endif //SECONDFILE_H
