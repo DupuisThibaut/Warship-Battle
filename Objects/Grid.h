@@ -79,8 +79,6 @@ public:
     //Fonction qui met à jour "vieShips" en fonction de l'état d'un bateau
     void isSunk(int numero, Grid grille){
         if(vieShips[numero]==0){
-            cout<<"iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"<<numero<<endl;
-            cout<<ships[numero].getSize()<<endl;
             ships[numero].isSunk=true;
         }
     }

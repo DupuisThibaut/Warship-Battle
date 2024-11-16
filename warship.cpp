@@ -1,8 +1,3 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <random>
-
 #include "Objects/Ship.h"
 #include "Objects/Grid.h"
 #include "Player/Player.h"
@@ -17,15 +12,15 @@ int main() {
     Agent a2("Ordi 2");
     Player p1("Joueur 1");
     Player p2("Joueur 2");
-    cout << "--------------------" << endl;
-    cout << "-- Warship-Battle --" << endl;
-    cout << "--------------------" << endl;
-    cout << "Mode parte : " << endl;
-    cout << "1. Player VS Player " << endl;
-    cout << "2. Player VS Agent " << endl;
-    cout << "3. Agent VS Player " << endl;
-    cout << "4. Agent VS Agent " << endl;
-    cout << "Votre choix : ";
+    cout << "--------------------" << endl
+         << "-- Warship-Battle --" << endl
+         << "--------------------" << endl
+         << "Mode parte : " << endl
+         << "1. Player VS Player " << endl 
+         << "2. Player VS Agent " << endl 
+         << "3. Agent VS Player " << endl 
+         << "4. Agent VS Agent " << endl 
+         << "Votre choix : ";
     int mode;
     string name;
 	cin >> mode;

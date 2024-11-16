@@ -31,7 +31,7 @@ class Agent : public IPlayer{
             else{for(int j=0;j<10;j++){if((i*10+j)%2!=0)coups.push_back(2);else coups.push_back(1);}}}
 
         }        
-        //Actions :
+    //Actions :
         //Implémentation de la fonction de placement pour l'agent
         void placeShips() override {
             srand(getpid()+(rand()%100));
@@ -92,8 +92,7 @@ class Agent : public IPlayer{
                     if(coups[i*10+j]==m)liste.push_back(vector<int>({i,j}));
                 }
             }
-            int x=rand()%liste.size();cout << "x" << x << endl;cout << "liste" << liste.size() << endl;cout << "coups" << coups.size() << endl;
-            cout << "X LISTE " << liste[x][0] << " " << liste[x][1] << endl;
+            int x=rand()%liste.size();
             return liste[x];
         }
         void changeCoups(int X, int Y, int valeur){
@@ -115,24 +114,24 @@ class Agent : public IPlayer{
             vector<int> result;
             vector<char> sunk = {'X', 'O', '~','e'};
             int cpt_sunked = 0;
-            int cpt_sunk = 0;
+            int cpt_sunk = 5;
             for(int i = 0; i<10;i++){
                 for(int j = 0;j<10;j++){
                     if(find(sunked.begin(),sunked.end(),this->play.grid[i][j])==sunked.end()){
-                            cout<<"sunked : "<<this->play.grid[i][j]<<endl;
+                            sunked.insert(sunked.begin(), this->play.grid[i][j]);
                             cpt_sunked++;
                     }
                     if(find(sunk.begin(),sunk.end(),this->grid.grid[i][j])==sunk.end()){
-                            cpt_sunk++;
+                            sunk.insert(sunk.begin(), this->grid.grid[i][j]);
+                            cpt_sunk--;
                     }
                 }
             }
+            cout<<"sunked : "<<cpt_sunked<<" sunk : "<<cpt_sunk<<endl;
             int ratio;
             if(cpt_sunk==0){ratio=1;}
-            else {ratio = int(cpt_sunked / cpt_sunk);}
-            cout<<"sunked/sunk : "<<ratio<<endl;
+            else {ratio = floor(cpt_sunked / cpt_sunk);}
             result.push_back(ratio);result.push_back(cpt_sunked);result.push_back(cpt_sunk);
-            cout<<"ratio : "<<result[0]<<" sunked : "<<result[1]<<" sunk :"<<result[2]<<endl;
             return result;
         }
         //Fonction qui choisit d'attaquer ou défendre
@@ -140,23 +139,16 @@ class Agent : public IPlayer{
             cout<<"Défenses restantes : "<<this->nbdefense<<endl;
             vector<int> datas = chooseDefAt();
             pair<int,int> result;
-            int lastBoat=0;
-            for(int i=0;i<5;i++){
-                if(this->grid.vieShips[i]==0)lastBoat++;
-            }
-            cout<<"ici"<<endl;
-            if(((datas[0]<1 && this->nbdefense==1 && datas[2]>2) || lastBoat==4 ) && coordinates.first<10 && isItTheBiggestBoat(coordinates,datas)){
-                cout<<"ici2"<<endl;
-                this->nbdefense+=15;
-                cout<<"ici3"<<endl;
+            bool test = isItTheBiggestBoat(coordinates);
+            cout<<"ratio : "<<datas[0]<<" coordonnées :"<<(coordinates.first<10 && coordinates.second<10)<<" Biggestboat :"<<test<<" nbdefense : "<<(nbdefense==1)<<endl;
+            if(((datas[0]<1 && datas[2]>=2) || datas[2]>=4 ) && (coordinates.first<10 && coordinates.second<10) && nbdefense==1 && test){
+                cout<<"Debug test :"<<(((datas[0]<1 && this->nbdefense==1 && datas[2]>2 && test) || datas[2]>=4 ) && (coordinates.first<10 && coordinates.second<10))<<endl;
                 this->defense(grid.ships[(grid.grid[coordinates.first][coordinates.second])-1],coordinates,player);
-                cout<<"ici4"<<endl;
-                this->nbdefense =0;
                 cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
+                this->nbdefense=0;
                 result = make_pair(10,10);
             }
             else{
-                cout<<"la"<<endl;
                 result = this->attack(player);
             }
             return result;
@@ -175,7 +167,7 @@ class Agent : public IPlayer{
                 }
             }
         }
-        //Lecture :
+    //Lecture :
         //Implémentation des getteurs
         void getEnvironment() override{
             grid.display();
@@ -194,35 +186,29 @@ class Agent : public IPlayer{
             return true;
         }
         //Fonction pour savoir si le bateau aux coordonnées X et Y est le plus grand
-        bool isItTheBiggestBoat(pair<int,int>coordinates,vector<int> datas){
-            if(grid.grid[coordinates.second][coordinates.first]=='~') return false;
-            if(grid.grid[coordinates.second][coordinates.first]=='O') return false;
-            int num_boat = 0;
-            for(size_t i=0;i<grid.ships.size();i++){
-                for(size_t j =0;j<grid.ships[i].size;j++){
-                    if(grid.ships[i].getIsVertical()==true){
-                        if(grid.ships[i].coordinates.second+j == coordinates.first && grid.ships[i].coordinates.first == coordinates.second){
-                            num_boat = i;
+        bool isItTheBiggestBoat(pair<int,int>coordinates){
+            if(coordinates.first<10 && coordinates.second<10){
+                if(grid.grid[coordinates.second][coordinates.first]=='~' || grid.grid[coordinates.second][coordinates.first]=='O') {return false;}
+                cout<<"debug ping"<<endl;
+                int num_boat = 100;
+                for(size_t i=0;i<grid.ships.size();i++){
+                    for(size_t j =0;j<grid.ships[i].getSize();j++){
+                        if(grid.ships[i].getIsVertical()==true){
+                            if((grid.ships[i].coordinates.second)+j == coordinates.second && grid.ships[i].coordinates.first == coordinates.first){num_boat = i;}
                         }
-                    }
-                    else{
-                        if(grid.ships[i].coordinates.first+j == coordinates.second && grid.ships[i].coordinates.second == coordinates.first){
-                            num_boat = i;
+                        else{
+                            if((grid.ships[i].coordinates.first)+j == coordinates.first && grid.ships[i].coordinates.second == coordinates.second){num_boat = i;}
                         }
                     }
                 }
-            }
-            if(grid.vieShips[num_boat-1]<(grid.ships[num_boat-1].size-1)) return false;
-            if(num_boat == 0){return false;}
-            if(num_boat==5){return true;}
-            if(num_boat==1 && datas[2]<4){return false;}
-            for(int i=1;i<5;i++){
-                if(i>num_boat && grid.vieShips[i]!=0){
-                    return false;
-
+                cout<<"num_boat : "<<num_boat<<endl;
+                if(num_boat == 100 || grid.vieShips[num_boat]!=(grid.ships[num_boat].getSize()-1)) return false;
+                for(int i=num_boat+1;i<5;i++){
+                    if(grid.vieShips[i]!=0){return false;}
                 }
+                return true;
             }
-            return true;
+            return false;
         }
 };
 #endif
