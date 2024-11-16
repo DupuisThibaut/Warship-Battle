@@ -1,7 +1,7 @@
 # Variables
 CXX = g++
 CXXFLAGS = -std=c++11
-SOURCES = warship.cpp Game.cpp Player/Player.cpp Player/Agent.cpp Objects/Grid.cpp Objects/Ship.cpp
+SOURCES = warship.cpp
 EXECUTABLE = out/warship
 
 # Règle par défaut
