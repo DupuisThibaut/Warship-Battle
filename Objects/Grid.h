@@ -29,7 +29,12 @@ public:
             for (int i = 0; i < ship.getSize(); i++)
             {
                 if(coordinates.second+i>9)return false;
-                if(grid[(coordinates.second)+i][coordinates.first]!='~')return false;
+                if(vieShips[numero-1]==0){
+                    if(grid[(coordinates.second)+i][coordinates.first]!='~' && grid[(coordinates.second)+i][coordinates.first]!='O')return false;
+                }
+                else{
+                    if(grid[(coordinates.second)+i][coordinates.first]!='~')return false;
+                } 
                 X.push_back((coordinates.second)+i);Y.push_back(coordinates.first);
             }
         }
@@ -37,7 +42,12 @@ public:
         for (int i = 0; i < ship.getSize(); i++)
             {
                 if(coordinates.first+i>9)return false;
-                if(grid[coordinates.second][(coordinates.first)+i]!='~')return false;
+                if(vieShips[numero-1]==0){
+                    if(grid[coordinates.second][(coordinates.first)+i]!='~' && grid[coordinates.second][(coordinates.first)+i]!='O')return false;
+                }
+                else{
+                    if(grid[coordinates.second][(coordinates.first)+i]!='~')return false;
+                }
                 X.push_back((coordinates.second));Y.push_back(coordinates.first+i);
             }
         }
@@ -51,16 +61,16 @@ public:
         }else{
             for(int i=0;i<ship.getSize();i++){
                 if(isVertical){
-                    grid[ships[numero].getCoordinates().first+i][ships[numero].getCoordinates().second]='O';
+                    grid[ships[numero].getCoordinates().first+i][ships[numero].getCoordinates().second]='~';
                 }else{
-                    grid[ships[numero].getCoordinates().first][ships[numero].getCoordinates().second+i]='O';
+                    grid[ships[numero].getCoordinates().first][ships[numero].getCoordinates().second+i]='~';
                 }
             }
             for(int i=0;i<ship.getSize();i++){
                 if(isVertical){
-                    grid[(coordinates.second)+i][coordinates.first]=numero+'0';
+                    grid[X[i]][Y[i]]=numero+'0';
                 }else{
-                    grid[coordinates.second][coordinates.first+i]=numero+'0';
+                    grid[X[i]][Y[i]]=numero+'0';
                 }
             }
             ships[numero]=ship;
