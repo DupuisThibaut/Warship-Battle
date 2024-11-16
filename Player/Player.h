@@ -51,7 +51,7 @@ class Player : public IPlayer{
         }
         //Fonction qui choisit d'attaquer ou défendre
         pair<int,int> whatToDo(IPlayer* player,pair<int,int> coordinates) override {
-            return this->attack(player);
+            return attack(player);
 
         }
         //Implémentation de la fonction d'attaque pour le joueur
@@ -73,12 +73,12 @@ class Player : public IPlayer{
                     player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
                     player->grid.isSunk((player->grid.grid[Y][X]-'0')-1,play);
                     player->grid.grid[Y][X] = 'X';
-                    this->play.grid[Y][X]='X';
+                    play.grid[Y][X]='X';
                     cout << "Touché !" << endl;
                 }
                 else {
                     player->grid.grid[Y][X] = 'O';
-                    this->play.grid[Y][X]='O';
+                    play.grid[Y][X]='O';
                     cout << "Dans l'eau !" << endl;
                 }
             result.first = X;

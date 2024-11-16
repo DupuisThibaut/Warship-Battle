@@ -55,18 +55,18 @@ class Agent : public IPlayer{
             vector<int> p=prochainCoup();X=p[0];Y=p[1];coups[X*10+Y]=0;
             if (player->isTouched({Y,X})){
                 player->grid.vieShips[(player->grid.grid[Y][X]-'0')-1]-=1;
-                player->grid.isSunk((player->grid.grid[Y][X]-'0')-1,this->play);
-                if(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].isSunk==false){this->play.grid[Y][X]='X';changeCoups(X,Y,3);}
+                player->grid.isSunk((player->grid.grid[Y][X]-'0')-1,play);
+                if(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].isSunk==false){play.grid[Y][X]='X';changeCoups(X,Y,3);}
                 else{
                     if (player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getIsVertical()) {
                         for (int i = 0; i < player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getSize(); i++){
-                            this->play.grid[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second+i][player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first] = ((player->grid.grid[Y][X]-'0')-1+1)+'0';
+                            play.grid[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second+i][player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first] = ((player->grid.grid[Y][X]-'0')-1+1)+'0';
                             changeCoups(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first,player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second+i,1);
                         }
                     }
                     else{
                         for (int i = 0; i < player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getSize(); i++){
-                            this->play.grid[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second][player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first+i] = ((player->grid.grid[Y][X]-'0')-1+1)+'0';
+                            play.grid[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second][player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first+i] = ((player->grid.grid[Y][X]-'0')-1+1)+'0';
                             changeCoups(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first+i,player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second,1);
                         }
                     }
@@ -76,7 +76,7 @@ class Agent : public IPlayer{
             }
             else {
                 player->grid.grid[Y][X] = 'O';
-                this->play.grid[Y][X]='O';
+                play.grid[Y][X]='O';
                 cout << "Dans l'eau !" << endl;
             }
             result.first = X;
@@ -103,10 +103,10 @@ class Agent : public IPlayer{
             if(valeur>1)ameliorerCoups(Y,X);
         }
         void ameliorerCoups(int X, int Y){
-            if(X-1>=0){if(this->play.grid[X-1][Y]=='X'){if(X<9)if(this->play.grid[X+1][Y]=='~'){coups[(Y)*10+X+1]+=1;}if(X-2>=0)if(this->play.grid[X-2][Y]=='~')coups[(Y)*10+X-2]+=1;}}
-            if(X+1<=9){if(this->play.grid[X+1][Y]=='X'){if(X>0)if(this->play.grid[X-1][Y]=='~'){coups[(Y)*10+X-1]+=1;}if(X+2<=9)if(this->play.grid[X+2][Y]=='~')coups[(Y)*10+X+2]+=1;}}
-            if(Y-1>=0){if(this->play.grid[X][Y-1]=='X'){if(Y<9)if(this->play.grid[X][Y+1]=='~'){coups[(Y+1)*10+X]+=1;}if(Y-2>=0)if(this->play.grid[X][Y-2]=='~')coups[(Y-2)*10+X]+=1;}}
-            if(Y+1<=9){if(this->play.grid[X][Y+1]=='X'){if(Y>0)if(this->play.grid[X][Y-1]=='~'){coups[(Y-1)*10+X]+=1;}if(Y+2<=9)if(this->play.grid[X][Y+2]=='~')coups[(Y+2)*10+X]+=1;}}
+            if(X-1>=0){if(play.grid[X-1][Y]=='X'){if(X<9)if(play.grid[X+1][Y]=='~'){coups[(Y)*10+X+1]+=1;}if(X-2>=0)if(play.grid[X-2][Y]=='~')coups[(Y)*10+X-2]+=1;}}
+            if(X+1<=9){if(play.grid[X+1][Y]=='X'){if(X>0)if(play.grid[X-1][Y]=='~'){coups[(Y)*10+X-1]+=1;}if(X+2<=9)if(play.grid[X+2][Y]=='~')coups[(Y)*10+X+2]+=1;}}
+            if(Y-1>=0){if(play.grid[X][Y-1]=='X'){if(Y<9)if(play.grid[X][Y+1]=='~'){coups[(Y+1)*10+X]+=1;}if(Y-2>=0)if(play.grid[X][Y-2]=='~')coups[(Y-2)*10+X]+=1;}}
+            if(Y+1<=9){if(play.grid[X][Y+1]=='X'){if(Y>0)if(play.grid[X][Y-1]=='~'){coups[(Y-1)*10+X]+=1;}if(Y+2<=9)if(play.grid[X][Y+2]=='~')coups[(Y+2)*10+X]+=1;}}
         }
         //Implémentation de la fonction de défense 
         vector<int> chooseDefAt(){
@@ -117,12 +117,12 @@ class Agent : public IPlayer{
             int cpt_sunk = 5;
             for(int i = 0; i<10;i++){
                 for(int j = 0;j<10;j++){
-                    if(find(sunked.begin(),sunked.end(),this->play.grid[i][j])==sunked.end()){
-                            sunked.insert(sunked.begin(), this->play.grid[i][j]);
+                    if(find(sunked.begin(),sunked.end(),play.grid[i][j])==sunked.end()){
+                            sunked.insert(sunked.begin(), play.grid[i][j]);
                             cpt_sunked++;
                     }
-                    if(find(sunk.begin(),sunk.end(),this->grid.grid[i][j])==sunk.end()){
-                            sunk.insert(sunk.begin(), this->grid.grid[i][j]);
+                    if(find(sunk.begin(),sunk.end(),grid.grid[i][j])==sunk.end()){
+                            sunk.insert(sunk.begin(), grid.grid[i][j]);
                             cpt_sunk--;
                     }
                 }
@@ -136,23 +136,23 @@ class Agent : public IPlayer{
         }
         //Fonction qui choisit d'attaquer ou défendre
         pair<int,int> whatToDo(IPlayer* player,pair<int,int> coordinates) override {
-            cout<<"Défenses restantes : "<<this->nbdefense<<endl;
+            cout<<"Défenses restantes : "<<nbdefense<<endl;
             vector<int> datas = chooseDefAt();
             pair<int,int> result;
             int numero = 100;
             bool test = isItTheBiggestBoat(coordinates, numero);
             cout<<"ratio : "<<datas[0]<<" coordonnées :"<<(coordinates.first<10 && coordinates.second<10)<<" Biggestboat :"<<test<<" nbdefense : "<<(nbdefense==1)<<endl;
             if(((datas[0]<1 && datas[2]>=2) || datas[2]>=4 ) && (coordinates.first<10 && coordinates.second<10) && nbdefense==1 && test){
-                cout<<"Debug test :"<<(((datas[0]<1 && this->nbdefense==1 && datas[2]>2 && test) || datas[2]>=4 ) && (coordinates.first<10 && coordinates.second<10))<<endl;
+                cout<<"Debug test :"<<(((datas[0]<1 && nbdefense==1 && datas[2]>2 && test) || datas[2]>=4 ) && (coordinates.first<10 && coordinates.second<10))<<endl;
                 pair<int,int> coor;coor.first=coordinates.second;coor.second=coordinates.first;
-                this->defense(grid.ships[numero-1],coor,player);
+                defense(grid.ships[numero-1],coor,player);
                 cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
-                this->nbdefense=0;
-                this->grid.display();
+                nbdefense=0;
+                grid.display();
                 result = make_pair(10,10);
             }
             else{
-                result = this->attack(player);
+                result = attack(player);
             }
             return result;
         }
@@ -190,7 +190,7 @@ class Agent : public IPlayer{
                         {
                             if(coordinates.second+i>9)placement=false;
                             if(placement){
-                                if(this->grid.grid[(coordinates.second)+i][coordinates.first]!='~' && this->grid.grid[(coordinates.second)+i][coordinates.first]!='O')placement=false;
+                                if(grid.grid[(coordinates.second)+i][coordinates.first]!='~' && grid.grid[(coordinates.second)+i][coordinates.first]!='O')placement=false;
                             }
                             if(placement){
                                 X.push_back((coordinates.second)+i);Y.push_back(coordinates.first);
@@ -202,7 +202,7 @@ class Agent : public IPlayer{
                         {
                             if(coordinates.first+i>9)placement=false;
                             if(placement){
-                                if(this->grid.grid[coordinates.second][(coordinates.first)+i]!='~' && this->grid.grid[coordinates.second][(coordinates.first)+i]!='O')placement=false;
+                                if(grid.grid[coordinates.second][(coordinates.first)+i]!='~' && grid.grid[coordinates.second][(coordinates.first)+i]!='O')placement=false;
                             }
                             if(placement){
                                 X.push_back((coordinates.second));Y.push_back(coordinates.first+i);
