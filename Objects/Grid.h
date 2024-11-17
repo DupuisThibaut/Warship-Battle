@@ -28,8 +28,11 @@ public:
         if (isVertical){
             for (int i = 0; i < ship.getSize(); i++)
             {
+                cout<<"k"<<endl;
                 if(coordinates.second+i>9)return false;
-                if(vieShips[numero-1]==0){
+                cout<<"l"<<endl;
+                if(vieShips[numero-1]!=0){
+                    cout<<"m"<<endl;
                     if(grid[(coordinates.second)+i][coordinates.first]!='~' && grid[(coordinates.second)+i][coordinates.first]!='O')return false;
                 }
                 else{
@@ -41,8 +44,11 @@ public:
         else {
         for (int i = 0; i < ship.getSize(); i++)
             {
+                cout<<"k"<<endl;
                 if(coordinates.first+i>9)return false;
-                if(vieShips[numero-1]==0){
+                cout<<"l"<<endl;
+                if(vieShips[numero-1]!=0){
+                    cout<<"m"<<endl;
                     if(grid[coordinates.second][(coordinates.first)+i]!='~' && grid[coordinates.second][(coordinates.first)+i]!='O')return false;
                 }
                 else{

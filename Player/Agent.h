@@ -146,6 +146,7 @@ class Agent : public IPlayer{
                 cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
                 nbdefense=0;
                 grid.display();
+                cin>>numero;
                 result = make_pair(10,10);
             }
             else{
@@ -156,56 +157,72 @@ class Agent : public IPlayer{
 
         //Fonction de défense de l'agent
         void defense(Ship ship, pair<int,int> coordinates, IPlayer* player){
-            vector<vector<int>> places;int X=ship.coordinates.second;int Y=ship.coordinates.first;
+            vector<vector<int>> places;int X=ship.coordinates.first;int Y=ship.coordinates.second;
             if(X>0)places.push_back(vector<int>{X-1,Y});if(X<9)places.push_back(vector<int>{X+1,Y});if(Y>0)places.push_back(vector<int>{X,Y-1});if(Y<9)places.push_back(vector<int>{X,Y+1});
             random_shuffle(places.begin(),places.end());
             bool test=false;
+            pair<int, int> coordinatesShipAvant = ship.getCoordinates();
             for(int i=0;i<places.size();i++){
                 if(test==false){
                     Ship shipTest=ship;
                     shipTest.coordinates.first=places[i][0];shipTest.coordinates.second=places[i][1];
-                    if(grid.placeShip(ship,ship.numero)){
+                    cout<<"j"<<endl;
+                    if(grid.placeShip(shipTest,shipTest.numero)){
+                        cout<<"i"<<endl;
                         player->play.grid[coordinates.first][coordinates.second]='X';
                         test=true;
                     }
                 }
             }
+            cout<<"places "<<places.size()<<endl;
+            cout<<"test "<<test<<endl;
             if(test){
                 pair<int, int> coordinatesShip = ship.getCoordinates();
                 bool isVertical = ship.getIsVertical();
-                bool placement;
                 vector<int> X;
                 vector<int> Y;
+                bool placement;
+                for(int i=0;i<ship.size;i++){
+                    cout<<"n"<<endl;
+                    if(isVertical)this->grid.grid[(coordinatesShipAvant.second)+i][coordinatesShipAvant.first]='~';
+                    else this->grid.grid[(coordinatesShipAvant.second)][coordinatesShipAvant.first+i]='~';
+                }
                 for(int i=0;i<places.size();i++){
                     placement=true;
                     if (isVertical){
-                        for (int i = 0; i < ship.getSize(); i++)
+                        for (int j = 0; j < ship.getSize(); j++)
                         {
-                            if(coordinates.second+i>9)placement=false;
+                            if(places[i][1]+j>9)placement=false;
                             if(placement){
-                                if(grid.grid[(coordinates.second)+i][coordinates.first]!='~' && grid.grid[(coordinates.second)+i][coordinates.first]!='O')placement=false;
+                                if(grid.grid[places[i][1]+j][places[i][0]]!='~' && grid.grid[places[i][1]+j][places[i][0]]!='O' && grid.grid[places[i][1]+j][places[i][0]]!=ship.numero+'0')placement=false;
                             }
-                            if(placement){
-                                X.push_back((coordinates.second)+i);Y.push_back(coordinates.first);
+                        }
+                        if(placement){
+                            for (int j = 0; j < ship.getSize(); j++){
+                                X.push_back(places[i][1]+j);Y.push_back(places[i][0]);
                             }
                         }
                     }
                     else {
-                        for (int i = 0; i < ship.getSize(); i++)
+                        for (int j = 0; j < ship.getSize(); j++)
                         {
-                            if(coordinates.first+i>9)placement=false;
+                            if(places[i][0]+j>9)placement=false;
                             if(placement){
-                                if(grid.grid[coordinates.second][(coordinates.first)+i]!='~' && grid.grid[coordinates.second][(coordinates.first)+i]!='O')placement=false;
+                                if(grid.grid[places[i][1]][places[i][0]+j]!='~' && grid.grid[places[i][1]][places[i][0]+j]!='O' && grid.grid[places[i][1]][places[i][0]+j]!=ship.numero+'0')placement=false;
                             }
-                            if(placement){
-                                X.push_back((coordinates.second));Y.push_back(coordinates.first+i);
+                        }
+                        if(placement){
+                            for (int j = 0; j < ship.getSize(); j++){
+                                X.push_back(places[i][1]);Y.push_back(places[i][0]+j);
                             }
                         }
                     }
                 }
                 for(int i=0;i<X.size();i++){
-                    player->grid.grid[X[i]][Y[i]]='~';
+                    cout<<"p"<<endl;
+                    player->play.grid[X[i]][Y[i]]='~';
                 }
+                player->play.display();
             }
         }
     //Lecture :
