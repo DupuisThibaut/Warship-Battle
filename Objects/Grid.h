@@ -37,7 +37,7 @@ public:
                 }
                 else{
                     if(grid[(coordinates.second)+i][coordinates.first]!='~')return false;
-                } 
+                }
                 X.push_back((coordinates.second)+i);Y.push_back(coordinates.first);
             }
         }
@@ -65,20 +65,20 @@ public:
             ships.push_back(ship);
             vieShips[numero-1]=ship.getSize();
         }else{
-            for(int i=0;i<ship.getSize();i++){
-                if(isVertical){
-                    grid[ships[numero].getCoordinates().first+i][ships[numero].getCoordinates().second]='~';
-                }else{
-                    grid[ships[numero].getCoordinates().first][ships[numero].getCoordinates().second+i]='~';
-                }
-            }
-            for(int i=0;i<ship.getSize();i++){
-                if(isVertical){
-                    grid[X[i]][Y[i]]=numero+'0';
-                }else{
-                    grid[X[i]][Y[i]]=numero+'0';
-                }
-            }
+            // for(int i=0;i<ship.getSize();i++){
+            //     if(isVertical){
+            //         grid[ships[numero-1].getCoordinates().second+i][ships[numero-1].getCoordinates().first]='~';
+            //     }else{
+            //         grid[ships[numero-1].getCoordinates().second][ships[numero-1].getCoordinates().first+i]='~';
+            //     }
+            // }
+            // for(int i=0;i<ship.getSize();i++){
+            //     if(isVertical){
+            //         grid[X[i]][Y[i]]=numero+'0';
+            //     }else{
+            //         grid[X[i]][Y[i]]=numero+'0';
+            //     }
+            // }
             ships[numero]=ship;
         }
         return true;

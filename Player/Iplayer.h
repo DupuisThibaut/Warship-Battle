@@ -13,6 +13,8 @@ class IPlayer{
     // Grilles de placement et de jeu
     Grid grid;
     Grid play;
+    //Liste des prochains coups
+    vector<int> coups;
     //Fonction qui permet au joueur de placer ses bateaux sur la grille grid
         virtual void placeShips()=0;
     //Fonction permettant d'attaquer la grille adverse

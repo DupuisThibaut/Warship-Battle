@@ -21,8 +21,6 @@ class Agent : public IPlayer{
         string name;
         //Environnement dans lequel il se trouve
         Game* game;
-        //Liste des prochains coups
-        vector<int> coups;
         //Nombre de défenses restantes
         int nbdefense=1;
         //Constructeur pour la classe Agent
@@ -30,7 +28,7 @@ class Agent : public IPlayer{
             if(i%2==0)for(int j=0;j<10;j++){if((i*10+j)%2!=0)coups.push_back(1);else coups.push_back(2);}
             else{for(int j=0;j<10;j++){if((i*10+j)%2!=0)coups.push_back(2);else coups.push_back(1);}}}
 
-        }        
+        }
     //Actions :
         //Implémentation de la fonction de placement pour l'agent
         void placeShips() override {
@@ -108,7 +106,7 @@ class Agent : public IPlayer{
             if(Y-1>=0){if(play.grid[X][Y-1]=='X'){if(Y<9)if(play.grid[X][Y+1]=='~'){coups[(Y+1)*10+X]+=1;}if(Y-2>=0)if(play.grid[X][Y-2]=='~')coups[(Y-2)*10+X]+=1;}}
             if(Y+1<=9){if(play.grid[X][Y+1]=='X'){if(Y>0)if(play.grid[X][Y-1]=='~'){coups[(Y-1)*10+X]+=1;}if(Y+2<=9)if(play.grid[X][Y+2]=='~')coups[(Y+2)*10+X]+=1;}}
         }
-        //Implémentation de la fonction de défense 
+        //Implémentation de la fonction de défense
         vector<int> chooseDefAt(){
             vector<char> sunked = {'X', 'O', '~','e'};
             vector<int> result;
@@ -140,7 +138,7 @@ class Agent : public IPlayer{
             pair<int,int> result;
             int numero = 100;
             bool test = isItTheBiggestBoat(coordinates, numero);
-            if(((datas[0]<1 && datas[2]>=2) || datas[2]>=4 ) && (coordinates.first<10 && coordinates.second<10) && nbdefense==1 && test){
+            if(((datas[0]<1 && datas[2]>=2) || datas[2]==4 ) && (coordinates.first<10 && coordinates.second<10) && nbdefense==1 && test){
                 pair<int,int> coor;coor.first=coordinates.second;coor.second=coordinates.first;
                 defense(grid.ships[numero],coor,player);
                 cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
@@ -158,7 +156,12 @@ class Agent : public IPlayer{
         //Fonction de défense de l'agent
         void defense(Ship ship, pair<int,int> coordinates, IPlayer* player){
             vector<vector<int>> places;int X=ship.coordinates.first;int Y=ship.coordinates.second;
-            if(X>0)places.push_back(vector<int>{X-1,Y});if(X<9)places.push_back(vector<int>{X+1,Y});if(Y>0)places.push_back(vector<int>{X,Y-1});if(Y<9)places.push_back(vector<int>{X,Y+1});
+            if(X>0)places.push_back(vector<int>{X-1,Y});
+            if(ship.isVertical==false){if(X+ship.size<9){places.push_back(vector<int>{X+1,Y});}}
+            else if(X<9)places.push_back(vector<int>{X+1,Y});
+            if(Y>0)places.push_back(vector<int>{X,Y-1});
+            if(ship.isVertical==false){if(Y<9)places.push_back(vector<int>{X,Y+1});}
+            else if(Y+ship.size<9)places.push_back(vector<int>{X,Y+1});
             random_shuffle(places.begin(),places.end());
             bool test=false;
             pair<int, int> coordinatesShipAvant = ship.getCoordinates();
@@ -169,8 +172,8 @@ class Agent : public IPlayer{
                     cout<<"j"<<endl;
                     if(grid.placeShip(shipTest,shipTest.numero)){
                         cout<<"i"<<endl;
-                        player->play.grid[coordinates.first][coordinates.second]='X';
                         test=true;
+                        ship=shipTest;
                     }
                 }
             }
@@ -182,11 +185,21 @@ class Agent : public IPlayer{
                 vector<int> X;
                 vector<int> Y;
                 bool placement;
+                grid.display();
+                cout<<"i"<<endl;
                 for(int i=0;i<ship.size;i++){
-                    cout<<"n"<<endl;
-                    if(isVertical)this->grid.grid[(coordinatesShipAvant.second)+i][coordinatesShipAvant.first]='~';
+                    if(isVertical){this->grid.grid[(coordinatesShipAvant.second)+i][coordinatesShipAvant.first]='~';cout<<coordinatesShipAvant.second+i<<endl;cout<<coordinatesShipAvant.first<<endl;}
                     else this->grid.grid[(coordinatesShipAvant.second)][coordinatesShipAvant.first+i]='~';
                 }
+                grid.display();
+                cout<<"i"<<endl;
+                for(int i=0;i<ship.size;i++){
+                    cout<<"n"<<endl;
+                    if(isVertical){this->grid.grid[(coordinatesShip.second)+i][coordinatesShip.first]=ship.numero+'0';cout<<coordinatesShip.first<<endl;}
+                    else this->grid.grid[(coordinatesShip.second)][coordinatesShip.first+i]=ship.numero+'0';
+                }
+                this->grid.display();
+                cout<<"i"<<endl;
                 for(int i=0;i<places.size();i++){
                     placement=true;
                     if (isVertical){
@@ -221,8 +234,12 @@ class Agent : public IPlayer{
                 for(int i=0;i<X.size();i++){
                     cout<<"p"<<endl;
                     player->play.grid[X[i]][Y[i]]='~';
+                    player->coups[X[i]*10+Y[i]]+=3;
                 }
                 player->play.display();
+            }else{
+                cout<<"jai tenté de défendre mais jai pas pu :c"<<endl;
+                cin>>test;
             }
         }
     //Lecture :
