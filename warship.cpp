@@ -15,7 +15,7 @@ int main() {
     cout << "--------------------" << endl
          << "-- Warship-Battle --" << endl
          << "--------------------" << endl
-         << "Mode parte : " << endl
+         << "Mode de jeu : " << endl
          << "1. Player VS Player " << endl 
          << "2. Player VS Agent " << endl 
          << "3. Agent VS Player " << endl 

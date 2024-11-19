@@ -107,22 +107,18 @@ class Agent : public IPlayer{
             if(Y+1<=9){if(play.grid[X][Y+1]=='X'){if(Y>0)if(play.grid[X][Y-1]=='~'){coups[(Y-1)*10+X]+=1;}if(Y+2<=9)if(play.grid[X][Y+2]=='~')coups[(Y+2)*10+X]+=1;}}
         }
         //Implémentation de la fonction de défense
-        vector<int> chooseDefAt(){
+        vector<int> chooseDefAt(IPlayer *player){
             vector<char> sunked = {'X', 'O', '~','e'};
             vector<int> result;
             vector<char> sunk = {'X', 'O', '~','e'};
             int cpt_sunked = 0;
-            int cpt_sunk = 5;
-            for(int i = 0; i<10;i++){
-                for(int j = 0;j<10;j++){
-                    if(find(sunked.begin(),sunked.end(),play.grid[i][j])==sunked.end()){
-                            sunked.insert(sunked.begin(), play.grid[i][j]);
-                            cpt_sunked++;
-                    }
-                    if(find(sunk.begin(),sunk.end(),grid.grid[i][j])==sunk.end()){
-                            sunk.insert(sunk.begin(), grid.grid[i][j]);
-                            cpt_sunk--;
-                    }
+            int cpt_sunk = 0;
+            for(int i=0;i<grid.ships.size();i++){
+                if(grid.vieShips[i] ==0){
+                        cpt_sunked++;
+                }
+                if(player->grid.vieShips[i] ==0){
+                        cpt_sunk++;
                 }
             }
             int ratio;
@@ -134,7 +130,7 @@ class Agent : public IPlayer{
         //Fonction qui choisit d'attaquer ou défendre
         pair<int,int> whatToDo(IPlayer* player,pair<int,int> coordinates) override {
             cout<<"Défenses restantes : "<<nbdefense<<endl;
-            vector<int> datas = chooseDefAt();
+            vector<int> datas = chooseDefAt(player);
             pair<int,int> result;
             int numero = 100;
             bool test = isItTheBiggestBoat(coordinates, numero);
@@ -154,7 +150,7 @@ class Agent : public IPlayer{
         }
 
         //Fonction de défense de l'agent
-        void defense(Ship ship, pair<int,int> coordinates, IPlayer* player){
+        void defense(Ship ship, pair<int,int> coordinates, IPlayer* player) override{
             vector<vector<int>> places;int X=ship.coordinates.first;int Y=ship.coordinates.second;
             if(X>0)places.push_back(vector<int>{X-1,Y});
             if(ship.isVertical==false){if(X+ship.size<9){places.push_back(vector<int>{X+1,Y});}}
