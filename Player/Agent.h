@@ -261,9 +261,11 @@ class Agent : public IPlayer{
                         }
                     }
                 }
+                if(num_boat==5) return true;
                 if(num_boat == 100 || grid.vieShips[num_boat]!=(grid.ships[num_boat].getSize()-1)) return false;
+                
                 for(int i=num_boat+1;i<5;i++){
-                    if(grid.vieShips[i]!=0){return false;}
+                    if(grid.vieShips[i]>=grid.ships[i].getSize()){return false;}
                 }
                 return true;
             }
