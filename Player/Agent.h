@@ -134,7 +134,7 @@ class Agent : public IPlayer{
             pair<int,int> result;
             int numero = 100;
             bool test = isItTheBiggestBoat(coordinates, numero);
-            if(((datas[0]<1 && datas[2]>=2) || datas[2]==4 ) && (coordinates.first<10 && coordinates.second<10) && nbdefense==1 && test){
+            if(((datas[0]<=1 && datas[2]>=2) || datas[2]==4 ) && (coordinates.first<10 && coordinates.second<10) && nbdefense==1 && test){
                 pair<int,int> coor;coor.first=coordinates.second;coor.second=coordinates.first;
                 defense(grid.ships[numero],coor,player);
                 cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
