@@ -38,7 +38,7 @@ make
 
 ## Videos
 
-To see the presentation video : <a href="http://warship-battle.grillotyanis.fr" target="_blank">Link</a>
+Click <a href="http://warship-battle.grillotyanis.fr" target="_blank">here</a> to see the presentation video.
 
 ## Authors 
 Dupuis Thibaut, Langouët Bastian, Grillot Yanis.
