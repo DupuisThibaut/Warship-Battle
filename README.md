@@ -36,6 +36,10 @@ make
 - Each turn, you must choose an X coordinate and then a Y coordinate.
 - The game will automatically end.
 
+## Videos
+
+To see the presentation video : <a href="warship-battle.grillotyanis.fr" target="_blank">Link</a>
+
 ## Authors 
 Dupuis Thibaut, Langouët Bastian, Grillot Yanis.
 
