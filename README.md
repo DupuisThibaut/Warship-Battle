@@ -8,6 +8,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Authors](#authors)
+- [Video](#video)
 
 ## Features
 
@@ -36,7 +37,7 @@ make
 - Each turn, you must choose an X coordinate and then a Y coordinate.
 - The game will automatically end.
 
-## Videos
+## Video
 
 Click <a href="http://warship-battle.grillotyanis.fr" target="_blank">here</a> to see the presentation video.
 
