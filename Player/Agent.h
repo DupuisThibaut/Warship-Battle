@@ -165,37 +165,26 @@ class Agent : public IPlayer{
                 if(test==false){
                     Ship shipTest=ship;
                     shipTest.coordinates.first=places[i][0];shipTest.coordinates.second=places[i][1];
-                    cout<<"j"<<endl;
                     if(grid.placeShip(shipTest,shipTest.numero)){
-                        cout<<"i"<<endl;
                         test=true;
                         ship=shipTest;
                     }
                 }
             }
-            cout<<"places "<<places.size()<<endl;
-            cout<<"test "<<test<<endl;
             if(test){
                 pair<int, int> coordinatesShip = ship.getCoordinates();
                 bool isVertical = ship.getIsVertical();
                 vector<int> X;
                 vector<int> Y;
                 bool placement;
-                grid.display();
-                cout<<"i"<<endl;
                 for(int i=0;i<ship.size;i++){
-                    if(isVertical){this->grid.grid[(coordinatesShipAvant.second)+i][coordinatesShipAvant.first]='~';cout<<coordinatesShipAvant.second+i<<endl;cout<<coordinatesShipAvant.first<<endl;}
+                    if(isVertical){this->grid.grid[(coordinatesShipAvant.second)+i][coordinatesShipAvant.first]='~';}
                     else this->grid.grid[(coordinatesShipAvant.second)][coordinatesShipAvant.first+i]='~';
                 }
-                grid.display();
-                cout<<"i"<<endl;
                 for(int i=0;i<ship.size;i++){
-                    cout<<"n"<<endl;
-                    if(isVertical){this->grid.grid[(coordinatesShip.second)+i][coordinatesShip.first]=ship.numero+'0';cout<<coordinatesShip.first<<endl;}
+                    if(isVertical){this->grid.grid[(coordinatesShip.second)+i][coordinatesShip.first]=ship.numero+'0';}
                     else this->grid.grid[(coordinatesShip.second)][coordinatesShip.first+i]=ship.numero+'0';
                 }
-                this->grid.display();
-                cout<<"i"<<endl;
                 for(int i=0;i<places.size();i++){
                     placement=true;
                     if (isVertical){
@@ -228,11 +217,9 @@ class Agent : public IPlayer{
                     }
                 }
                 for(int i=0;i<X.size();i++){
-                    cout<<"p"<<endl;
                     player->play.grid[X[i]][Y[i]]='~';
                     player->coups[X[i]*10+Y[i]]+=3;
                 }
-                player->play.display();
             }else{
                 cout<<"jai tenté de défendre mais jai pas pu :c"<<endl;
                 cin>>test;
