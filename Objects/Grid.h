@@ -59,21 +59,7 @@ public:
             ships.push_back(ship);
             vieShips[numero-1]=ship.getSize();
         }else{
-            // for(int i=0;i<ship.getSize();i++){
-            //     if(isVertical){
-            //         grid[ships[numero-1].getCoordinates().second+i][ships[numero-1].getCoordinates().first]='~';
-            //     }else{
-            //         grid[ships[numero-1].getCoordinates().second][ships[numero-1].getCoordinates().first+i]='~';
-            //     }
-            // }
-            // for(int i=0;i<ship.getSize();i++){
-            //     if(isVertical){
-            //         grid[X[i]][Y[i]]=numero+'0';
-            //     }else{
-            //         grid[X[i]][Y[i]]=numero+'0';
-            //     }
-            // }
-            ships[numero]=ship;
+            ships[numero-1]=ship;
         }
         return true;
     }

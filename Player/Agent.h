@@ -140,12 +140,12 @@ class Agent : public IPlayer{
                 cout<<"Je défends sur :"<<coordinates.first<<","<<coordinates.second<<endl;
                 nbdefense=0;
                 grid.display();
-                cin>>numero;
+                // cin>>numero;
                 result = make_pair(10,10);
             }
             else{
                 result = attack(player);
-                cin>>numero;
+                // cin>>numero;
             }
             return result;
         }
