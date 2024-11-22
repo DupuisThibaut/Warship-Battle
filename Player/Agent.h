@@ -145,6 +145,7 @@ class Agent : public IPlayer{
             }
             else{
                 result = attack(player);
+                cin>>numero;
             }
             return result;
         }
