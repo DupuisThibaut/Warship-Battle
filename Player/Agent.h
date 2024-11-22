@@ -59,12 +59,14 @@ class Agent : public IPlayer{
                     if (player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getIsVertical()) {
                         for (int i = 0; i < player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getSize(); i++){
                             play.grid[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second+i][player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first] = ((player->grid.grid[Y][X]-'0')-1+1)+'0';
+                            // if(coups[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first+10*(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second+i)]!=0)
                             changeCoups(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first,player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second+i,1);
                         }
                     }
                     else{
                         for (int i = 0; i < player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getSize(); i++){
                             play.grid[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second][player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first+i] = ((player->grid.grid[Y][X]-'0')-1+1)+'0';
+                            // if(coups[player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first+i+10*(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second)]!=0)
                             changeCoups(player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().first+i,player->grid.ships[(player->grid.grid[Y][X]-'0')-1].getCoordinates().second,1);
                         }
                     }
@@ -83,7 +85,7 @@ class Agent : public IPlayer{
         }
         //Implémentation de la fonction pour récuperer le prochain coup pour l'agent
         vector<int> prochainCoup(){
-            int m=0;vector<vector<int>> liste;
+            int m=1;vector<vector<int>> liste;
             for(int i=0;i<10;i++){
                 for(int j=0;j<10;j++){
                     if(coups[i*10+j]>m){liste.clear();liste.push_back(vector<int>({i,j}));m=coups[i*10+j];}
@@ -217,9 +219,10 @@ class Agent : public IPlayer{
                         }
                     }
                 }
+                player->play.grid[coordinates.second][coordinates.first]='~';
                 for(int i=0;i<X.size();i++){
                     player->play.grid[X[i]][Y[i]]='~';
-                    player->coups[X[i]*10+Y[i]]+=3;
+                    if(player->coups[X[i]*10+Y[i]]>0)player->coups[X[i]*10+Y[i]]+=3;
                 }
             }else{
                 cout<<"jai tenté de défendre mais jai pas pu :c"<<endl;

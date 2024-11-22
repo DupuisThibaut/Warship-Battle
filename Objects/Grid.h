@@ -30,7 +30,7 @@ public:
             {
                 if(coordinates.second+i>9)return false;
                 if(vieShips[numero-1]!=0){
-                    if(grid[(coordinates.second)+i][coordinates.first]!='~' && grid[(coordinates.second)+i][coordinates.first]!='O')return false;
+                    if(grid[(coordinates.second)+i][coordinates.first]!='~' && grid[(coordinates.second)+i][coordinates.first]!='O' && grid[(coordinates.second)+i][coordinates.first]!=numero+'0')return false;
                 }
                 else{
                     if(grid[(coordinates.second)+i][coordinates.first]!='~')return false;
@@ -43,7 +43,7 @@ public:
             {
                 if(coordinates.first+i>9)return false;
                 if(vieShips[numero-1]!=0){
-                    if(grid[coordinates.second][(coordinates.first)+i]!='~' && grid[coordinates.second][(coordinates.first)+i]!='O')return false;
+                    if(grid[coordinates.second][(coordinates.first)+i]!='~' && grid[coordinates.second][(coordinates.first)+i]!='O' && grid[coordinates.second][(coordinates.first)+i]!=numero+'0')return false;
                 }
                 else{
                     if(grid[coordinates.second][(coordinates.first)+i]!='~')return false;
