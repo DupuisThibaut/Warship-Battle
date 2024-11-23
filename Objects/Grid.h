@@ -29,8 +29,9 @@ public:
             for (int i = 0; i < ship.getSize(); i++)
             {
                 if(coordinates.second+i>9)return false;
+                cout<<"case : "<<grid[coordinates.second+i][(coordinates.first)]<<endl;
                 if(vieShips[numero-1]!=0){
-                    if(grid[(coordinates.second)+i][coordinates.first]!='~' && grid[(coordinates.second)+i][coordinates.first]!='O' && grid[(coordinates.second)+i][coordinates.first]!=numero+'0')return false;
+                    if(grid[(coordinates.second)+i][coordinates.first]!='~' && grid[(coordinates.second)+i][coordinates.first]!='O' && grid[(coordinates.second)+i][coordinates.first]!=numero+'0' && grid[ships[numero-1].coordinates.second+(coordinates.second+i-ships[numero-1].coordinates.second)][ships[numero-1].coordinates.first]!='X')return false;
                 }
                 else{
                     if(grid[(coordinates.second)+i][coordinates.first]!='~')return false;
@@ -42,8 +43,9 @@ public:
         for (int i = 0; i < ship.getSize(); i++)
             {
                 if(coordinates.first+i>9)return false;
+                cout<<"case : "<<grid[coordinates.second][(coordinates.first)+i]<<endl;
                 if(vieShips[numero-1]!=0){
-                    if(grid[coordinates.second][(coordinates.first)+i]!='~' && grid[coordinates.second][(coordinates.first)+i]!='O' && grid[coordinates.second][(coordinates.first)+i]!=numero+'0')return false;
+                    if(grid[coordinates.second][(coordinates.first)+i]!='~' && grid[coordinates.second][(coordinates.first)+i]!='O' && grid[coordinates.second][(coordinates.first)+i]!=numero+'0' && grid[ships[numero-1].coordinates.second][ships[numero-1].coordinates.first+(coordinates.first+i-ships[numero-1].coordinates.first)]!='X')return false;
                 }
                 else{
                     if(grid[coordinates.second][(coordinates.first)+i]!='~')return false;
@@ -60,6 +62,7 @@ public:
             vieShips[numero-1]=ship.getSize();
         }else{
             ships[numero-1]=ship;
+            // vieShips[numero-1]++;
         }
         return true;
     }

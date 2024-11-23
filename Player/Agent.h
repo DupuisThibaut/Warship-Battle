@@ -103,10 +103,10 @@ class Agent : public IPlayer{
             if(valeur>1)ameliorerCoups(Y,X);
         }
         void ameliorerCoups(int X, int Y){
-            if(X-1>=0){if(play.grid[X-1][Y]=='X'){if(X<9)if(play.grid[X+1][Y]=='~'){coups[(Y)*10+X+1]+=1;}if(X-2>=0)if(play.grid[X-2][Y]=='~')coups[(Y)*10+X-2]+=1;}}
-            if(X+1<=9){if(play.grid[X+1][Y]=='X'){if(X>0)if(play.grid[X-1][Y]=='~'){coups[(Y)*10+X-1]+=1;}if(X+2<=9)if(play.grid[X+2][Y]=='~')coups[(Y)*10+X+2]+=1;}}
-            if(Y-1>=0){if(play.grid[X][Y-1]=='X'){if(Y<9)if(play.grid[X][Y+1]=='~'){coups[(Y+1)*10+X]+=1;}if(Y-2>=0)if(play.grid[X][Y-2]=='~')coups[(Y-2)*10+X]+=1;}}
-            if(Y+1<=9){if(play.grid[X][Y+1]=='X'){if(Y>0)if(play.grid[X][Y-1]=='~'){coups[(Y-1)*10+X]+=1;}if(Y+2<=9)if(play.grid[X][Y+2]=='~')coups[(Y+2)*10+X]+=1;}}
+            if(X-1>=0){if(play.grid[X-1][Y]=='X'){if(X<9)if(play.grid[X+1][Y]=='~' && coups[(Y)*10+X+1]>0){coups[(Y)*10+X+1]+=1;}if(X-2>=0)if(play.grid[X-2][Y]=='~' && coups[(Y)*10+X-2]>0)coups[(Y)*10+X-2]+=1;}}
+            if(X+1<=9){if(play.grid[X+1][Y]=='X'){if(X>0)if(play.grid[X-1][Y]=='~' && coups[(Y)*10+X-1]>0){coups[(Y)*10+X-1]+=1;}if(X+2<=9)if(play.grid[X+2][Y]=='~' && coups[(Y)*10+X+2]>0)coups[(Y)*10+X+2]+=1;}}
+            if(Y-1>=0){if(play.grid[X][Y-1]=='X'){if(Y<9)if(play.grid[X][Y+1]=='~' && coups[(Y+1)*10+X]>0){coups[(Y+1)*10+X]+=1;}if(Y-2>=0)if(play.grid[X][Y-2]=='~' && coups[(Y-2)*10+X]>0)coups[(Y-2)*10+X]+=1;}}
+            if(Y+1<=9){if(play.grid[X][Y+1]=='X'){if(Y>0)if(play.grid[X][Y-1]=='~' && coups[(Y-1)*10+X]>0){coups[(Y-1)*10+X]+=1;}if(Y+2<=9)if(play.grid[X][Y+2]=='~' && coups[(Y+2)*10+X]>0)coups[(Y+2)*10+X]+=1;}}
         }
         //Implémentation de la fonction de défense
         vector<int> chooseDefAt(IPlayer *player){
@@ -136,6 +136,7 @@ class Agent : public IPlayer{
             pair<int,int> result;
             int numero = 100;
             bool test = isItTheBiggestBoat(coordinates, numero);
+            // if(test){char u;cin>>u;}
             if(((datas[0]<=1 && datas[2]>=2) || datas[2]==4 ) && (coordinates.first<10 && coordinates.second<10) && nbdefense==1 && test){
                 pair<int,int> coor;coor.first=coordinates.second;coor.second=coordinates.first;
                 defense(grid.ships[numero],coor,player);
@@ -144,8 +145,10 @@ class Agent : public IPlayer{
                 grid.display();
                 // cin>>numero;
                 result = make_pair(10,10);
+                player->play.grid[coordinates.second][coordinates.first]='~';
             }
             else{
+                // if(coordinates.first<10 && coordinates.second<10 && this->grid.grid[coordinates.second][coordinates.first]!='X')this->play.grid[coordinates.second][coordinates.first]='X';
                 result = attack(player);
                 // cin>>numero;
             }
@@ -164,6 +167,11 @@ class Agent : public IPlayer{
             random_shuffle(places.begin(),places.end());
             bool test=false;
             pair<int, int> coordinatesShipAvant = ship.getCoordinates();
+            cout<<"places : "<<places.size()<<endl;
+            for(int w=0;w<places.size();w++){
+                cout<<"X : "<<places[w][0]<<endl;
+                cout<<"Y : "<<places[w][1]<<endl;
+            }
             for(int i=0;i<places.size();i++){
                 if(test==false){
                     Ship shipTest=ship;
@@ -220,9 +228,12 @@ class Agent : public IPlayer{
                     }
                 }
                 player->play.grid[coordinates.second][coordinates.first]='~';
+                cout<<"X : "<<X.size()<<endl;
                 for(int i=0;i<X.size();i++){
                     player->play.grid[X[i]][Y[i]]='~';
-                    if(player->coups[X[i]*10+Y[i]]>0)player->coups[X[i]*10+Y[i]]+=3;
+                    // if(player->coups[Y[i]*10+X[i]]>0)
+                    player->coups[Y[i]*10+X[i]]=3;
+                    //bug ici avec la condition
                 }
             }else{
                 cout<<"jai tenté de défendre mais jai pas pu :c"<<endl;
@@ -261,11 +272,9 @@ class Agent : public IPlayer{
                         }
                     }
                 }
-                if(num_boat==5) return true;
                 if(num_boat == 100 || grid.vieShips[num_boat]!=(grid.ships[num_boat].getSize()-1)) return false;
-                
                 for(int i=num_boat+1;i<5;i++){
-                    if(grid.vieShips[i]>=grid.ships[i].getSize()){return false;}
+                    if(grid.vieShips[i]!=0){return false;}
                 }
                 return true;
             }
