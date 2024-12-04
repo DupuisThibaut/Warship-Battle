@@ -124,12 +124,12 @@ class Agent:
     def Stratégie2(self):
         if self.x < self.gridSize-1 and self.y!=self.Candy[1]:
             self.droite()
-        elif self.y > self.Candy[1]:
-            self.reculer()
-        elif self.x > self.Candy[0]:
-            self.gauche()
         elif self.y < self.Candy[1]:
             self.avancer()
+        elif self.x > self.Candy[0]:
+            self.gauche()
+        elif self.y > self.Candy[1]:
+            self.reculer()
         elif self.x < self.Candy[0]:
             self.droite()
     
