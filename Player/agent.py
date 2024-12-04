@@ -49,14 +49,24 @@ class Agent:
         self.previous = tmp
     
     def GoBack(self):
-        if self.x > self.initial_Coordinates[0] and self.Candy[0]!=self.x-1:
-            self.gauche()
-        elif self.x < self.initial_Coordinates[0] and self.Candy[0]!=self.x+1:
-            self.droite()
-        elif self.y > self.initial_Coordinates[1] and self.Candy[1]!=self.y-1:
-            self.reculer()
-        elif self.y < self.initial_Coordinates[1]and self.Candy[1]!=self.y+1:
-            self.avancer()
+        if(self.numStrat==1):
+            if self.x > self.initial_Coordinates[0] and self.Candy[0]!=self.x-1:
+                self.gauche()
+            elif self.x < self.initial_Coordinates[0] and self.Candy[0]!=self.x+1:
+                self.droite()
+            elif self.y > self.initial_Coordinates[1] and self.Candy[1]!=self.y-1:
+                self.reculer()
+            elif self.y < self.initial_Coordinates[1]and self.Candy[1]!=self.y+1:
+                self.avancer()
+        elif(self.numStrat==2):
+            if self.y > self.initial_Coordinates[1] and self.Candy[1]!=self.y-1:
+                self.reculer()
+            elif self.y < self.initial_Coordinates[1]and self.Candy[1]!=self.y+1:
+                self.avancer()
+            elif self.x > self.initial_Coordinates[0] and self.Candy[0]!=self.x-1:
+                self.gauche()
+            elif self.x < self.initial_Coordinates[0] and self.Candy[0]!=self.x+1:
+                self.droite()
         elif self.x == self.initial_Coordinates[0] and self.y == self.initial_Coordinates[1]:
             print("Est bien revenu")
             self.previous = [self.x, self.y]
@@ -74,6 +84,8 @@ class Agent:
             self.StratAleat()
         elif self.numStrat == 1:
             self.Stratégie1()
+        elif self.numStrat == 2:
+            self.Stratégie2()
     
     def StratAleat(self):
         i = random.randint(0, 3)
@@ -98,3 +110,91 @@ class Agent:
         elif self.x > self.Candy[0]:
             self.gauche()
 
+    def Stratégie2(self):
+        if self.x < self.gridSize-1 and self.y!=self.Candy[1]:
+            self.droite()
+        elif self.y > self.Candy[1]:
+            self.reculer()
+        elif self.x > self.Candy[0]:
+            self.gauche()
+        elif self.y < self.Candy[1]:
+            self.avancer()
+        elif self.x < self.Candy[0]:
+            self.droite()
+    
+    def plusCourtChemin(self,x,y,chemin):
+        agentX=self.x
+        agentY=self.y
+        l=[]
+        if(chemin==1):
+            while(agentX!=x and agentY!=y):
+                avance=True
+                if agentX==x and agentY==y:
+                    if agentY < y:
+                        agentY+=1
+                        l.append([agentX,agentY])
+                    elif agentX < x:
+                        agentX+=1
+                        l.append([agentX,agentY])
+                    elif agentY > y:
+                        agentY-=1
+                        l.append([agentX,agentY])
+                    elif agentX > x:
+                        agentX-=1
+                        l.append([agentX,agentY])
+                elif(avance):
+                    if agentY < y:
+                        agentY+=1
+                        l.append([agentX,agentY])
+                        avance=False
+                    elif agentY > y:
+                        agentY-=1
+                        l.append([agentX,agentY])
+                        avance=False
+                else:
+                    if agentX < x:
+                        agentX+=1
+                        l.append([agentX,agentY])
+                        avance=True
+                    elif agentX > x:
+                        agentX-=1
+                        l.append([agentX,agentY])
+                        avance=True
+        elif(chemin==2):
+            while(agentX!=x):
+                if agentX < x:
+                    agentX+=1
+                    l.append([agentX,agentY])
+                    avance=True
+                elif agentX > x:
+                    agentX-=1
+                    l.append([agentX,agentY])
+                    avance=True
+            while(agentY!=y):
+                if agentY < y:
+                    agentY+=1
+                    l.append([agentX,agentY])
+                    avance=False
+                elif agentY > y:
+                    agentY-=1
+                    l.append([agentX,agentY])
+                    avance=False
+        elif(chemin==2):
+            while(agentY!=y):
+                if agentY < y:
+                    agentY+=1
+                    l.append([agentX,agentY])
+                    avance=False
+                elif agentY > y:
+                    agentY-=1
+                    l.append([agentX,agentY])
+                    avance=False
+            while(agentX!=x):
+                if agentX < x:
+                    agentX+=1
+                    l.append([agentX,agentY])
+                    avance=True
+                elif agentX > x:
+                    agentX-=1
+                    l.append([agentX,agentY])
+                    avance=True

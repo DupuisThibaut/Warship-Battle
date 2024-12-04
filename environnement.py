@@ -21,6 +21,7 @@ class Environnement:
             for _ in range(4*self.taille+1):
                 s+="-"
             print(s)
+        print(" ")
 
     def displayAgent(self,agent):
         if (self.grid[agent.y][agent.x]==" "):

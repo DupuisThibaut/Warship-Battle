@@ -23,7 +23,7 @@ class Main:
 
 taille=10
 student1=Agent("Yanis",2,0,taille,1)
-student2=Agent("Bastian",1,1,taille,0)
+student2=Agent("Bastian",1,1,taille,2)
 student3=Agent("Thibaut",2,2,taille,0)
 students=[student1,student2,student3]
 teacher = Agent("T", (taille // 2)-1, (taille // 2), taille,None)
