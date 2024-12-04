@@ -65,12 +65,12 @@ class Agent:
                 self.droite()
             elif self.y > self.initial_Coordinates[1] and self.Candy[1]!=self.y-1:
                 self.reculer()
-            elif self.y < self.initial_Coordinates[1]and self.Candy[1]!=self.y+1:
+            elif self.y < self.initial_Coordinates[1] and self.Candy[1]!=self.y+1:
                 self.avancer()
         elif(self.numStrat==2):
             if self.y > self.initial_Coordinates[1] and self.Candy[1]!=self.y-1:
                 self.reculer()
-            elif self.y < self.initial_Coordinates[1]and self.Candy[1]!=self.y+1:
+            elif self.y < self.initial_Coordinates[1] and self.Candy[1]!=self.y+1:
                 self.avancer()
             elif self.x > self.initial_Coordinates[0] and self.Candy[0]!=self.x-1:
                 self.gauche()
@@ -134,18 +134,21 @@ class Agent:
             self.droite()
     
     def Stratégie3(self):
+        print('j')
+        print(self.x)
+        print(self.y)
         if(self.position<len(self.chemin)-1):
             print("i")
             if self.x<self.chemin[self.position][0]:
                 self.droite()
                 self.position+=1
-            if self.x>self.chemin[self.position][0]:
+            elif self.x>self.chemin[self.position][0]:
                 self.gauche()
                 self.position+=1
-            if self.y<self.chemin[self.position][1]:
+            elif self.y<self.chemin[self.position][1]:
                 self.avancer()
                 self.position+=1
-            if self.y>self.chemin[self.position][1]:
+            elif self.y>self.chemin[self.position][1]:
                 self.reculer()
                 self.position+=1
     
@@ -228,6 +231,19 @@ class Agent:
         return l
 
     def prof(self,eleves):
+        for e in range(0,len(eleves)):
+            if self.x>0:
+                if eleves[e].x==self.x-1 and eleves[e].y==self.y:
+                    return e
+            if self.x<self.gridSize:
+                if eleves[e].x==self.x+1 and eleves[e].y==self.y:
+                    return e
+            if self.y>0:
+                if eleves[e].y==self.y-1 and eleves[e].x==self.x:
+                    return e
+            if self.y<self.gridSize:
+                if eleves[e].y==self.y+1 and eleves[e].x==self.x:
+                    return e
         min=self.gridSize*self.gridSize
         parcours=[]
         i=0
