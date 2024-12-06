@@ -12,7 +12,7 @@ TAILLE_CASE = WIDTH // TAILLE
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 candy_position = (0, 0)
-img_candy = pygame.image.load("img/skins/candy.png")
+img_candy = pygame.image.load("img/skins/candy.png") 
 img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
 
 def draw_image1(x, y):
@@ -34,10 +34,10 @@ def draw_board():
 
 class Img_Agent:
     def __init__(self,img,x,y):
-        self.x=x
+        self.x=x 
         self.y=y
         self.position = (self.x, self.y)
-        self.img = pygame.image.load("img/skins/"+img+".png")
+        self.img = pygame.image.load("img/skins/"+img+".png") 
         self.img = pygame.transform.scale(self.img, (TAILLE_CASE, TAILLE_CASE))
 
     def draw(self):
@@ -45,7 +45,7 @@ class Img_Agent:
 
     def update_position(self,new_x, new_y):
         self.x = new_x
-        self.y = new_y
+        self.y = new_y    
 
 class Main:
     fin=False
@@ -70,7 +70,7 @@ class Main:
         if(i!=-1):
             self.agents[i].haveToGoBack=True
         self.grid.displayAgent(self.teacher)
-
+            
 
 taille=TAILLE
 
@@ -99,11 +99,12 @@ main=Main(taille,students,teacher)
 input_test = "ok"
 x = 30
 start_time = time.time()
-main.updateAgents()
-main.grid.afficher()
 #"""
 running = True
 while running:
+    elapsed_time = time.time() - start_time
+    if elapsed_time > x:
+        running = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -118,7 +119,7 @@ while running:
     pygame.display.flip()
     main.grid.afficher()
     main.updateAgents()
-    time.sleep(1)
+    #time.sleep(1)
 
 # Quitter Pygame
 pygame.quit()
@@ -131,7 +132,7 @@ pygame.quit()
   #  main.updateAgents()
  #   main.grid.afficher()
 #    time.sleep(1)
-
+print("Temps écoulé. Fin du jeu.")
 maxPoint=0
 bestStudent = student1
 for e in students:
