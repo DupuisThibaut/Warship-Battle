@@ -1,4 +1,3 @@
-import itertools
 from environnement import Environnement
 from Player.agent import Agent
 import time
@@ -7,13 +6,13 @@ import pygame
 
 pygame.init()
 WIDTH = 500
-HEIGHT = 500
+HEIGHT = 550
 TAILLE = 10
 TAILLE_CASE = WIDTH // TAILLE
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 candy_position = (0, 0)
-img_candy = pygame.image.load("img/skins/candy.png")
+img_candy = pygame.image.load("img/skins/candy.png") 
 img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
 
 def draw_image1(x, y):
@@ -28,16 +27,17 @@ pygame.display.set_caption("Jeu des narvalos")
 
 def draw_board():
     """Dessine le damier."""
-    for row, col in itertools.product(range(TAILLE), range(TAILLE)):
-        color = WHITE if (row + col) % 2 == 0 else BLACK
-        pygame.draw.rect(screen, color, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE))
+    for row in range(TAILLE):
+        for col in range(TAILLE):
+            color = WHITE if (row + col) % 2 == 0 else BLACK
+            pygame.draw.rect(screen, color, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE))
 
 class Img_Agent:
     def __init__(self,img,x,y):
-        self.x=x
+        self.x=x 
         self.y=y
         self.position = (self.x, self.y)
-        self.img = pygame.image.load(f"img/skins/{img}.png")
+        self.img = pygame.image.load("img/skins/"+img+".png") 
         self.img = pygame.transform.scale(self.img, (TAILLE_CASE, TAILLE_CASE))
 
     def draw(self):
@@ -45,7 +45,7 @@ class Img_Agent:
 
     def update_position(self,new_x, new_y):
         self.x = new_x
-        self.y = new_y
+        self.y = new_y    
 
 class Main:
     fin=False
@@ -64,14 +64,13 @@ class Main:
 
     def updateAgents(self):
         for e in self.agents:
-            if(e.haveToGoBack and e.numStrat==3): e.position=0
             e.whatToDo()
             self.grid.displayAgent(e)
         i=self.teacher.prof(self.agents)
         if(i!=-1):
             self.agents[i].haveToGoBack=True
         self.grid.displayAgent(self.teacher)
-
+            
 
 taille=TAILLE
 
@@ -91,11 +90,16 @@ student3=Agent("Thibaut",5,0,taille,3,img_student3.update_position)
 img_student4=Img_Agent("student4",6,0)
 student4=Agent("G",6,0,taille,0,img_student4.update_position)
 
-students=[student1,student2]
+students=[student1,student2,student3,student4]
 
 #Définitions de teacher
 img_teacher=Img_Agent("teacher",(taille // 2)-1,(taille // 2))
 teacher = Agent("I", (taille // 2)-1, (taille // 2), taille,None,img_teacher.update_position)
+
+font=pygame.font.Font(None, 24)
+text1 = font.render("Texte",1,(255,255,255))
+text2 = font.render("Texte",1,(255,255,255))
+
 main=Main(taille,students,teacher)
 input_test = "ok"
 x = 30
@@ -114,9 +118,11 @@ while running:
     draw_image1(*candy_position)
     img_student1.draw()
     img_student2.draw()
-    #img_student3.draw()
-    #img_student4.draw()
+    img_student3.draw()
+    img_student4.draw()
     img_teacher.draw()
+    screen.blit(text1, (10, 510))
+    screen.blit(text2, (10, 530))
     pygame.display.flip()
     main.grid.afficher()
     main.updateAgents()
