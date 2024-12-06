@@ -58,6 +58,14 @@ class Agent:
         self.previous = tmp
         self.move(self.x, self.y)
 
+    def collisionObjet(self):
+        parcours=[]
+        if self.y + 1 < self.gridSize:
+            parcours.append(Agent.plusCourtChemin(self,self.x,self.y+1,2))
+        if self.y >= 1:
+        if self.x >= 1:
+        if self.x + 1 < self.gridSize:
+
     def GoBack(self):
         self.position=0
         if self.x == self.initial_Coordinates[0] and self.y == self.initial_Coordinates[1]:
@@ -179,21 +187,7 @@ class Agent:
                         avance=False
                 else:
                     if agentX < x:
-                        agentX+=1
-                        l.append([agentX,agentY])
-                        avance=True
-                    elif agentX > x:
-                        agentX-=1
-                        l.append([agentX,agentY])
-                        avance=True
-        elif(chemin==2):
-            while(agentX!=x):
-                if agentX < x:
-                    agentX+=1
-                    l.append([agentX,agentY])
-                    avance=True
-                elif agentX > x:
-                    agentX-=1
+                        agentX+=15
                     l.append([agentX,agentY])
                     avance=True
             while(agentY!=y):

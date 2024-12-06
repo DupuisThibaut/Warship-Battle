@@ -31,5 +31,5 @@ class Environnement:
             agent.nbPoint+=1
             agent.haveToGoBack = True
             agent.collision()
-        else: 
+        else:
             agent.collision()
