@@ -236,19 +236,19 @@ class Agent:
     def prof(self,eleves):
         for e in range(len(eleves)):
             if self.x>0:
-                if eleves[e].x==self.x-1 and eleves[e].y==self.y:
+                if eleves[e].x==self.x-1 and eleves[e].y==self.y and eleves[e].haveToGoBack==True:
                     self.previous=[self.x,self.y]
                     return e
             if self.x<self.gridSize:
-                if eleves[e].x==self.x+1 and eleves[e].y==self.y:
+                if eleves[e].x==self.x+1 and eleves[e].y==self.y and eleves[e].haveToGoBack==True:
                     self.previous=[self.x,self.y]
                     return e
             if self.y>0:
-                if eleves[e].y==self.y-1 and eleves[e].x==self.x:
+                if eleves[e].y==self.y-1 and eleves[e].x==self.x and eleves[e].haveToGoBack==True:
                     self.previous=[self.x,self.y]
                     return e
             if self.y<self.gridSize:
-                if eleves[e].y==self.y+1 and eleves[e].x==self.x:
+                if eleves[e].y==self.y+1 and eleves[e].x==self.x and eleves[e].haveToGoBack==True:
                     self.previous=[self.x,self.y]
                     return e
         min=self.gridSize*self.gridSize
