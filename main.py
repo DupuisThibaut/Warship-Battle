@@ -1,3 +1,4 @@
+import itertools
 from environnement import Environnement
 from Player.agent import Agent
 import time
@@ -12,7 +13,7 @@ TAILLE_CASE = WIDTH // TAILLE
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 candy_position = (0, 0)
-img_candy = pygame.image.load("img/skins/candy.png") 
+img_candy = pygame.image.load("img/skins/candy.png")
 img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
 
 def draw_image1(x, y):
@@ -27,17 +28,16 @@ pygame.display.set_caption("Jeu des narvalos")
 
 def draw_board():
     """Dessine le damier."""
-    for row in range(TAILLE):
-        for col in range(TAILLE):
-            color = WHITE if (row + col) % 2 == 0 else BLACK
-            pygame.draw.rect(screen, color, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE))
+    for row, col in itertools.product(range(TAILLE), range(TAILLE)):
+        color = WHITE if (row + col) % 2 == 0 else BLACK
+        pygame.draw.rect(screen, color, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE))
 
 class Img_Agent:
     def __init__(self,img,x,y):
-        self.x=x 
+        self.x=x
         self.y=y
         self.position = (self.x, self.y)
-        self.img = pygame.image.load("img/skins/"+img+".png") 
+        self.img = pygame.image.load(f"img/skins/{img}.png")
         self.img = pygame.transform.scale(self.img, (TAILLE_CASE, TAILLE_CASE))
 
     def draw(self):
@@ -51,7 +51,7 @@ class Main:
     fin=False
 
     def __init__(self,tailleGrid,agents,teacher):
-        self.grid=Environnement(tailleGrid,[random.randint(0,taille-1),random.randint((taille//2)+1,taille-1)])
+        self.grid=Environnement(tailleGrid,[8,8])
         self.agents=agents
         print(self.grid.candy)
         for e in self.agents:

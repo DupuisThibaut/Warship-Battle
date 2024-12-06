@@ -65,22 +65,22 @@ class Agent:
             self.previous = [self.x, self.y]
             self.back=3
         elif(self.numStrat!=2):
-            if self.x > self.initial_Coordinates[0] and self.Candy[0]!=self.x-1:
+            if self.x > self.initial_Coordinates[0] :
                 self.gauche()
-            elif self.x < self.initial_Coordinates[0] and self.Candy[0]!=self.x+1:
-                self.droite()
-            elif self.y > self.initial_Coordinates[1] and self.Candy[1]!=self.y-1:
+            elif self.y > self.initial_Coordinates[1] :
                 self.reculer()
-            elif self.y < self.initial_Coordinates[1] and self.Candy[1]!=self.y+1:
+            elif self.x < self.initial_Coordinates[0] :
+                self.droite()
+            elif self.y < self.initial_Coordinates[1] :
                 self.avancer()
         elif(self.numStrat==2):
-            if self.y > self.initial_Coordinates[1] and self.Candy[1]!=self.y-1:
+            if self.y > self.initial_Coordinates[1]:
                 self.reculer()
-            elif self.y < self.initial_Coordinates[1] and self.Candy[1]!=self.y+1:
-                self.avancer()
-            elif self.x > self.initial_Coordinates[0] and self.Candy[0]!=self.x-1:
+            elif self.x > self.initial_Coordinates[0]:
                 self.gauche()
-            elif self.x < self.initial_Coordinates[0] and self.Candy[0]!=self.x+1:
+            elif self.y < self.initial_Coordinates[1] :
+                self.avancer()
+            elif self.x < self.initial_Coordinates[0]:
                 self.droite()
         else:
             self.previous = [self.x, self.y]
@@ -119,6 +119,7 @@ class Agent:
     def Stratégie1(self):
         if self.x > 0 and self.y!=self.Candy[1]:
             self.gauche()
+            print("hello")
         elif self.y < self.Candy[1]:
             self.avancer()
         elif self.x < self.Candy[0]:
@@ -131,10 +132,6 @@ class Agent:
             self.avancer()
         elif self.x > self.Candy[0]:
             self.gauche()
-        elif self.y > self.Candy[1]:
-            self.reculer()
-        elif self.x < self.Candy[0]:
-            self.droite()
 
     def Stratégie3(self):
         if(self.position<len(self.chemin)-1):
