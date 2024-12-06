@@ -234,26 +234,31 @@ class Agent:
         return l
 
     def prof(self,eleves):
-        for e in range(len(eleves)):
+        for e in range(0,len(eleves)):
             if self.x>0:
-                if eleves[e].x==self.x-1 and eleves[e].y==self.y and eleves[e].haveToGoBack==True:
+                if eleves[e].x==self.x-1 and eleves[e].y==self.y and eleves[e].haveToGoBack==False:
                     self.previous=[self.x,self.y]
+                    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                     return e
             if self.x<self.gridSize:
-                if eleves[e].x==self.x+1 and eleves[e].y==self.y and eleves[e].haveToGoBack==True:
+                if eleves[e].x==self.x+1 and eleves[e].y==self.y and eleves[e].haveToGoBack==False:
                     self.previous=[self.x,self.y]
+                    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                     return e
             if self.y>0:
-                if eleves[e].y==self.y-1 and eleves[e].x==self.x and eleves[e].haveToGoBack==True:
+                if eleves[e].y==self.y-1 and eleves[e].x==self.x and eleves[e].haveToGoBack==False:
                     self.previous=[self.x,self.y]
+                    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                     return e
             if self.y<self.gridSize:
-                if eleves[e].y==self.y+1 and eleves[e].x==self.x and eleves[e].haveToGoBack==True:
+                if eleves[e].y==self.y+1 and eleves[e].x==self.x and eleves[e].haveToGoBack==False:
                     self.previous=[self.x,self.y]
+                    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                     return e
         min=self.gridSize*self.gridSize
         parcours=[]
         i=0
+        e=-1
         for eleve in eleves:
             if(eleve.haveToGoBack==False):
                 l=Agent.plusCourtChemin(self,eleve.x,eleve.y,2)
@@ -267,6 +272,15 @@ class Agent:
             parcoursVide=True
             if self.x!=self.initial_Coordinates[0] and self.y!=self.initial_Coordinates[1]:
                 parcours=Agent.plusCourtChemin(self,self.initial_Coordinates[0],self.initial_Coordinates[1],2)
+                if self.x<parcours[0][0]:
+                    self.droite()
+                elif self.x>parcours[0][0]:
+                    self.gauche()
+                elif self.y<parcours[0][1]:
+                    self.avancer()
+                elif self.y>parcours[0][1]:
+                    self.reculer()
+                return -1
             else:
                 parcours=[[self.initial_Coordinates[0],self.initial_Coordinates[1]]]
                 self.previous[0]=self.x
@@ -280,17 +294,16 @@ class Agent:
             self.avancer()
         elif self.y>parcours[0][1]:
             self.reculer()
-        if(parcoursVide==False):
-            if self.x>0:
-                if eleves[e].x==self.x-1 and eleves[e].y==self.y:
-                    return e
-            if self.x<self.gridSize:
-                if eleves[e].x==self.x+1 and eleves[e].y==self.y:
-                    return e
-            if self.y>0:
-                if eleves[e].y==self.y-1 and eleves[e].x==self.x:
-                    return e
-            if self.y<self.gridSize:
-                if eleves[e].y==self.y+1 and eleves[e].x==self.x:
-                    return e
+        if self.x>0:
+            if eleves[e].x==self.x-1 and eleves[e].y==self.y:
+                return e
+        elif self.x<self.gridSize:
+            if eleves[e].x==self.x+1 and eleves[e].y==self.y:
+                return e
+        elif self.y>0:
+            if eleves[e].y==self.y-1 and eleves[e].x==self.x:
+                return e
+        elif self.y<self.gridSize:
+            if eleves[e].y==self.y+1 and eleves[e].x==self.x:
+                return e
         return -1
