@@ -88,7 +88,6 @@ class Agent:
             self.y = self.initial_Coordinates[1]
         self.move(self.x, self.y)
 
-
     def whatToDo(self):
         if self.haveToGoBack:
             if self.back==0:
@@ -142,11 +141,7 @@ class Agent:
             self.droite()
 
     def Stratégie3(self):
-        print('j')
-        print(self.x)
-        print(self.y)
         if(self.position<len(self.chemin)-1):
-            print("i")
             if self.x<self.chemin[self.position][0]:
                 self.droite()
                 self.position+=1
@@ -217,7 +212,7 @@ class Agent:
                     agentY-=1
                     l.append([agentX,agentY])
                     avance=False
-        elif(chemin==2):
+        elif(chemin==3):
             while(agentY!=y):
                 if agentY < y:
                     agentY+=1
@@ -242,15 +237,19 @@ class Agent:
         for e in range(len(eleves)):
             if self.x>0:
                 if eleves[e].x==self.x-1 and eleves[e].y==self.y:
+                    self.previous=[self.x,self.y]
                     return e
             if self.x<self.gridSize:
                 if eleves[e].x==self.x+1 and eleves[e].y==self.y:
+                    self.previous=[self.x,self.y]
                     return e
             if self.y>0:
                 if eleves[e].y==self.y-1 and eleves[e].x==self.x:
+                    self.previous=[self.x,self.y]
                     return e
             if self.y<self.gridSize:
                 if eleves[e].y==self.y+1 and eleves[e].x==self.x:
+                    self.previous=[self.x,self.y]
                     return e
         min=self.gridSize*self.gridSize
         parcours=[]
