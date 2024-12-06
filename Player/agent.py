@@ -134,7 +134,7 @@ class Agent:
             self.gauche()
 
     def Stratégie3(self):
-        if(self.position<len(self.chemin)-1):
+        if(self.position<=len(self.chemin)-1):
             if self.x<self.chemin[self.position][0]:
                 self.droite()
                 self.position+=1
@@ -259,7 +259,7 @@ class Agent:
         parcoursVide=False
         if parcours==[]:
             parcoursVide=True
-            if self.x!=self.initial_Coordinates[0] and self.y!=self.initial_Coordinates[1]:
+            if self.x!=self.initial_Coordinates[0] or self.y!=self.initial_Coordinates[1]:
                 parcours=Agent.plusCourtChemin(self,self.initial_Coordinates[0],self.initial_Coordinates[1],2)
                 if self.x<parcours[0][0]:
                     self.droite()

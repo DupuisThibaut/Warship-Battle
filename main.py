@@ -45,7 +45,7 @@ class Img_Agent:
 
     def update_position(self,new_x, new_y):
         self.x = new_x
-        self.y = new_y    
+        self.y = new_y
 
 class Main:
     fin=False
@@ -70,7 +70,7 @@ class Main:
         if(i!=-1):
             self.agents[i].haveToGoBack=True
         self.grid.displayAgent(self.teacher)
-            
+
 
 taille=TAILLE
 
@@ -90,7 +90,7 @@ student3=Agent("Thibaut",5,0,taille,3,img_student3.update_position)
 img_student4=Img_Agent("student4",6,0)
 student4=Agent("G",6,0,taille,0,img_student4.update_position)
 
-students=[student1,student2]
+students=[student1,student2,student3,student4]
 
 #Définitions de teacher
 img_teacher=Img_Agent("teacher",(taille // 2)-1,(taille // 2))
@@ -118,8 +118,8 @@ while running:
     draw_image1(*candy_position)
     img_student1.draw()
     img_student2.draw()
-   # img_student3.draw()
-    #img_student4.draw()
+    img_student3.draw()
+    img_student4.draw()
     img_teacher.draw()
     screen.blit(text1, (10, 510))
     screen.blit(text2, (10, 530))
