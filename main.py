@@ -108,8 +108,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     main.updateAgents()
-    main.grid.afficher()
-    time.sleep(1)
     draw_board()
     update_image1_position(*main.grid.candy)
     draw_image1(*candy_position)
@@ -119,6 +117,8 @@ while running:
     img_student4.draw()
     img_teacher.draw()
     pygame.display.flip()
+    main.grid.afficher()
+    time.sleep(1)
 
 # Quitter Pygame
 pygame.quit()
