@@ -7,7 +7,7 @@ import pygame
 
 pygame.init()
 WIDTH = 500
-HEIGHT = 550
+HEIGHT = WIDTH+50
 TAILLE = 10
 TAILLE_CASE = WIDTH // TAILLE
 WHITE = (255, 255, 255)
@@ -49,6 +49,10 @@ class Img_Agent:
     def update_position(self,new_x, new_y):
         self.x = new_x
         self.y = new_y
+
+    def resize(self):
+        self.img = pygame.transform.scale(self.img, (TAILLE_CASE, TAILLE_CASE))
+
 
 class Main:
     fin=False
@@ -99,9 +103,8 @@ students=[student1,student2,student3,student4]
 img_teacher=Img_Agent("teacher",(taille // 2)-1,(taille // 2))
 teacher = Agent("I", (taille // 2)-1, (taille // 2), taille,None,img_teacher.update_position)
 
-font=pygame.font.Font(None, 24)
-text1 = font.render("Texte",1,(255,255,255))
-text2 = font.render("Texte",1,(255,255,255))
+list_Img = [img_student1,img_student2,img_student3,img_student4,img_teacher]
+font2=pygame.font.Font(None, 24)
 font = pygame.font.Font(None, 74)
 small_font = pygame.font.Font(None, 36)
 
@@ -135,26 +138,47 @@ while running:
                     x += 10
                 elif downtime_button.collidepoint(mouse_pos):
                     x -= 10
+                elif downsize_button.collidepoint(mouse_pos):
+                    TAILLE-=1
+                    taille = TAILLE
+                    TAILLE_CASE = WIDTH // TAILLE
+                    for e in list_Img :
+                        e.resize()
+                    img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
+                elif upsize_button.collidepoint(mouse_pos):
+                    TAILLE+=1
+                    taille = TAILLE
+                    TAILLE_CASE = WIDTH // TAILLE
+                    for e in list_Img :
+                        e.resize()
+                    img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
+
 
     if state=="option":
         titre2 = font.render("Option", True, WHITE)
         start_text2 = small_font.render("Démarrer le jeu", True, WHITE)
         quit_text2 = small_font.render("Quitter", True, WHITE)
         time_texte = small_font.render("Temps de jeux : "+str(x), True, WHITE)
+        size_texte = small_font.render("Taille du plateau : "+str(taille), True, WHITE)
 
         start_button2 = pygame.Rect(60, 380, 380, 50)
         quit_button2 = pygame.Rect(60, 480, 380, 50)
         downtime_button = pygame.Rect(300, 170, 25, 25)
         uptime_button = pygame.Rect(350, 170, 25, 25)
+        downsize_button = pygame.Rect(300, 220, 25, 25)
+        upsize_button = pygame.Rect(350, 220, 25, 25)
         
         pygame.draw.rect(screen, BLUE, start_button2)
         pygame.draw.rect(screen, RED, quit_button2)
         pygame.draw.rect(screen, RED, downtime_button)
         pygame.draw.rect(screen, GREEN, uptime_button)
+        pygame.draw.rect(screen, RED, downsize_button)
+        pygame.draw.rect(screen, GREEN, upsize_button)
         
         screen.blit(start_text2, (150, 390))
         screen.blit(quit_text2, (150, 490))
         screen.blit(time_texte, (50, 170))
+        screen.blit(size_texte,(50,220))
         
         screen.blit(titre2, (60, 100))
 
@@ -186,11 +210,12 @@ while running:
         img_student3.draw()
         img_student4.draw()
         img_teacher.draw()
-        screen.blit(text1, (10, 510))
-        screen.blit(text2, (10, 530))
-        pygame.display.flip()
         main.grid.afficher()
         main.updateAgents()
+        text1 = font2.render("Texte",1,(255,255,255))
+        text2 = font2.render(str(int(elapsed_time*10)/10)+" / "+str(x)+"s",1,(255,255,255))
+        screen.blit(text1, (10, 510))
+        screen.blit(text2, (10, 530))
         time.sleep(0.1)
 
     pygame.display.flip()
