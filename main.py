@@ -106,28 +106,90 @@ x = 30
 start_time = time.time()
 #"""
 running = True
+state="menu"
 while running:
-    elapsed_time = time.time() - start_time
-    if elapsed_time > x:
-        running = False
+    screen.fill(BLACK)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    draw_board()
-    update_image1_position(*main.grid.candy)
-    draw_image1(*candy_position)
-    img_student1.draw()
-    img_student2.draw()
-    img_student3.draw()
-    img_student4.draw()
-    img_teacher.draw()
-    screen.blit(text1, (10, 510))
-    screen.blit(text2, (10, 530))
-    pygame.display.flip()
-    main.grid.afficher()
-    main.updateAgents()
-    time.sleep(0.1)
+        if state=="menu":
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                if start_button.collidepoint(mouse_pos):
+                    state = "option"
+                elif quit_button.collidepoint(mouse_pos):
+                    running = False
+        elif state=="option":
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                if start_button2.collidepoint(mouse_pos):
+                    state = "game"
+                elif quit_button2.collidepoint(mouse_pos):
+                    running = False
+                elif uptime_button.collidepoint(mouse_pos):
+                    x += 10
+                elif downtime_button.collidepoint(mouse_pos):
+                    x -= 10
 
+    if state=="option":
+        titre2 = font.render("Option", True, WHITE)
+        start_text2 = small_font.render("Démarrer le jeu", True, WHITE)
+        quit_text2 = small_font.render("Quitter", True, WHITE)
+        time_texte = small_font.render("Temps de jeux : "+str(x), True, WHITE)
+
+        start_button2 = pygame.Rect(60, 380, 380, 50)
+        quit_button2 = pygame.Rect(60, 480, 380, 50)
+        downtime_button = pygame.Rect(300, 170, 25, 25)
+        uptime_button = pygame.Rect(350, 170, 25, 25)
+        
+        pygame.draw.rect(screen, BLUE, start_button2)
+        pygame.draw.rect(screen, RED, quit_button2)
+        pygame.draw.rect(screen, RED, downtime_button)
+        pygame.draw.rect(screen, GREEN, uptime_button)
+        
+        screen.blit(start_text2, (150, 390))
+        screen.blit(quit_text2, (150, 490))
+        screen.blit(time_texte, (50, 170))
+        
+        screen.blit(titre2, (60, 100))
+
+    if state == "menu":
+        titre = font.render("Menu Principal", True, WHITE)
+        start_text = small_font.render("Démarrer le jeu", True, WHITE)
+        quit_text = small_font.render("Quitter", True, WHITE)
+
+        start_button = pygame.Rect(60, 200, 380, 50)
+        quit_button = pygame.Rect(60, 300, 380, 50)
+        
+        pygame.draw.rect(screen, BLUE, start_button)
+        pygame.draw.rect(screen, RED, quit_button)
+        
+        screen.blit(start_text, (150, 210))
+        screen.blit(quit_text, (150, 310))
+        
+        screen.blit(titre, (60, 100))
+
+    if state=="game":
+        elapsed_time = time.time() - start_time
+        if elapsed_time > x:
+            running = False
+        draw_board()
+        update_image1_position(*main.grid.candy)
+        draw_image1(*candy_position)
+        img_student1.draw()
+        img_student2.draw()
+        img_student3.draw()
+        img_student4.draw()
+        img_teacher.draw()
+        screen.blit(text1, (10, 510))
+        screen.blit(text2, (10, 530))
+        pygame.display.flip()
+        main.grid.afficher()
+        main.updateAgents()
+        time.sleep(0.1)
+
+    pygame.display.flip()
+    
 # Quitter Pygame
 pygame.quit()
 
