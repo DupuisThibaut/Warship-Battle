@@ -50,13 +50,13 @@ class Agent:
             self.move(self.x, self.y)
         else:
             self.collision()
-            
+
     def collision(self):
         tmp = [self.x, self.y]
         self.x = self.previous[0]
         self.y = self.previous[1]
         self.previous = tmp
-    
+
     def GoBack(self):
         self.position=0
         if self.x == self.initial_Coordinates[0] and self.y == self.initial_Coordinates[1]:
@@ -102,7 +102,7 @@ class Agent:
             self.Stratégie2()
         elif self.numStrat == 3:
             self.Stratégie3()
-    
+
     def StratAleat(self):
         i = random.randint(0, 3)
         if i == 0:
@@ -113,7 +113,7 @@ class Agent:
             self.gauche()
         else:
             self.droite()
-    
+
     def Stratégie1(self):
         if self.x > 0 and self.y!=self.Candy[1]:
             self.gauche()
@@ -137,7 +137,7 @@ class Agent:
             self.reculer()
         elif self.x < self.Candy[0]:
             self.droite()
-    
+
     def Stratégie3(self):
         print('j')
         print(self.x)
@@ -156,7 +156,7 @@ class Agent:
             elif self.y>self.chemin[self.position][1]:
                 self.reculer()
                 self.position+=1
-    
+
     def plusCourtChemin(self,x,y,chemin):
         agentX=self.x
         agentY=self.y
@@ -260,15 +260,24 @@ class Agent:
                     parcours=l
                     e=i
             i+=1
-        self.previous[0]=self.x
-        self.previous[1]=self.y
         parcoursVide=False
         if parcours==[]:
-            parcours=Agent.plusCourtChemin(self,self.initial_Coordinates[0],self.initial_Coordinates[1],2)
             parcoursVide=True
-        self.x=parcours[0][0]
-        self.y=parcours[0][1]
-        self.move(self.x,self.y)
+            if self.x!=self.initial_Coordinates[0] and self.y!=self.initial_Coordinates[1]:
+                parcours=Agent.plusCourtChemin(self,self.initial_Coordinates[0],self.initial_Coordinates[1],2)
+            else:
+                parcours=[[self.initial_Coordinates[0],self.initial_Coordinates[1]]]
+                self.previous[0]=self.x
+                self.previous[1]=self.y
+                return -1
+        if self.x<parcours[0][0]:
+            self.droite()
+        elif self.x>parcours[0][0]:
+            self.gauche()
+        elif self.y<parcours[0][1]:
+            self.avancer()
+        elif self.y>parcours[0][1]:
+            self.reculer()
         if(parcoursVide==False):
             if self.x>0:
                 if eleves[e].x==self.x-1 and eleves[e].y==self.y:
