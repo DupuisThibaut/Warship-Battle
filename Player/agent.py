@@ -123,10 +123,6 @@ class Agent:
             self.avancer()
         elif self.x < self.Candy[0]:
             self.droite()
-        elif self.y > self.Candy[1]:
-            self.reculer()
-        elif self.x > self.Candy[0]:
-            self.gauche()
 
     def Stratégie2(self):
         if self.x < self.gridSize-1 and self.y!=self.Candy[1]:
@@ -238,22 +234,18 @@ class Agent:
             if self.x>0:
                 if eleves[e].x==self.x-1 and eleves[e].y==self.y and eleves[e].haveToGoBack==False:
                     self.previous=[self.x,self.y]
-                    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                     return e
             if self.x<self.gridSize:
                 if eleves[e].x==self.x+1 and eleves[e].y==self.y and eleves[e].haveToGoBack==False:
                     self.previous=[self.x,self.y]
-                    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                     return e
             if self.y>0:
                 if eleves[e].y==self.y-1 and eleves[e].x==self.x and eleves[e].haveToGoBack==False:
                     self.previous=[self.x,self.y]
-                    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                     return e
             if self.y<self.gridSize:
                 if eleves[e].y==self.y+1 and eleves[e].x==self.x and eleves[e].haveToGoBack==False:
                     self.previous=[self.x,self.y]
-                    print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
                     return e
         min=self.gridSize*self.gridSize
         parcours=[]
