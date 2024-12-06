@@ -56,6 +56,7 @@ class Agent:
         self.x = self.previous[0]
         self.y = self.previous[1]
         self.previous = tmp
+        self.move(self.x, self.y)
 
     def GoBack(self):
         self.position=0
@@ -85,6 +86,8 @@ class Agent:
             self.previous = [self.x, self.y]
             self.x = self.initial_Coordinates[0]
             self.y = self.initial_Coordinates[1]
+        self.move(self.x, self.y)
+
 
     def whatToDo(self):
         if self.haveToGoBack:
@@ -236,7 +239,7 @@ class Agent:
         return l
 
     def prof(self,eleves):
-        for e in range(0,len(eleves)):
+        for e in range(len(eleves)):
             if self.x>0:
                 if eleves[e].x==self.x-1 and eleves[e].y==self.y:
                     return e
