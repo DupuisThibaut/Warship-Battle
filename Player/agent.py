@@ -2,7 +2,7 @@ import random
 
 class Agent:
 
-    def __init__(self, nom, x, y, gridSize, numStrat):
+    def __init__(self, nom, x, y, gridSize, numStrat, move):
         self.nom = nom
         self.x = x  # Position horizontale (colonnes)
         self.y = y  # Position verticale (lignes)
@@ -17,11 +17,13 @@ class Agent:
         self.chemin = []
         self.position=0
         self.back=0
+        self.move = move
 
     def avancer(self):
         if self.y + 1 < self.gridSize:
             self.previous = [self.x, self.y]
             self.y += 1
+            self.move(self.x, self.y)
         else:
             self.collision()
 
@@ -29,6 +31,7 @@ class Agent:
         if self.y >= 1:
             self.previous = [self.x, self.y]
             self.y -= 1
+            self.move(self.x, self.y)
         else:
             self.collision()
 
@@ -36,6 +39,7 @@ class Agent:
         if self.x >= 1:
             self.previous = [self.x, self.y]
             self.x -= 1
+            self.move(self.x, self.y)
         else:
             self.collision()
 
@@ -43,6 +47,7 @@ class Agent:
         if self.x + 1 < self.gridSize:
             self.previous = [self.x, self.y]
             self.x += 1
+            self.move(self.x, self.y)
         else:
             self.collision()
             
@@ -263,6 +268,7 @@ class Agent:
             parcoursVide=True
         self.x=parcours[0][0]
         self.y=parcours[0][1]
+        self.move(self.x,self.y)
         if(parcoursVide==False):
             if self.x>0:
                 if eleves[e].x==self.x-1 and eleves[e].y==self.y:
