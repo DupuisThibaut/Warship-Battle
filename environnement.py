@@ -3,6 +3,7 @@ class Environnement:
         self.taille=taille
         self.grid = []
         self.candy = coordinates
+        self.msg = ""
         for _ in range(taille):
             l = [" " for _ in range(taille)]
             self.grid.append(l)
@@ -30,6 +31,7 @@ class Environnement:
         elif([agent.x,agent.y]==self.candy and agent.haveToGoBack==False):
             agent.nbPoint+=1
             agent.haveToGoBack = True
+            self.msg = f"{agent.nom} récupère un bonbon"
             agent.collision()
         else:
             agent.collision()

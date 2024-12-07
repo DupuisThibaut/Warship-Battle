@@ -212,11 +212,11 @@ while running:
         img_teacher.draw()
         main.grid.afficher()
         main.updateAgents()
-        text1 = font2.render("Texte",1,(255,255,255))
-        text2 = font2.render(str(int(elapsed_time*10)/10)+" / "+str(x)+"s",1,(255,255,255))
+        text1 = font2.render(main.grid.msg,1,(255,255,255))
+        text2 = font2.render(str(int(elapsed_time))+" / "+str(x)+"s",1,(255,255,255))
         screen.blit(text1, (10, 510))
         screen.blit(text2, (10, 530))
-        time.sleep(0.1)
+        time.sleep(0.3)
 
     pygame.display.flip()
     
