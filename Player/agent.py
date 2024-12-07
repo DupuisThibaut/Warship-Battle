@@ -62,9 +62,9 @@ class Agent:
         parcours=[]
         if self.y + 1 < self.gridSize:
             parcours.append(Agent.plusCourtChemin(self,self.x,self.y+1,2))
-        if self.y >= 1:
-        if self.x >= 1:
-        if self.x + 1 < self.gridSize:
+        #if self.y >= 1:
+        #if self.x >= 1:
+        #if self.x + 1 < self.gridSize:
 
     def GoBack(self):
         self.position=0

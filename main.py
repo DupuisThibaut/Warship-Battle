@@ -15,24 +15,14 @@ BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
-candy_position = (0, 0)
-img_candy = pygame.image.load("img/skins/candy.png")
-img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
-
-def draw_image1(x, y):
-    screen.blit(img_candy, (x * TAILLE_CASE, y * TAILLE_CASE))
-
-def update_image1_position(new_x, new_y):
-    global candy_position
-    candy_position = (new_x, new_y)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Jeu des narvalos")
 
-def draw_board():
+def draw_board(couleur1=WHITE, couleur2=BLACK):
     """Dessine le damier."""
     for row, col in itertools.product(range(TAILLE), range(TAILLE)):
-        color = WHITE if (row + col) % 2 == 0 else BLACK
+        color = couleur1 if (row + col) % 2 == 0 else couleur2
         pygame.draw.rect(screen, color, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE))
 
 class Img_Agent:
@@ -53,11 +43,10 @@ class Img_Agent:
     def resize(self):
         self.img = pygame.transform.scale(self.img, (TAILLE_CASE, TAILLE_CASE))
 
-
 class Main:
     fin=False
 
-    def __init__(self,tailleGrid,agents,teacher):
+    def __init__(self,tailleGrid,agents,teacher,obstacles):
         self.grid=Environnement(tailleGrid,[8,8])
         self.agents=agents
         print(self.grid.candy)
@@ -68,8 +57,11 @@ class Main:
                 print(e.chemin)
         self.debutJeu=time
         self.teacher=teacher
+        self.obstacles=obstacles
 
     def updateAgents(self):
+        for e in self.obstacles:
+            self.grid.displayAgent(e)
         for e in self.agents:
             e.whatToDo()
             self.grid.displayAgent(e)
@@ -97,18 +89,31 @@ student3=Agent("Thibaut",5,0,taille,3,img_student3.update_position)
 img_student4=Img_Agent("student4",6,0)
 student4=Agent("G",6,0,taille,0,img_student4.update_position)
 
+#Définitions de student4
+img_obstacle1=Img_Agent("obstacle",0,6)
+obstacle1=Agent("O",0,6,taille,None,img_obstacle1.update_position)
+
 students=[student1,student2,student3,student4]
+obstacles=[obstacle1]
 
 #Définitions de teacher
 img_teacher=Img_Agent("teacher",(taille // 2)-1,(taille // 2))
 teacher = Agent("I", (taille // 2)-1, (taille // 2), taille,None,img_teacher.update_position)
 
-list_Img = [img_student1,img_student2,img_student3,img_student4,img_teacher]
+list_Img = [img_student1,img_student2,img_student3,img_student4,img_teacher,img_obstacle1]
 font2=pygame.font.Font(None, 24)
 font = pygame.font.Font(None, 74)
 small_font = pygame.font.Font(None, 36)
 
-main=Main(taille,students,teacher)
+main=Main(taille,students,teacher,obstacles)
+
+candy_position = main.grid.candy
+img_candy = pygame.image.load("img/skins/candy.png")
+img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
+
+def draw_candy(x, y):
+    screen.blit(img_candy, (x * TAILLE_CASE, y * TAILLE_CASE))
+
 input_test = "ok"
 x = 30
 start_time = time.time()
@@ -131,6 +136,7 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
                 if start_button2.collidepoint(mouse_pos):
+                    start_time = time.time()
                     state = "game"
                 elif quit_button2.collidepoint(mouse_pos):
                     running = False
@@ -203,12 +209,9 @@ while running:
         if elapsed_time > x:
             running = False
         draw_board()
-        update_image1_position(*main.grid.candy)
-        draw_image1(*candy_position)
-        img_student1.draw()
-        img_student2.draw()
-        img_student3.draw()
-        img_student4.draw()
+        draw_candy(*candy_position)
+        for e in list_Img:
+            e.draw()
         img_teacher.draw()
         main.grid.afficher()
         main.updateAgents()
