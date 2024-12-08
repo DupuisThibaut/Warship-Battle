@@ -15,11 +15,19 @@ BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+BACKGROUND = (40, 40, 40)
+SOL = (220, 220, 220)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Jeu des narvalos")
 
-def draw_board(couleur1=WHITE, couleur2=BLACK):
+def draw_board(couleur1=SOL, couleur2=SOL):
+    """Dessine un sol avec des carreaux et des lignes noires.""" 
+    board = pygame.Rect(0, 0, WIDTH, WIDTH)
+    pygame.draw.rect(screen, SOL, board)    
+    for row, col in itertools.product(range(TAILLE), range(TAILLE)): 
+        pygame.draw.rect(screen, BLACK, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE), 1)
+def draw_board_1(couleur1=WHITE, couleur2=BLACK):
     """Dessine le damier."""
     for row, col in itertools.product(range(TAILLE), range(TAILLE)):
         color = couleur1 if (row + col) % 2 == 0 else couleur2
@@ -63,7 +71,7 @@ class Main:
         for e in self.obstacles:
             self.grid.displayAgent(e)
         for e in self.agents:
-            e.whatToDo()
+            e.whatToDo(self.grid.grid)
             self.grid.displayAgent(e)
         i=self.teacher.prof(self.agents)
         if(i!=-1):
@@ -119,9 +127,25 @@ x = 30
 start_time = time.time()
 #"""
 running = True
+titre = font.render("Menu Principal", True, WHITE)
+start_text = small_font.render("Démarrer le jeu", True, WHITE)
+quit_text = small_font.render("Quitter", True, WHITE)
+start_button = pygame.Rect(60, 200, 380, 50)
+quit_button = pygame.Rect(60, 300, 380, 50)
+titre2 = font.render("Option", True, WHITE)
+start_text2 = small_font.render("Démarrer le jeu", True, WHITE)
+quit_text2 = small_font.render("Quitter", True, WHITE)
+time_texte = small_font.render(f"Temps de jeux : {x}", True, WHITE)
+size_texte = small_font.render(f"Taille du plateau : {str(taille)}", True, WHITE)
+start_button2 = pygame.Rect(60, 380, 380, 50)
+quit_button2 = pygame.Rect(60, 480, 380, 50)
+downtime_button = pygame.Rect(300, 170, 25, 25)
+uptime_button = pygame.Rect(350, 170, 25, 25)
+downsize_button = pygame.Rect(300, 220, 25, 25)
+upsize_button = pygame.Rect(350, 220, 25, 25)
 state="menu"
 while running:
-    screen.fill(BLACK)
+    screen.fill(BACKGROUND)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -158,53 +182,7 @@ while running:
                     for e in list_Img :
                         e.resize()
                     img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
-
-
-    if state=="option":
-        titre2 = font.render("Option", True, WHITE)
-        start_text2 = small_font.render("Démarrer le jeu", True, WHITE)
-        quit_text2 = small_font.render("Quitter", True, WHITE)
-        time_texte = small_font.render("Temps de jeux : "+str(x), True, WHITE)
-        size_texte = small_font.render("Taille du plateau : "+str(taille), True, WHITE)
-
-        start_button2 = pygame.Rect(60, 380, 380, 50)
-        quit_button2 = pygame.Rect(60, 480, 380, 50)
-        downtime_button = pygame.Rect(300, 170, 25, 25)
-        uptime_button = pygame.Rect(350, 170, 25, 25)
-        downsize_button = pygame.Rect(300, 220, 25, 25)
-        upsize_button = pygame.Rect(350, 220, 25, 25)
-        
-        pygame.draw.rect(screen, BLUE, start_button2)
-        pygame.draw.rect(screen, RED, quit_button2)
-        pygame.draw.rect(screen, RED, downtime_button)
-        pygame.draw.rect(screen, GREEN, uptime_button)
-        pygame.draw.rect(screen, RED, downsize_button)
-        pygame.draw.rect(screen, GREEN, upsize_button)
-        
-        screen.blit(start_text2, (150, 390))
-        screen.blit(quit_text2, (150, 490))
-        screen.blit(time_texte, (50, 170))
-        screen.blit(size_texte,(50,220))
-        
-        screen.blit(titre2, (60, 100))
-
-    if state == "menu":
-        titre = font.render("Menu Principal", True, WHITE)
-        start_text = small_font.render("Démarrer le jeu", True, WHITE)
-        quit_text = small_font.render("Quitter", True, WHITE)
-
-        start_button = pygame.Rect(60, 200, 380, 50)
-        quit_button = pygame.Rect(60, 300, 380, 50)
-        
-        pygame.draw.rect(screen, BLUE, start_button)
-        pygame.draw.rect(screen, RED, quit_button)
-        
-        screen.blit(start_text, (150, 210))
-        screen.blit(quit_text, (150, 310))
-        
-        screen.blit(titre, (60, 100))
-
-    if state=="game":
+    if state == "game":
         elapsed_time = time.time() - start_time
         if elapsed_time > x:
             running = False
@@ -216,24 +194,30 @@ while running:
         main.grid.afficher()
         main.updateAgents()
         text1 = font2.render(main.grid.msg,1,(255,255,255))
-        text2 = font2.render(str(int(elapsed_time))+" / "+str(x)+"s",1,(255,255,255))
+        text2 = font2.render(f"{int(elapsed_time)} / {str(x)}s", 1, (255, 255, 255))
         screen.blit(text1, (10, 510))
         screen.blit(text2, (10, 530))
         time.sleep(0.3)
-
+    elif state == "menu":
+        pygame.draw.rect(screen, BLUE, start_button)
+        pygame.draw.rect(screen, RED, quit_button)
+        screen.blit(start_text, (150, 210))
+        screen.blit(quit_text, (150, 310))
+        screen.blit(titre, (60, 100))
+    elif state == "option":
+        pygame.draw.rect(screen, BLUE, start_button2)
+        pygame.draw.rect(screen, RED, quit_button2)
+        pygame.draw.rect(screen, RED, downtime_button)
+        pygame.draw.rect(screen, GREEN, uptime_button)
+        pygame.draw.rect(screen, RED, downsize_button)
+        pygame.draw.rect(screen, GREEN, upsize_button)
+        screen.blit(start_text2, (150, 390))
+        screen.blit(quit_text2, (150, 490))
+        screen.blit(time_texte, (50, 170))
+        screen.blit(size_texte,(50,220))
+        screen.blit(titre2, (60, 100))
     pygame.display.flip()
-    
-# Quitter Pygame
 pygame.quit()
-
-#while True:
-#    elapsed_time = time.time() - start_time
-#    if elapsed_time > x:
- #       print("Temps écoulé. Fin du jeu.")
- #       break
-  #  main.updateAgents()
- #   main.grid.afficher()
-#    time.sleep(1)
 print("Temps écoulé. Fin du jeu.")
 maxPoint=0
 bestStudent = student1
