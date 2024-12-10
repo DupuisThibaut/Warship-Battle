@@ -20,7 +20,7 @@ SOL = (220, 220, 220)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Jeu des narvalos")
-OFFSET_X = WIDTH // 2 
+OFFSET_X = WIDTH // 2
 OFFSET_Y = HEIGHT // 4
 def cart_to_iso(x, y):
     iso_x = OFFSET_X + (x - y) * (TAILLE_CASE // 2)
@@ -29,16 +29,16 @@ def cart_to_iso(x, y):
 
 
 def draw_board(couleur1=SOL, couleur2=SOL):
-    """Dessine un sol avec des carreaux et des lignes noires.""" 
+    """Dessine un sol avec des carreaux et des lignes noires."""
     board = pygame.Rect(0, 0, WIDTH, WIDTH)
-    pygame.draw.rect(screen, SOL, board)    
-    for row, col in itertools.product(range(TAILLE), range(TAILLE)): 
+    pygame.draw.rect(screen, SOL, board)
+    for row, col in itertools.product(range(TAILLE), range(TAILLE)):
         pygame.draw.rect(screen, BLACK, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE), 1)
 def draw_board_iso(couleur1=SOL, couleur2=SOL):
-    """Dessine un sol en vue isométrique avec des carreaux et des lignes noires.""" 
+    """Dessine un sol en vue isométrique avec des carreaux et des lignes noires."""
     board = pygame.Rect(0, 0, WIDTH, WIDTH)
-    pygame.draw.rect(screen, SOL, board)    
-    for row, col in itertools.product(range(TAILLE), range(TAILLE)): 
+    pygame.draw.rect(screen, SOL, board)
+    for row, col in itertools.product(range(TAILLE), range(TAILLE)):
         iso_x, iso_y = cart_to_iso(col, row)
         points = [
             (iso_x, iso_y),
@@ -89,7 +89,7 @@ class Main:
         for e in self.agents:
             e.whatToDo(self.grid.grid)
             self.grid.displayAgent(e)
-        i=self.teacher.prof(self.agents)
+        i=self.teacher.prof(self.agents,self.grid.grid)
         if(i!=-1):
             self.agents[i].haveToGoBack=True
         self.grid.displayAgent(self.teacher)
