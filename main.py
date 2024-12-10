@@ -20,6 +20,13 @@ SOL = (220, 220, 220)
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Jeu des narvalos")
+OFFSET_X = WIDTH // 2 
+OFFSET_Y = HEIGHT // 4
+def cart_to_iso(x, y):
+    iso_x = OFFSET_X + (x - y) * (TAILLE_CASE // 2)
+    iso_y = OFFSET_Y + (x + y) * (TAILLE_CASE // 4)
+    return iso_x, iso_y
+
 
 def draw_board(couleur1=SOL, couleur2=SOL):
     """Dessine un sol avec des carreaux et des lignes noires.""" 
@@ -27,11 +34,20 @@ def draw_board(couleur1=SOL, couleur2=SOL):
     pygame.draw.rect(screen, SOL, board)    
     for row, col in itertools.product(range(TAILLE), range(TAILLE)): 
         pygame.draw.rect(screen, BLACK, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE), 1)
-def draw_board_1(couleur1=WHITE, couleur2=BLACK):
-    """Dessine le damier."""
-    for row, col in itertools.product(range(TAILLE), range(TAILLE)):
-        color = couleur1 if (row + col) % 2 == 0 else couleur2
-        pygame.draw.rect(screen, color, (col * TAILLE_CASE, row * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE))
+def draw_board_iso(couleur1=SOL, couleur2=SOL):
+    """Dessine un sol en vue isométrique avec des carreaux et des lignes noires.""" 
+    board = pygame.Rect(0, 0, WIDTH, WIDTH)
+    pygame.draw.rect(screen, SOL, board)    
+    for row, col in itertools.product(range(TAILLE), range(TAILLE)): 
+        iso_x, iso_y = cart_to_iso(col, row)
+        points = [
+            (iso_x, iso_y),
+            (iso_x + (TAILLE_CASE // 2), iso_y + (TAILLE_CASE // 4)),
+            (iso_x, iso_y + (TAILLE_CASE // 2)),
+            (iso_x - (TAILLE_CASE // 2), iso_y + (TAILLE_CASE // 4))
+        ]
+        pygame.draw.polygon(screen, couleur1, points)
+        pygame.draw.polygon(screen, BLACK, points, 1)
 
 class Img_Agent:
     def __init__(self,img,x,y):
@@ -90,23 +106,24 @@ z = 10
 
 def create_Agent(n):
     for i in range(n):
-        img_student=Img_Agent("student"+str(i%4+1),i,i)
-        student=Agent("A"+str(i+1),i,i,taille,i%4,img_student.update_position)
+        x=(i*2)%(taille-2)+1
+        y=(i//((taille-2)//2))*3
+        img_student = Img_Agent(f"student{str(i % 4 + 1)}", x, y)
+        student = Agent(
+            f"A{str(i + 1)}", x, y, taille, i % 4, img_student.update_position
+        )
         students.append(student)
         list_Img.append(img_student)
-    img_obstacle1=Img_Agent("obstacle",0,6)
-    list_Img.append(img_obstacle1)
-
-    obstacle1=Agent("O",0,6,taille,None,img_obstacle1.update_position)
-    obstacles.append(obstacle1)
+        img_obstacle=Img_Agent("obstacle",x,y+1)
+        list_Img.append(img_obstacle)
+        obstacle=Agent("O",x,y+1,taille,None,img_obstacle.update_position)
+        obstacles.append(obstacle)
 
     img_teacher=Img_Agent("teacher",(taille // 2)-1,(taille // 2))
     teacher = Agent("I", (taille // 2)-1, (taille // 2), taille,None,img_teacher.update_position,z)
     teachers.append(teacher)
 
     list_Img.append(img_teacher)
-    list_Img.append(img_obstacle1)
-
 
 font2=pygame.font.Font(None, 24)
 font = pygame.font.Font(None, 74)
@@ -165,7 +182,7 @@ while running:
                         e.resize()
                     img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
                 elif upagent_button.collidepoint(mouse_pos):
-                    if(y<taille/2):
+                    if(y<taille-2):
                         y += 1
                 elif downagent_button.collidepoint(mouse_pos):
                     if(y>1):
