@@ -80,42 +80,38 @@ class Main:
 
 
 taille=TAILLE
+students=[]
+list_Img=[]
+obstacles=[]
+teachers=[]
+x = 30
+y = 4
+z = 10
 
-#Définitions de student1
-img_student1=Img_Agent("student1",1,0)
-student1=Agent("Yanis",1,0,taille,1,img_student1.update_position)
+def create_Agent(n):
+    for i in range(n):
+        img_student=Img_Agent("student"+str(i%4+1),i,i)
+        student=Agent("A"+str(i+1),i,i,taille,i%4,img_student.update_position)
+        students.append(student)
+        list_Img.append(img_student)
+    img_obstacle1=Img_Agent("obstacle",0,6)
+    list_Img.append(img_obstacle1)
 
-#Définitions de student2
-img_student2=Img_Agent("student2",8,0)
-student2=Agent("Bastian",8,0,taille,2,img_student2.update_position)
+    obstacle1=Agent("O",0,6,taille,None,img_obstacle1.update_position)
+    obstacles.append(obstacle1)
 
-#Définitions de student3
-img_student3=Img_Agent("student3",5,0)
-student3=Agent("Thibaut",5,0,taille,3,img_student3.update_position)
+    img_teacher=Img_Agent("teacher",(taille // 2)-1,(taille // 2))
+    teacher = Agent("I", (taille // 2)-1, (taille // 2), taille,None,img_teacher.update_position,z)
+    teachers.append(teacher)
 
-#Définitions de student4
-#img_student4=Img_Agent("student4",6,0)
-#student4=Agent("G",6,0,taille,0,img_student4.update_position,40)
+    list_Img.append(img_teacher)
+    list_Img.append(img_obstacle1)
 
-#Définitions de student4
-img_obstacle1=Img_Agent("obstacle",0,6)
-obstacle1=Agent("O",0,6,taille,None,img_obstacle1.update_position,0)
 
-students=[student1,student2,student3]
-obstacles=[obstacle1]
-
-#Définitions de teacher
-img_teacher=Img_Agent("teacher",(taille // 2)-1,(taille // 2))
-teacher = Agent("I", (taille // 2)-1, (taille // 2), taille,None,img_teacher.update_position,10)
-
-list_Img = [img_student1,img_student2,img_student3,img_teacher,img_obstacle1]
 font2=pygame.font.Font(None, 24)
 font = pygame.font.Font(None, 74)
 small_font = pygame.font.Font(None, 36)
 
-main=Main(taille,students,teacher,obstacles)
-
-candy_position = main.grid.candy
 img_candy = pygame.image.load("img/skins/candy.png")
 img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
 
@@ -123,27 +119,9 @@ def draw_candy(x, y):
     screen.blit(img_candy, (x * TAILLE_CASE, y * TAILLE_CASE))
 
 input_test = "ok"
-x = 30
-
 start_time = time.time()
 #"""
 running = True
-titre = font.render("Menu Principal", True, WHITE)
-start_text = small_font.render("Démarrer le jeu", True, WHITE)
-quit_text = small_font.render("Quitter", True, WHITE)
-start_button = pygame.Rect(60, 200, 380, 50)
-quit_button = pygame.Rect(60, 300, 380, 50)
-titre2 = font.render("Option", True, WHITE)
-start_text2 = small_font.render("Démarrer le jeu", True, WHITE)
-quit_text2 = small_font.render("Quitter", True, WHITE)
-time_texte = small_font.render(f"Temps de jeux : {x}", True, WHITE)
-size_texte = small_font.render(f"Taille du plateau : {str(taille)}", True, WHITE)
-start_button2 = pygame.Rect(60, 380, 380, 50)
-quit_button2 = pygame.Rect(60, 480, 380, 50)
-downtime_button = pygame.Rect(300, 170, 25, 25)
-uptime_button = pygame.Rect(350, 170, 25, 25)
-downsize_button = pygame.Rect(300, 220, 25, 25)
-upsize_button = pygame.Rect(350, 220, 25, 25)
 state="menu"
 while running:
     screen.fill(BACKGROUND)
@@ -162,7 +140,10 @@ while running:
                 mouse_pos = event.pos
                 if start_button2.collidepoint(mouse_pos):
                     start_time = time.time()
+                    create_Agent(y)
                     state = "game"
+                    main=Main(taille,students,teachers[0],obstacles)
+                    candy_position = main.grid.candy
                 elif quit_button2.collidepoint(mouse_pos):
                     running = False
                 elif uptime_button.collidepoint(mouse_pos):
@@ -183,6 +164,15 @@ while running:
                     for e in list_Img :
                         e.resize()
                     img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
+                elif upagent_button.collidepoint(mouse_pos):
+                    y += 1
+                elif downagent_button.collidepoint(mouse_pos):
+                    y -= 1
+                elif upspeed_button.collidepoint(mouse_pos):
+                    z +=1
+                elif downspeed_button.collidepoint(mouse_pos):
+                    if(z>1):
+                       z -=1
     if state == "game":
         elapsed_time = time.time() - start_time
         if elapsed_time > x:
@@ -191,7 +181,6 @@ while running:
         draw_candy(*candy_position)
         for e in list_Img:
             e.draw()
-        img_teacher.draw()
         main.grid.afficher()
         main.updateAgents()
         text1 = font2.render(main.grid.msg,1,(255,255,255))
@@ -200,28 +189,56 @@ while running:
         screen.blit(text2, (10, 530))
         time.sleep(0.1)
     elif state == "menu":
+        titre = font.render("Menu Principal", True, WHITE)
+        start_text = small_font.render("Démarrer le jeu", True, WHITE)
+        quit_text = small_font.render("Quitter", True, WHITE)
+        start_button = pygame.Rect(60, 200, 380, 50)
+        quit_button = pygame.Rect(60, 300, 380, 50)
         pygame.draw.rect(screen, BLUE, start_button)
         pygame.draw.rect(screen, RED, quit_button)
         screen.blit(start_text, (150, 210))
         screen.blit(quit_text, (150, 310))
         screen.blit(titre, (60, 100))
     elif state == "option":
+        titre2 = font.render("Option", True, WHITE)
+        start_text2 = small_font.render("Démarrer le jeu", True, WHITE)
+        quit_text2 = small_font.render("Quitter", True, WHITE)
+        time_texte = small_font.render(f"Temps de jeux : {x}", True, WHITE)
+        size_texte = small_font.render(f"Taille du plateau : {str(taille)}", True, WHITE)
+        nbA_texte = small_font.render(f"Nombre Agents : {y}", True, WHITE)
+        speed_texte = small_font.render(f"Vitesse : {z}", True, WHITE)
+        start_button2 = pygame.Rect(60, 380, 380, 50)
+        quit_button2 = pygame.Rect(60, 480, 380, 50)
+        downtime_button = pygame.Rect(300, 170, 25, 25)
+        uptime_button = pygame.Rect(350, 170, 25, 25)
+        downsize_button = pygame.Rect(300, 220, 25, 25)
+        upsize_button = pygame.Rect(350, 220, 25, 25)
+        downagent_button = pygame.Rect(300, 270, 25, 25)
+        upagent_button = pygame.Rect(350, 270, 25, 25)
+        downspeed_button = pygame.Rect(300, 320, 25, 25)
+        upspeed_button = pygame.Rect(350, 320, 25, 25)
         pygame.draw.rect(screen, BLUE, start_button2)
         pygame.draw.rect(screen, RED, quit_button2)
         pygame.draw.rect(screen, RED, downtime_button)
         pygame.draw.rect(screen, GREEN, uptime_button)
         pygame.draw.rect(screen, RED, downsize_button)
         pygame.draw.rect(screen, GREEN, upsize_button)
+        pygame.draw.rect(screen, RED, downagent_button)
+        pygame.draw.rect(screen, GREEN, upagent_button)
+        pygame.draw.rect(screen, RED, downspeed_button)
+        pygame.draw.rect(screen, GREEN, upspeed_button)
         screen.blit(start_text2, (150, 390))
         screen.blit(quit_text2, (150, 490))
         screen.blit(time_texte, (50, 170))
         screen.blit(size_texte,(50,220))
+        screen.blit(nbA_texte,(50,270))
+        screen.blit(speed_texte,(50,320))
         screen.blit(titre2, (60, 100))
     pygame.display.flip()
 pygame.quit()
 print("Temps écoulé. Fin du jeu.")
 maxPoint=0
-bestStudent = student1
+bestStudent = students[0]
 for e in students:
     print(f"{e.nom} marque : {e.nbPoint} point(s) avec la stratégie {e.numStrat}")
     if(e.nbPoint>maxPoint):
