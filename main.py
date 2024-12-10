@@ -55,7 +55,7 @@ class Main:
     fin=False
 
     def __init__(self,tailleGrid,agents,teacher,obstacles):
-        self.grid=Environnement(tailleGrid,[8,8])
+        self.grid=Environnement(tailleGrid,[random.randint(0,taille-1),random.randint((taille//2)+1,taille-1)])
         self.agents=agents
         print(self.grid.candy)
         for e in self.agents:
@@ -165,9 +165,11 @@ while running:
                         e.resize()
                     img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
                 elif upagent_button.collidepoint(mouse_pos):
-                    y += 1
+                    if(y<taille/2):
+                        y += 1
                 elif downagent_button.collidepoint(mouse_pos):
-                    y -= 1
+                    if(y>1):
+                        y -= 1
                 elif upspeed_button.collidepoint(mouse_pos):
                     z +=1
                 elif downspeed_button.collidepoint(mouse_pos):
