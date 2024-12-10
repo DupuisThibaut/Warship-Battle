@@ -24,10 +24,9 @@ class Agent:
 
     def avancer(self,grid):
         if self.y + 1 < self.gridSize:
-            if grid[self.y+1][self.x]==" " or grid[self.y+1][self.x]=="X":
-                    self.previous = [self.x, self.y]
-                    self.y += 1
-                    self.move(self.x, self.y)
+            if grid[self.y + 1][self.x] not in ["O"]:
+                self.previous = [self.x, self.y]
+                self.y += 1
             else:
                 self.collision(1,grid)
         else:
@@ -35,10 +34,9 @@ class Agent:
 
     def reculer(self,grid):
         if self.y >= 1:
-            if grid[self.y-1][self.x]==" " or grid[self.y-1][self.x]=="X":
+            if grid[self.y - 1][self.x] not in ["O"]:
                 self.previous = [self.x, self.y]
                 self.y -= 1
-                self.move(self.x, self.y)
             else:
                 self.collision(2,grid)
         else:
@@ -46,10 +44,9 @@ class Agent:
 
     def gauche(self,grid):
         if self.x >= 1:
-            if grid[self.y][self.x-1]==" " or grid[self.y][self.x-1]=="X":
+            if grid[self.y][self.x - 1] not in ["O"]:
                 self.previous = [self.x, self.y]
                 self.x -= 1
-                self.move(self.x, self.y)
             else:
                 self.collision(3,grid)
         else:
@@ -57,95 +54,73 @@ class Agent:
 
     def droite(self,grid):
         if self.x + 1 < self.gridSize:
-            if grid[self.y][self.x+1]==" " or grid[self.y][self.x+1]=="X":
+            if grid[self.y][self.x + 1] not in ["O"]:
                 self.previous = [self.x, self.y]
                 self.x += 1
-                self.move(self.x, self.y)
             else:
                 self.collision(4,grid)
         else:
             self.collision(4,grid)
 
-    def collision(self,provenance=0,grid=None):
-        if provenance!=0: parcours=Agent.collisionObjet(self,provenance,grid)
-        else: parcours=[[self.x, self.y]]
+    def collision(self, provenance=0, grid=None):
         tmp = [self.x, self.y]
-        self.x = parcours[0][0]
-        self.y = parcours[0][1]
+        if provenance != 0 and grid is not None:
+            parcours = self.collisionObjet(provenance, grid)
+        else:
+            parcours = [tmp]
+
+        if parcours and parcours[0] != tmp:
+            self.x = parcours[0][0]
+            self.y = parcours[0][1]
+        else:
+            self.x = self.previous[0]
+            self.y = self.previous[1]
+        # Empêcher les coordonnées invalides
+        self.x = max(self.x, 0)
+        self.y = max(self.y, 0)
+        print(f"Collision: Agent {self.nom} déplacé à ({self.x}, {self.y})")
         self.previous = tmp
         self.move(self.x, self.y)
 
-    def collisionObjet(self,provenance,grid):
-        parcours=[[self.x,self.y]]
-        chemin=[]
-        min0=self.gridSize*self.gridSize
-        if self.y + 1 < self.gridSize and provenance!=1:
-            if grid[self.y+1][self.x]==" ":
-                #chemin=Agent("i",self.x,self.y+1,self.gridSize,self.numStrat,self.move,self.speed).plusCourtChemin(self.x,self.y+1,2)
-                print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-                chemin=Agent.plusCourtChemin2(self,self.x,self.y+1)
-                print(chemin)
-                if min0<len(chemin):
-                    min0=len(chemin)
-                    parcours=chemin
-        if self.y >= 1 and provenance!=2:
-            if grid[self.y-1][self.x]==" ":
-                #chemin=Agent("i",self.x,self.y-1,self.gridSize,self.numStrat,self.move,self.speed).plusCourtChemin(self.x,self.y-1,2)
-                print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-                chemin=Agent.plusCourtChemin2(self,self.x,self.y-1)
-                print(chemin)
-                if min0<len(chemin):
-                    min0=len(chemin)
-                    parcours=chemin
-        if self.x >= 1 and provenance!=3:
-            if grid[self.y][self.x-1]==" ":
-                #chemin=Agent("i",self.x-1,self.y,self.gridSize,self.numStrat,self.move,self.speed).plusCourtChemin(self.x-1,self.y,2)
-                print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-                chemin=Agent.plusCourtChemin2(self,self.x-1,self.y)
-                print(chemin)
-                if min0<len(chemin):
-                    min0=len(chemin)
-                    parcours=chemin
-        if self.x + 1 < self.gridSize and provenance!=4:
-            if grid[self.y][self.x+1]==" ":
-                #chemin=Agent("i",self.x+1,self.y,self.gridSize,self.numStrat,self.move,self.speed).plusCourtChemin(self.x+1,self.y,2)
-                print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-                chemin=Agent.plusCourtChemin2(self,self.x+1,self.y)
-                print(chemin)
-                if min0<len(chemin):
-                    min0=len(chemin)
-                    parcours=chemin
-        return parcours
+    def collisionObjet(self, provenance, grid):
+        parcours = [[self.x, self.y]]
+        chemin = []
+        min0 = self.gridSize * self.gridSize
+        directions = [
+            (self.y + 1, self.x, 1),  # Bas
+            (self.y - 1, self.x, 2),  # Haut
+            (self.y, self.x - 1, 3),  # Gauche
+            (self.y, self.x + 1, 4)   # Droite
+        ]
 
-    def GoBack(self,grid):
-        self.position=0
+        for new_y, new_x, prov in directions:
+            if 0 <= new_y < self.gridSize and 0 <= new_x < self.gridSize and provenance != prov and grid[new_y][new_x] == " ":
+                chemin = self.plusCourtChemin2(new_x, new_y)
+                if len(chemin) < min0:
+                    min0 = len(chemin)
+                    parcours = chemin
+
+        return parcours or [[self.x, self.y]]
+
+
+
+    def GoBack(self, grid):
+        self.position = 0
         if self.x == self.initial_Coordinates[0] and self.y == self.initial_Coordinates[1]:
             print("Est bien revenu")
             self.previous = [self.x, self.y]
-            self.back=3
-        elif(self.numStrat!=2):
-            if self.x > self.initial_Coordinates[0] :
-                self.gauche(grid)
-            elif self.y > self.initial_Coordinates[1] :
-                self.reculer(grid)
-            elif self.x < self.initial_Coordinates[0] :
-                self.droite(grid)
-            elif self.y < self.initial_Coordinates[1] :
-                self.avancer(grid)
-        elif(self.numStrat==2):
-            if self.y > self.initial_Coordinates[1]:
-                self.reculer(grid)
-            elif self.x > self.initial_Coordinates[0]:
-                self.gauche(grid)
-            elif self.y < self.initial_Coordinates[1] :
-                self.avancer(grid)
-            elif self.x < self.initial_Coordinates[0]:
-                self.droite(grid)
-        else:
-            self.previous = [self.x, self.y]
-            self.x = self.initial_Coordinates[0]
-            self.y = self.initial_Coordinates[1]
+            self.back = 3
+        elif self.x > self.initial_Coordinates[0] and not((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
+            self.gauche(grid)
+        elif self.x < self.initial_Coordinates[0] and not((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
+            self.droite(grid)
+        elif self.y > self.initial_Coordinates[1] or ((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
+            self.reculer(grid)
+        elif self.y < self.initial_Coordinates[1] or ((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
+            self.avancer(grid)
         self.move(self.x, self.y)
+
+
 
     def whatToDo(self,grid):
         self.grid=grid
@@ -198,17 +173,22 @@ class Agent:
             self.avancer(grid)
         elif self.x > self.Candy[0]:
             self.gauche(grid)
-
-    def Stratégie3(self,grid):
-        self.chemin=Agent.plusCourtChemin(self,self.Candy[0],self.Candy[1],self.numStrat)
-        if self.x<self.chemin[0][0]:
-            self.droite(grid)
-        elif self.x>self.chemin[0][0]:
-            self.gauche(grid)
-        elif self.y<self.chemin[0][1]:
-            self.avancer(grid)
-        elif self.y>self.chemin[0][1]:
+        else :
             self.reculer(grid)
+
+    def Stratégie3(self, grid):
+        self.chemin = self.plusCourtChemin(self.Candy[0], self.Candy[1], self.numStrat)
+        print(f"Chemin calculé : {self.chemin}")  # Ajout pour vérifier le chemin
+        if self.chemin:  # Vérifier que le chemin n'est pas vide
+            if self.x < self.chemin[0][0]:
+                self.droite(grid)
+            elif self.x > self.chemin[0][0]:
+                self.gauche(grid)
+            elif self.y < self.chemin[0][1]:
+                self.avancer(grid)
+            elif self.y > self.chemin[0][1]:
+                self.reculer(grid)
+
 
     def plusCourtChemin(self,x,y,chemin):
         agentX=self.x
@@ -290,7 +270,7 @@ class Agent:
     
     def plusCourtChemin2(self,x,y):
         a=Agent(self.nom,x,y,self.gridSize,self.numStrat,self.move,self.speed)
-        return a.plusCourtChemin(self.Candy[0],self.Candy[1],2)
+        return a.plusCourtChemin(self.Candy[0],self.Candy[1],self.numStrat)
 
     def prof(self,eleves,grid):
         if (self.cptmove==0):

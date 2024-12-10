@@ -10,7 +10,7 @@ class Environnement:
         self.grid[self.candy[1]][self.candy[0]] = "X"
 
     def afficher(self):
-        print("\033[H\033[J", end="")
+        #print("\033[H\033[J", end="")
         s=" "
         for _ in range(4*self.taille+1):
             s+="-"
@@ -25,10 +25,12 @@ class Environnement:
         print(" ")
 
     def displayAgent(self,agent):
-        if (self.grid[agent.y][agent.x]==" "):
+        if (self.grid[agent.y][agent.x] not in ["I","O","X"] or (self.grid[agent.y][agent.x] not in ["I"] and agent.haveToGoBack)):
             self.grid[agent.previous[1]][agent.previous[0]] = " "
             self.grid[agent.y][agent.x]=agent.nom[0]
+            agent.move(agent.x, agent.y)
         elif([agent.x,agent.y]==self.candy and agent.haveToGoBack==False):
+            print("helle")
             agent.nbPoint+=1
             agent.haveToGoBack = True
             self.msg = f"{agent.nom} récupère un bonbon"
