@@ -24,7 +24,7 @@ class Agent:
 
     def avancer(self,grid):
         if self.y + 1 < self.gridSize:
-            if grid[self.y+1][self.x]==" ":
+            if grid[self.y+1][self.x]==" " or grid[self.y+1][self.x]=="X":
                     self.previous = [self.x, self.y]
                     self.y += 1
                     self.move(self.x, self.y)
@@ -35,7 +35,7 @@ class Agent:
 
     def reculer(self,grid):
         if self.y >= 1:
-            if grid[self.y-1][self.x]==" ":
+            if grid[self.y-1][self.x]==" " or grid[self.y-1][self.x]=="X":
                 self.previous = [self.x, self.y]
                 self.y -= 1
                 self.move(self.x, self.y)
@@ -46,7 +46,7 @@ class Agent:
 
     def gauche(self,grid):
         if self.x >= 1:
-            if grid[self.y][self.x-1]==" ":
+            if grid[self.y][self.x-1]==" " or grid[self.y][self.x-1]=="X":
                 self.previous = [self.x, self.y]
                 self.x -= 1
                 self.move(self.x, self.y)
@@ -57,7 +57,7 @@ class Agent:
 
     def droite(self,grid):
         if self.x + 1 < self.gridSize:
-            if grid[self.y][self.x+1]==" ":
+            if grid[self.y][self.x+1]==" " or grid[self.y][self.x+1]=="X":
                 self.previous = [self.x, self.y]
                 self.x += 1
                 self.move(self.x, self.y)
@@ -80,26 +80,38 @@ class Agent:
         chemin=[]
         min0=self.gridSize*self.gridSize
         if self.y + 1 < self.gridSize and provenance!=1:
-            if grid[self.y+1][self.x]!=" ":
-                chemin=Agent.plusCourtChemin(self,self.x,self.y+1,2)
+            if grid[self.y+1][self.x]==" ":
+                #chemin=Agent("i",self.x,self.y+1,self.gridSize,self.numStrat,self.move,self.speed).plusCourtChemin(self.x,self.y+1,2)
+                print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+                chemin=Agent.plusCourtChemin2(self,self.x,self.y+1)
+                print(chemin)
                 if min0<len(chemin):
                     min0=len(chemin)
                     parcours=chemin
         if self.y >= 1 and provenance!=2:
-            if grid[self.y-1][self.x]!=" ":
-                chemin=Agent.plusCourtChemin(self,self.x,self.y-1,2)
+            if grid[self.y-1][self.x]==" ":
+                #chemin=Agent("i",self.x,self.y-1,self.gridSize,self.numStrat,self.move,self.speed).plusCourtChemin(self.x,self.y-1,2)
+                print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+                chemin=Agent.plusCourtChemin2(self,self.x,self.y-1)
+                print(chemin)
                 if min0<len(chemin):
                     min0=len(chemin)
                     parcours=chemin
         if self.x >= 1 and provenance!=3:
-            if grid[self.y][self.x-1]!=" ":
-                chemin=Agent.plusCourtChemin(self,self.x-1,self.y,2)
+            if grid[self.y][self.x-1]==" ":
+                #chemin=Agent("i",self.x-1,self.y,self.gridSize,self.numStrat,self.move,self.speed).plusCourtChemin(self.x-1,self.y,2)
+                print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+                chemin=Agent.plusCourtChemin2(self,self.x-1,self.y)
+                print(chemin)
                 if min0<len(chemin):
                     min0=len(chemin)
                     parcours=chemin
         if self.x + 1 < self.gridSize and provenance!=4:
-            if grid[self.y][self.x+1]!=" ":
-                chemin=Agent.plusCourtChemin(self,self.x+1,self.y,2)
+            if grid[self.y][self.x+1]==" ":
+                #chemin=Agent("i",self.x+1,self.y,self.gridSize,self.numStrat,self.move,self.speed).plusCourtChemin(self.x+1,self.y,2)
+                print("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
+                chemin=Agent.plusCourtChemin2(self,self.x+1,self.y)
+                print(chemin)
                 if min0<len(chemin):
                     min0=len(chemin)
                     parcours=chemin
@@ -275,6 +287,10 @@ class Agent:
                     l.append([agentX,agentY])
                     avance=True
         return l
+    
+    def plusCourtChemin2(self,x,y):
+        a=Agent(self.nom,x,y,self.gridSize,self.numStrat,self.move,self.speed)
+        return a.plusCourtChemin(self.Candy[0],self.Candy[1],2)
 
     def prof(self,eleves,grid):
         if (self.cptmove==0):
