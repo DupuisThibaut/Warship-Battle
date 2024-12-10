@@ -236,32 +236,28 @@ class Agent:
         return l
 
     def prof(self,eleves):
-        for e in range(0,len(eleves)):
-            if self.x>0:
-                if eleves[e].x==self.x-1 and eleves[e].y==self.y and eleves[e].haveToGoBack==False:
-                    self.previous=[self.x,self.y]
-                    return e
-            if self.x<self.gridSize:
-                if eleves[e].x==self.x+1 and eleves[e].y==self.y and eleves[e].haveToGoBack==False:
-                    self.previous=[self.x,self.y]
-                    return e
-            if self.y>0:
-                if eleves[e].y==self.y-1 and eleves[e].x==self.x and eleves[e].haveToGoBack==False:
-                    self.previous=[self.x,self.y]
-                    return e
-            if self.y<self.gridSize:
-                if eleves[e].y==self.y+1 and eleves[e].x==self.x and eleves[e].haveToGoBack==False:
-                    self.previous=[self.x,self.y]
-                    return e
-        min=self.gridSize*self.gridSize
+        for e in range(len(eleves)):
+            if (self.x > 0 and eleves[e].x == self.x - 1 and eleves[e].y == self.y and eleves[e].haveToGoBack == False):
+                self.previous=[self.x,self.y]
+                return e
+            if (self.x < self.gridSize and eleves[e].x == self.x + 1 and eleves[e].y == self.y and eleves[e].haveToGoBack == False):
+                self.previous=[self.x,self.y]
+                return e
+            if (self.y > 0 and eleves[e].y == self.y - 1 and eleves[e].x == self.x and eleves[e].haveToGoBack == False):
+                self.previous=[self.x,self.y]
+                return e
+            if (self.y < self.gridSize and eleves[e].y == self.y + 1 and eleves[e].x == self.x and eleves[e].haveToGoBack == False):
+                self.previous=[self.x,self.y]
+                return e
+        min1=self.gridSize*self.gridSize
         parcours=[]
         i=0
         e=-1
         for eleve in eleves:
             if(eleve.haveToGoBack==False):
                 l=Agent.plusCourtChemin(self,eleve.x,eleve.y,2)
-                if len(l)<min:
-                    min=len(l)
+                if len(l)<min1:
+                    min1=len(l)
                     parcours=l
                     e=i
             i+=1
