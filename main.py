@@ -94,21 +94,21 @@ img_student3=Img_Agent("student3",5,0)
 student3=Agent("Thibaut",5,0,taille,3,img_student3.update_position)
 
 #Définitions de student4
-img_student4=Img_Agent("student4",6,0)
-student4=Agent("G",6,0,taille,0,img_student4.update_position)
+#img_student4=Img_Agent("student4",6,0)
+#student4=Agent("G",6,0,taille,0,img_student4.update_position,40)
 
 #Définitions de student4
 img_obstacle1=Img_Agent("obstacle",0,6)
-obstacle1=Agent("O",0,6,taille,None,img_obstacle1.update_position)
+obstacle1=Agent("O",0,6,taille,None,img_obstacle1.update_position,0)
 
-students=[student1,student2,student3,student4]
+students=[student1,student2,student3]
 obstacles=[obstacle1]
 
 #Définitions de teacher
 img_teacher=Img_Agent("teacher",(taille // 2)-1,(taille // 2))
-teacher = Agent("I", (taille // 2)-1, (taille // 2), taille,None,img_teacher.update_position)
+teacher = Agent("I", (taille // 2)-1, (taille // 2), taille,None,img_teacher.update_position,10)
 
-list_Img = [img_student1,img_student2,img_student3,img_student4,img_teacher,img_obstacle1]
+list_Img = [img_student1,img_student2,img_student3,img_teacher,img_obstacle1]
 font2=pygame.font.Font(None, 24)
 font = pygame.font.Font(None, 74)
 small_font = pygame.font.Font(None, 36)
@@ -124,6 +124,7 @@ def draw_candy(x, y):
 
 input_test = "ok"
 x = 30
+
 start_time = time.time()
 #"""
 running = True
@@ -197,7 +198,7 @@ while running:
         text2 = font2.render(f"{int(elapsed_time)} / {str(x)}s", 1, (255, 255, 255))
         screen.blit(text1, (10, 510))
         screen.blit(text2, (10, 530))
-        time.sleep(0.3)
+        time.sleep(0.1)
     elif state == "menu":
         pygame.draw.rect(screen, BLUE, start_button)
         pygame.draw.rect(screen, RED, quit_button)

@@ -2,7 +2,7 @@ import random
 
 class Agent:
 
-    def __init__(self, nom, x, y, gridSize, numStrat, move):
+    def __init__(self, nom, x, y, gridSize, numStrat, move,speed=5):
         self.nom = nom
         self.x = x  # Position horizontale (colonnes)
         self.y = y  # Position verticale (lignes)
@@ -18,6 +18,8 @@ class Agent:
         self.position=0
         self.back=0
         self.move = move
+        self.speed = speed
+        self.cptmove = self.speed
 
     def avancer(self):
         if self.y + 1 < self.gridSize:
@@ -97,21 +99,26 @@ class Agent:
         self.move(self.x, self.y)
 
     def whatToDo(self,grid):
-        if self.haveToGoBack:
-            if self.back==0:
-                self.GoBack()
-            else:
-                self.back-=1
+        if(self.cptmove == 0):
+            if self.haveToGoBack:
                 if self.back==0:
-                    self.haveToGoBack=False
-        elif self.numStrat == 0:
-            self.StratAleat()
-        elif self.numStrat == 1:
-            self.Stratégie1(grid)
-        elif self.numStrat == 2:
-            self.Stratégie2(grid)
-        elif self.numStrat == 3:
-            self.Stratégie3()
+                    self.GoBack()
+                else:
+                    self.back-=1
+                    if self.back==0:
+                        self.haveToGoBack=False
+            elif self.numStrat == 0:
+                self.StratAleat()
+            elif self.numStrat == 1:
+                self.Stratégie1(grid)
+            elif self.numStrat == 2:
+                self.Stratégie2(grid)
+            elif self.numStrat == 3:
+                self.Stratégie3()
+            self.cptmove = self.speed 
+        else :
+            self.previous=[self.x,self.y]
+            self.cptmove-=1
 
     def StratAleat(self):
         i = random.randint(0, 3)
@@ -236,68 +243,70 @@ class Agent:
         return l
 
     def prof(self,eleves):
-        for e in range(len(eleves)):
-            if (self.x > 0 and eleves[e].x == self.x - 1 and eleves[e].y == self.y and eleves[e].haveToGoBack == False):
-                self.previous=[self.x,self.y]
-                return e
-            if (self.x < self.gridSize and eleves[e].x == self.x + 1 and eleves[e].y == self.y and eleves[e].haveToGoBack == False):
-                self.previous=[self.x,self.y]
-                return e
-            if (self.y > 0 and eleves[e].y == self.y - 1 and eleves[e].x == self.x and eleves[e].haveToGoBack == False):
-                self.previous=[self.x,self.y]
-                return e
-            if (self.y < self.gridSize and eleves[e].y == self.y + 1 and eleves[e].x == self.x and eleves[e].haveToGoBack == False):
-                self.previous=[self.x,self.y]
-                return e
-        min1=self.gridSize*self.gridSize
-        parcours=[]
-        i=0
-        e=-1
-        for eleve in eleves:
-            if(eleve.haveToGoBack==False):
-                l=Agent.plusCourtChemin(self,eleve.x,eleve.y,2)
-                if len(l)<min1:
-                    min1=len(l)
-                    parcours=l
-                    e=i
-            i+=1
-        parcoursVide=False
-        if parcours==[]:
-            parcoursVide=True
-            if self.x!=self.initial_Coordinates[0] or self.y!=self.initial_Coordinates[1]:
-                parcours=Agent.plusCourtChemin(self,self.initial_Coordinates[0],self.initial_Coordinates[1],2)
-                if self.x<parcours[0][0]:
-                    self.droite()
-                elif self.x>parcours[0][0]:
-                    self.gauche()
-                elif self.y<parcours[0][1]:
-                    self.avancer()
-                elif self.y>parcours[0][1]:
-                    self.reculer()
+        if (self.cptmove==0):
+            self.cptmove=self.speed
+            for e in range(len(eleves)):
+                if (self.x > 0 and eleves[e].x == self.x - 1 and eleves[e].y == self.y and eleves[e].haveToGoBack == False):
+                    self.previous=[self.x,self.y]
+                    return e
+                if (self.x < self.gridSize and eleves[e].x == self.x + 1 and eleves[e].y == self.y and eleves[e].haveToGoBack == False):
+                    self.previous=[self.x,self.y]
+                    return e
+                if (self.y > 0 and eleves[e].y == self.y - 1 and eleves[e].x == self.x and eleves[e].haveToGoBack == False):
+                    self.previous=[self.x,self.y]
+                    return e
+                if (self.y < self.gridSize and eleves[e].y == self.y + 1 and eleves[e].x == self.x and eleves[e].haveToGoBack == False):
+                    self.previous=[self.x,self.y]
+                    return e
+            min1=self.gridSize*self.gridSize
+            parcours=[]
+            e=-1
+            for i, eleve in enumerate(eleves):
+                if(eleve.haveToGoBack==False):
+                    l=Agent.plusCourtChemin(self,eleve.x,eleve.y,2)
+                    if len(l)<min1:
+                        min1=len(l)
+                        parcours=l
+                        e=i
+            parcoursVide=False
+            if parcours==[]:
+                parcoursVide=True
+                if self.x!=self.initial_Coordinates[0] or self.y!=self.initial_Coordinates[1]:
+                    parcours=Agent.plusCourtChemin(self,self.initial_Coordinates[0],self.initial_Coordinates[1],2)
+                    if self.x<parcours[0][0]:
+                        self.droite()
+                    elif self.x>parcours[0][0]:
+                        self.gauche()
+                    elif self.y<parcours[0][1]:
+                        self.avancer()
+                    elif self.y>parcours[0][1]:
+                        self.reculer()
+                else:
+                    parcours=[[self.initial_Coordinates[0],self.initial_Coordinates[1]]]
+                    self.previous[0]=self.x
+                    self.previous[1]=self.y
                 return -1
-            else:
-                parcours=[[self.initial_Coordinates[0],self.initial_Coordinates[1]]]
-                self.previous[0]=self.x
-                self.previous[1]=self.y
-                return -1
-        if self.x<parcours[0][0]:
-            self.droite()
-        elif self.x>parcours[0][0]:
-            self.gauche()
-        elif self.y<parcours[0][1]:
-            self.avancer()
-        elif self.y>parcours[0][1]:
-            self.reculer()
-        if self.x>0:
-            if eleves[e].x==self.x-1 and eleves[e].y==self.y:
-                return e
-        elif self.x<self.gridSize:
-            if eleves[e].x==self.x+1 and eleves[e].y==self.y:
-                return e
-        elif self.y>0:
-            if eleves[e].y==self.y-1 and eleves[e].x==self.x:
-                return e
-        elif self.y<self.gridSize:
-            if eleves[e].y==self.y+1 and eleves[e].x==self.x:
-                return e
+            if self.x<parcours[0][0]:
+                self.droite()
+            elif self.x>parcours[0][0]:
+                self.gauche()
+            elif self.y<parcours[0][1]:
+                self.avancer()
+            elif self.y>parcours[0][1]:
+                self.reculer()
+            if self.x>0:
+                if eleves[e].x==self.x-1 and eleves[e].y==self.y:
+                    return e
+            elif self.x<self.gridSize:
+                if eleves[e].x==self.x+1 and eleves[e].y==self.y:
+                    return e
+            elif self.y>0:
+                if eleves[e].y==self.y-1 and eleves[e].x==self.x:
+                    return e
+            elif self.y<self.gridSize:
+                if eleves[e].y==self.y+1 and eleves[e].x==self.x:
+                    return e
+        else:
+            self.previous=[self.x,self.y]
+            self.cptmove-=1
         return -1
