@@ -110,7 +110,7 @@ def create_Agent(n):
         y=(i//((taille-2)//2))*3
         img_student = Img_Agent(f"student{str(i % 4 + 1)}", x, y)
         student = Agent(
-            f"A{str(i + 1)}", x, y, taille, i % 4, img_student.update_position
+            f"{str(i + 1)}", x, y, taille, i % 4, img_student.update_position
         )
         students.append(student)
         list_Img.append(img_student)

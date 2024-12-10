@@ -170,21 +170,21 @@ class Agent:
             self.droite(grid)
 
     def Stratégie1(self,grid):
-        if self.x > 0 and self.y==self.initial_Coordinates[1] and grid[self.y][self.x-1] in[" ","X"]:
+        if self.x > 0 and self.y==self.initial_Coordinates[1]:
             self.gauche(grid)
-        elif self.y < self.Candy[1] and grid[self.y+1][self.x] in[" ","X"]:
+        elif self.y < self.Candy[1]:
             self.avancer(grid)
-        elif self.x < self.Candy[0] and grid[self.y][self.x+1] in[" ","X"]:
+        elif self.x < self.Candy[0]:
             self.droite(grid)
         else :
             self.reculer(grid)
 
     def Stratégie2(self,grid):
-        if self.x < self.gridSize-1 and self.y!=self.Candy[1] and grid[self.y][self.x+1] in[" ","X"]:
+        if self.x < self.gridSize-1 and self.y!=self.Candy[1]:
             self.droite(grid)
-        elif self.y < self.Candy[1] and grid[self.y+1][self.x] in[" ","X"]:
+        elif self.y < self.Candy[1]:
             self.avancer(grid)
-        elif self.x > self.Candy[0] and grid[self.y][self.x-1] in[" ","X"]:
+        elif self.x > self.Candy[0]:
             self.gauche(grid)
 
     def Stratégie3(self,grid):
