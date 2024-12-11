@@ -110,7 +110,7 @@ class Agent:
         if self.x == self.initial_Coordinates[0] and self.y == self.initial_Coordinates[1]:
             print("Est bien revenu")
             self.previous = [self.x, self.y]
-            self.back = 3
+            self.back = random.randint(1,5)
             self.retour=[self.initial_Coordinates]
         elif(self.nom=="teacher"):
             if self.x > self.initial_Coordinates[0] and not((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
@@ -218,6 +218,12 @@ class Agent:
                 if min1>a:
                     min1=a
                     suivant=[self.x,self.y+1]
+        if self.y-1<self.gridSize:
+            if grid[self.y-1][self.x] not in ["O","I"] and self.previous!=[self.x,self.y-1]:
+                a=(self.Candy[0]-self.x)**2+(self.Candy[1]-(self.y-1))**2
+                if min1>a:
+                    min1=a
+                    suivant=[self.x,self.y-1]
         if suivant:
             self.previous = [self.x, self.y]
             self.x=suivant[0]
@@ -333,28 +339,28 @@ class Agent:
                     #     parcours=l
                     #     e=i
                     if self.x+1<self.gridSize:
-                        if grid[self.y][self.x+1] not in ["O"]:
+                        if grid[self.y][self.x+1] not in ["O"] and self.previous!=[self.x+1,self.y]:
                             a=(eleve.x-(self.x+1))**2+(eleve.y-self.y)**2
                             if min1>a:
                                 min1=a
                                 parcours=[[self.x+1,self.y]]
                                 e=i
-                    if self.x-1>0:
-                        if grid[self.y][self.x-1] not in ["O"]:
+                    if self.x-1>=0:
+                        if grid[self.y][self.x-1] not in ["O"] and self.previous!=[self.x-1,self.y]:
                             a=(eleve.x-(self.x-1))**2+(eleve.y-self.y)**2
                             if min1>a:
                                 min1=a
                                 parcours=[[self.x-1,self.y]]
                                 e=i
                     if self.y+1<self.gridSize:
-                        if grid[self.y+1][self.x] not in ["O"]:
+                        if grid[self.y+1][self.x] not in ["O"] and self.previous!=[self.x,self.y+1]:
                             a=(eleve.x-self.x)**2+(eleve.y-(self.y+1))**2
                             if min1>a:
                                 min1=a
                                 parcours=[[self.x,self.y+1]]
                                 e=i
-                    if self.y-1>0:
-                        if grid[self.y-1][self.x] not in ["O"]:
+                    if self.y-1>=0:
+                        if grid[self.y-1][self.x] not in ["O"] and self.previous!=[self.x,self.y-1]:
                             a=(eleve.x-self.x)**2+(eleve.y-(self.y-1))**2
                             if min1>a:
                                 min1=a

@@ -158,14 +158,16 @@ while running:
                 elif uptime_button.collidepoint(mouse_pos):
                     x += 10
                 elif downtime_button.collidepoint(mouse_pos):
-                    x -= 10
+                    if x>10:
+                        x -= 10
                 elif downsize_button.collidepoint(mouse_pos):
-                    TAILLE-=1
-                    taille = TAILLE
-                    TAILLE_CASE = WIDTH // TAILLE
-                    for e in list_Img :
-                        e.resize()
-                    img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
+                    if taille-2>y:
+                        TAILLE-=1
+                        taille = TAILLE
+                        TAILLE_CASE = WIDTH // TAILLE
+                        for e in list_Img :
+                            e.resize()
+                        img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
                 elif upsize_button.collidepoint(mouse_pos):
                     TAILLE+=1
                     taille = TAILLE
