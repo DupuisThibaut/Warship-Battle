@@ -3,7 +3,7 @@ name: Build Executable
 on:
   push:
     branches:
-      - main
+      - Seconde-Partie
   workflow_dispatch: # Permet de déclencher le workflow manuellement
     inputs:
       python_version:
