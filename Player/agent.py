@@ -21,6 +21,7 @@ class Agent:
         self.speed = speed
         self.cptmove = self.speed
         self.grid=None
+        self.retour=[[x,y]]
 
     def avancer(self,grid):
         if self.y + 1 < self.gridSize:
@@ -110,15 +111,23 @@ class Agent:
             print("Est bien revenu")
             self.previous = [self.x, self.y]
             self.back = 3
-        elif self.x > self.initial_Coordinates[0] and not((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
-            self.gauche(grid)
-        elif self.x < self.initial_Coordinates[0] and not((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
-            self.droite(grid)
-        elif self.y > self.initial_Coordinates[1] or ((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
-            self.reculer(grid)
-        elif self.y < self.initial_Coordinates[1] or ((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
-            self.avancer(grid)
-        self.move(self.x, self.y)
+            self.retour=[self.initial_Coordinates]
+        elif(self.nom=="teacher"):
+            if self.x > self.initial_Coordinates[0] and not((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
+                self.gauche(grid)
+            elif self.x < self.initial_Coordinates[0] and not((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
+                self.droite(grid)
+            elif self.y > self.initial_Coordinates[1] or ((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
+                self.reculer(grid)
+            elif self.y < self.initial_Coordinates[1] or ((self.x - 1 >= 0 and grid[self.y][self.x - 1] == "X") or (self.x + 1 < self.gridSize and grid[self.y][self.x + 1] == "X")):
+                self.avancer(grid)
+            self.move(self.x, self.y)
+        else:
+            self.previous = [self.x, self.y]
+            tmp = self.retour.pop()
+            self.x = tmp[0]
+            self.y = tmp[1]     
+           
 
 
 

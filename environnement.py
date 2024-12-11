@@ -28,6 +28,8 @@ class Environnement:
         if (self.grid[agent.y][agent.x] not in ["I","O","X"] or (self.grid[agent.y][agent.x] not in ["I"] and agent.haveToGoBack)):
             self.grid[agent.previous[1]][agent.previous[0]] = " "
             self.grid[agent.y][agent.x]=agent.nom[0]
+            if(agent.haveToGoBack==False and [agent.x,agent.y] != agent.retour[len(agent.retour)-1]):
+                agent.retour.append([agent.x,agent.y])
             agent.move(agent.x, agent.y)
         elif([agent.x,agent.y]==self.candy and agent.haveToGoBack==False):
             print("helle")
