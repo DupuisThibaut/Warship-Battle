@@ -6,6 +6,7 @@ import random
 import pygame
 import os
 import sys
+import math
 
 def resource_path(relative_path):
     try:
@@ -97,7 +98,7 @@ z = 10
 def create_Agent(n):
     for i in range(n):
         x=(i*2)%(taille-2)+1
-        y=(i//((taille-2)//2))*3
+        y = (i // math.ceil((taille - 2) / 2)) * 3
         img_student = Img_Agent(f"student{str(i % 4 + 1)}", x, y)
         student = Agent(
             f"{str(i + 1)}", x, y, taille, i % 4, img_student.update_position
