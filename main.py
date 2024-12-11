@@ -215,7 +215,7 @@ while running:
         quit_text2 = small_font.render("Quitter", True, WHITE)
         time_texte = small_font.render(f"Temps de jeux : {x}", True, WHITE)
         size_texte = small_font.render(f"Taille du plateau : {str(taille)}", True, WHITE)
-        nbA_texte = small_font.render(f"Nombre Agents : {y}", True, WHITE)
+        nbA_texte = small_font.render(f"Nombre d'élèves : {y}", True, WHITE)
         speed_texte = small_font.render(f"Vitesse : {z}", True, WHITE)
         start_button2 = pygame.Rect(60, 380, 380, 50)
         quit_button2 = pygame.Rect(60, 480, 380, 50)

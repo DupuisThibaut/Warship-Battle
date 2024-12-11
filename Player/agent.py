@@ -80,7 +80,6 @@ class Agent:
         # Empêcher les coordonnées invalides
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
-        print(f"Collision: Agent {self.nom} déplacé à ({self.x}, {self.y})")
         self.previous = tmp
         self.move(self.x, self.y)
 
@@ -188,7 +187,6 @@ class Agent:
 
     def Stratégie3(self, grid):
         self.chemin = self.plusCourtChemin(self.Candy[0], self.Candy[1], 1)
-        print(f"Chemin calculé : {self.chemin}")  # Ajout pour vérifier le chemin
         if self.chemin:  # Vérifier que le chemin n'est pas vide
             if self.x < self.chemin[0][0]:
                 self.droite(grid)
