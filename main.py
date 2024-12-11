@@ -4,6 +4,15 @@ from Player.agent import Agent
 import time
 import random
 import pygame
+import os
+import sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 pygame.init()
 WIDTH = 500
@@ -35,7 +44,7 @@ class Img_Agent:
         self.x=x
         self.y=y
         self.position = (self.x, self.y)
-        self.img = pygame.image.load(f"img/skins/{img}.png")
+        self.img = pygame.image.load(resource_path("img/skins/"+img+".png"))
         self.img = pygame.transform.scale(self.img, (TAILLE_CASE, TAILLE_CASE))
 
     def draw(self):
@@ -110,7 +119,7 @@ font2=pygame.font.Font(None, 24)
 font = pygame.font.Font(None, 74)
 small_font = pygame.font.Font(None, 36)
 
-img_candy = pygame.image.load("img/skins/candy.png")
+img_candy = pygame.image.load(resource_path("img/skins/candy.png"))
 img_candy = pygame.transform.scale(img_candy, (TAILLE_CASE, TAILLE_CASE))
 
 def draw_candy(x, y):
