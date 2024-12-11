@@ -35,7 +35,15 @@ jobs:
     - name: Build for macOS
       run: |
         pyinstaller --onefile --add-data "img/skins/*:img/skins" main.py
-        chmod +x dist/main  # Ajoute la permission d'exécution
+        
+        # Vérifier les permissions avant d'ajouter le chmod
+        ls -l dist/main
+
+        # Ajouter la permission d'exécution
+        chmod +x dist/main
+        
+        # Vérifier les permissions après le chmod
+        ls -l dist/main
 
     - name: Upload macOS executable as artifact
       uses: actions/upload-artifact@v3
