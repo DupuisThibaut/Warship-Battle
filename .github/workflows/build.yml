@@ -3,47 +3,36 @@ name: Build Executable
 on:
   push:
     branches:
-      - Seconde-Partie
-  workflow_dispatch: # Permet de déclencher le workflow manuellement
-    inputs:
-      python_version:
-        description: "Version de Python à utiliser"
-        required: false
-        default: "3.10"
+      - Seconde-Partie # Exécuter uniquement sur cette branche
+  workflow_dispatch: # Permet d'exécuter manuellement
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    # Étape 1 : Checkout du code
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Étape 2 : Configurer Python
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ inputs.python_version }}
+        python-version: 3.10
 
-    # Étape 3 : Installer les dépendances
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # Étape 4 : Installer PyInstaller
     - name: Install PyInstaller
       run: pip install pyinstaller
 
-    # Étape 5 : Compiler le projet
     - name: Build with PyInstaller
       run: |
         pyinstaller --onefile --add-data "img/skins/*:img/skins" main.py
 
-    # Étape 6 : Sauvegarder l'exécutable comme artefact
-    - name: Upload artifact
+    - name: Upload executable as artifact
       uses: actions/upload-artifact@v3
       with:
         name: executable
-        path: dist/
+        path: dist/main.exe  # Chemin du fichier généré
