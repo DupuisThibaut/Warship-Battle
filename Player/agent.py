@@ -1,4 +1,5 @@
 import random
+import math
 
 class Agent:
 
@@ -124,10 +125,10 @@ class Agent:
             self.move(self.x, self.y)
         else:
             self.previous = [self.x, self.y]
-            tmp = self.retour.pop()
+            tmp = self.retour.pop() if(self.retour!=[]) else self.initial_Coordinates
             self.x = tmp[0]
-            self.y = tmp[1]     
-           
+            self.y = tmp[1]
+
 
 
 
@@ -142,7 +143,7 @@ class Agent:
                     if self.back==0:
                         self.haveToGoBack=False
             elif self.numStrat == 0:
-                self.StratAleat(grid)
+                self.Stratégie4(grid)
             elif self.numStrat == 1:
                 self.Stratégie1(grid)
             elif self.numStrat == 2:
@@ -186,7 +187,7 @@ class Agent:
             self.reculer(grid)
 
     def Stratégie3(self, grid):
-        self.chemin = self.plusCourtChemin(self.Candy[0], self.Candy[1], self.numStrat)
+        self.chemin = self.plusCourtChemin(self.Candy[0], self.Candy[1], 1)
         print(f"Chemin calculé : {self.chemin}")  # Ajout pour vérifier le chemin
         if self.chemin:  # Vérifier que le chemin n'est pas vide
             if self.x < self.chemin[0][0]:
@@ -197,6 +198,33 @@ class Agent:
                 self.avancer(grid)
             elif self.y > self.chemin[0][1]:
                 self.reculer(grid)
+
+    def Stratégie4(self, grid):
+        min1=self.gridSize*self.gridSize*self.gridSize
+        suivant=[]
+        if self.x+1<self.gridSize:
+            if grid[self.y][self.x+1] not in ["O","I"] and self.previous!=[self.x+1,self.y]:
+                a=(self.Candy[0]-(self.x+1))**2+(self.Candy[1]-self.y)**2
+                if min1>a:
+                    min1=a
+                    suivant=[self.x+1,self.y]
+        if self.x-1>0:
+            if grid[self.y][self.x-1] not in ["O","I"] and self.previous!=[self.x-1,self.y]:
+                a=(self.Candy[0]-(self.x-1))**2+(self.Candy[1]-self.y)**2
+                if min1>a:
+                    min1=a
+                    suivant=[self.x-1,self.y]
+        if self.y+1<self.gridSize:
+            if grid[self.y+1][self.x] not in ["O","I"] and self.previous!=[self.x,self.y+1]:
+                a=(self.Candy[0]-self.x)**2+(self.Candy[1]-(self.y+1))**2
+                if min1>a:
+                    min1=a
+                    suivant=[self.x,self.y+1]
+        print(min1)
+        if suivant:
+            self.previous = [self.x, self.y]
+            self.x=suivant[0]
+            self.y=suivant[1]
 
 
     def plusCourtChemin(self,x,y,chemin):
@@ -276,7 +304,7 @@ class Agent:
                     l.append([agentX,agentY])
                     avance=True
         return l
-    
+
     def plusCourtChemin2(self,x,y):
         a=Agent(self.nom,x,y,self.gridSize,self.numStrat,self.move,self.speed)
         return a.plusCourtChemin(self.Candy[0],self.Candy[1],self.numStrat)
