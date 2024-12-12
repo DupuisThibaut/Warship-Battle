@@ -47,6 +47,11 @@ jobs:
         name: macos-executable
         path: dist/main-macos.tar.gz
 
+    - name: Create Tag
+      run: |
+        git tag v${{ github.run_number }}
+        git push origin v${{ github.run_number }}
+
     - name: Create Release on GitHub
       uses: softprops/action-gh-release@v1
       with:
@@ -84,6 +89,11 @@ jobs:
       with:
         name: linux-executable
         path: dist/main
+
+    - name: Create Tag
+      run: |
+        git tag v${{ github.run_number }}
+        git push origin v${{ github.run_number }}
 
     - name: Create Release on GitHub
       uses: softprops/action-gh-release@v1
@@ -126,6 +136,11 @@ jobs:
       with:
         name: windows-executable
         path: dist/main-windows.tar.gz
+
+    - name: Create Tag
+      run: |
+        git tag v${{ github.run_number }}
+        git push origin v${{ github.run_number }}
 
     - name: Create Release on GitHub
       uses: softprops/action-gh-release@v1
