@@ -12,10 +12,10 @@
 ## Features
 
 - Each student employs a unique strategy:
-    - The first student will stick to the left side and follow it until reaching the candy. This strategy starts every 10 seconds.
-    - The second student will stick to the right side, mirroring the first student's approach. This strategy begins when the teacher is on the left side of the environment.
-    - The third student aims to reach the candy as quickly as possible, starting randomly.
-    - The fourth student also aims to reach the candy as quickly as possible but will calculate an optimal timing to avoid being overtaken by the teacher. This strategy starts at the moment the student deems most advantageous.
+    - The first student will stick to the left side and follow it until reaching the candy.
+    - The second student will stick to the right side, mirroring the first student's approach.
+    - The third student aims to reach the candy as quickly as possible.
+    - The fourth student also aims to reach the candy as quickly as possible following the shortest path.
 - The teacher has its own strategy to defend the candy:
     - The teacher identifies the shortest path to reach one of the students and follows it to intercept them.
 
